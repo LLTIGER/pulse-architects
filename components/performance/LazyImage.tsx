@@ -42,7 +42,7 @@ const LazyImage: React.FC<LazyImageProps> = ({
   const [hasError, setHasError] = useState(false);
   const [currentSrc, setCurrentSrc] = useState<string>('');
   const imgRef = useRef<HTMLImageElement>(null);
-  const observerRef = useRef<IntersectionObserver>();
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   // Generate optimized image URLs based on viewport and quality settings
   const generateOptimizedSrc = useCallback((originalSrc: string, width?: number) => {

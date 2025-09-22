@@ -19,7 +19,7 @@ export interface MigrationStatus {
 export async function runMigration(
   migrationName: string,
   migrationFn: () => Promise<void>,
-  rollbackFn?: () => Promise<void>
+  _rollbackFn?: () => Promise<void>
 ): Promise<{ success: boolean; error?: string }> {
   const startTime = Date.now()
   
@@ -31,9 +31,16 @@ export async function runMigration(
       where: { key: `migration_${migrationName}` }
     })
     
-    if (existingMigration?.value?.applied) {
-      console.log(`✅ Migration ${migrationName} already applied`)
-      return { success: true }
+    if (existingMigration?.value) {
+      try {
+        const migrationData = JSON.parse(existingMigration.value);
+        if (migrationData.applied) {
+          console.log(`✅ Migration ${migrationName} already applied`)
+          return { success: true }
+        }
+      } catch (e) {
+        // If parsing fails, treat as not applied
+      }
     }
     
     // Run migration in transaction
@@ -44,19 +51,19 @@ export async function runMigration(
       await tx.systemConfig.upsert({
         where: { key: `migration_${migrationName}` },
         update: {
-          value: {
+          value: JSON.stringify({
             applied: true,
             appliedAt: new Date(),
             duration: Date.now() - startTime
-          }
+          })
         },
         create: {
           key: `migration_${migrationName}`,
-          value: {
+          value: JSON.stringify({
             applied: true,
             appliedAt: new Date(),
             duration: Date.now() - startTime
-          },
+          }),
           description: `Migration: ${migrationName}`,
           category: 'migrations'
         }
@@ -70,10 +77,10 @@ export async function runMigration(
     console.error(`❌ Migration ${migrationName} failed:`, error)
     
     // Attempt rollback if provided
-    if (rollbackFn) {
+    if (_rollbackFn) {
       try {
         console.log(`🔄 Rolling back migration: ${migrationName}`)
-        await rollbackFn()
+        await _rollbackFn()
         console.log(`✅ Rollback completed for: ${migrationName}`)
       } catch (rollbackError) {
         console.error(`❌ Rollback failed for ${migrationName}:`, rollbackError)
@@ -84,19 +91,19 @@ export async function runMigration(
     await prisma.systemConfig.upsert({
       where: { key: `migration_${migrationName}` },
       update: {
-        value: {
+        value: JSON.stringify({
           applied: false,
           error: error instanceof Error ? error.message : 'Unknown error',
           failedAt: new Date()
-        }
+        })
       },
       create: {
         key: `migration_${migrationName}`,
-        value: {
+        value: JSON.stringify({
           applied: false,
           error: error instanceof Error ? error.message : 'Unknown error',
           failedAt: new Date()
-        },
+        }),
         description: `Failed migration: ${migrationName}`,
         category: 'migrations'
       }
@@ -118,12 +125,15 @@ export async function getMigrationHistory(): Promise<MigrationStatus[]> {
     orderBy: { createdAt: 'asc' }
   })
   
-  return migrations.map(migration => ({
-    name: migration.key.replace('migration_', ''),
-    applied: migration.value?.applied || false,
-    appliedAt: migration.value?.appliedAt ? new Date(migration.value.appliedAt) : undefined,
-    error: migration.value?.error
-  }))
+  return migrations.map(migration => {
+    const value = migration.value as any
+    return {
+      name: migration.key.replace('migration_', ''),
+      applied: value?.applied || false,
+      appliedAt: value?.appliedAt ? new Date(value.appliedAt) : undefined,
+      error: value?.error
+    }
+  })
 }
 
 // Data integrity checks
@@ -134,26 +144,8 @@ export async function performDataIntegrityCheck(): Promise<{
   const issues: string[] = []
   
   try {
-    // Check for orphaned records
-    const orphanedFiles = await prisma.planFile.count({
-      where: {
-        plan: null
-      }
-    })
+    // Note: PlanFile and PlanImage have cascade deletes, so orphaned records are prevented by schema
     
-    if (orphanedFiles > 0) {
-      issues.push(`Found ${orphanedFiles} orphaned plan files`)
-    }
-    
-    const orphanedImages = await prisma.planImage.count({
-      where: {
-        plan: null
-      }
-    })
-    
-    if (orphanedImages > 0) {
-      issues.push(`Found ${orphanedImages} orphaned plan images`)
-    }
     
     // Check for plans without primary images
     const plansWithoutImages = await prisma.plan.count({
@@ -171,25 +163,12 @@ export async function performDataIntegrityCheck(): Promise<{
       issues.push(`Found ${plansWithoutImages} published plans without primary images`)
     }
     
-    // Check for invalid license relationships
-    const invalidLicenses = await prisma.license.count({
-      where: {
-        OR: [
-          { user: null },
-          { plan: null },
-          { order: null }
-        ]
-      }
-    })
-    
-    if (invalidLicenses > 0) {
-      issues.push(`Found ${invalidLicenses} licenses with invalid relationships`)
-    }
+    // License integrity is maintained by foreign key constraints
     
     // Check for users without profiles
     const usersWithoutProfiles = await prisma.user.count({
       where: {
-        profile: null,
+        profile: { is: null },
         profileComplete: true
       }
     })

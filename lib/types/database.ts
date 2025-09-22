@@ -10,32 +10,33 @@ import type {
   Category, 
   PlanFile, 
   PlanImage,
+  PlanTag,
   Order,
   OrderItem,
   License,
   Review,
   Favorite,
-  CustomPlanRequest,
   DownloadLog,
   AuditLog,
-  SupportTicket,
-  SystemConfig,
-  UserRole,
-  CompanySize,
-  ArchitecturalStyle,
-  BuildingType,
-  PlanStatus,
-  FileType,
-  ImageType,
-  OrderStatus,
-  PaymentStatus,
-  FulfillmentStatus,
-  LicenseType,
-  CustomRequestStatus,
-  Priority,
-  TicketCategory,
-  TicketStatus
+  SystemConfig
 } from '@prisma/client'
+
+// Define string literal types for our SQLite schema
+export type UserRole = 'CUSTOMER' | 'ARCHITECT' | 'ADMIN' | 'SUPER_ADMIN'
+export type CompanySize = 'SOLO' | 'SMALL' | 'MEDIUM' | 'LARGE' | 'ENTERPRISE'
+export type ArchitecturalStyle = 'MODERN' | 'TRADITIONAL' | 'CONTEMPORARY' | 'FARMHOUSE' | 'CRAFTSMAN' | 'COLONIAL' | 'VICTORIAN' | 'MEDITERRANEAN' | 'SOUTHWESTERN' | 'INDUSTRIAL'
+export type BuildingType = 'SINGLE_FAMILY' | 'DUPLEX' | 'TOWNHOUSE' | 'CONDO' | 'COMMERCIAL' | 'CABIN' | 'GARAGE' | 'ADU'
+export type PlanStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
+export type FileType = 'DWG' | 'PDF' | 'REVIT' | 'SKETCHUP' | 'CAD' | 'ZIP'
+export type ImageType = 'THUMBNAIL' | 'MAIN' | 'GALLERY' | 'FLOOR_PLAN' | 'ELEVATION' | 'PERSPECTIVE'
+export type OrderStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'CANCELLED' | 'REFUNDED'
+export type PaymentStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'REFUNDED'
+export type FulfillmentStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED'
+export type LicenseType = 'SINGLE_BUILD' | 'MULTI_BUILD' | 'COMMERCIAL' | 'MODIFICATION_RIGHTS'
+export type CustomRequestStatus = 'PENDING' | 'IN_REVIEW' | 'QUOTED' | 'ACCEPTED' | 'IN_PROGRESS' | 'COMPLETED' | 'REJECTED'
+export type Priority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT'
+export type TicketCategory = 'TECHNICAL' | 'BILLING' | 'DOWNLOAD' | 'LICENSE' | 'CUSTOM' | 'GENERAL' | 'BUG' | 'FEATURE'
+export type TicketStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED'
 
 // Enhanced types with relations
 export interface UserWithProfile extends User {
@@ -47,7 +48,6 @@ export interface UserWithRelations extends User {
   orders: Order[]
   reviews: Review[]
   favorites: Favorite[]
-  customRequests: CustomPlanRequest[]
   licenses: License[]
 }
 
@@ -99,10 +99,11 @@ export interface LicenseWithPlan extends License {
   }
 }
 
-export interface CustomRequestWithUser extends CustomPlanRequest {
-  user: UserWithProfile
-  assignedTo: UserWithProfile | null
-}
+// Commented out since CustomPlanRequest model doesn't exist in our schema
+// export interface CustomRequestWithUser extends CustomPlanRequest {
+//   user: UserWithProfile
+//   assignedTo: UserWithProfile | null
+// }
 
 export interface CategoryWithPlans extends Category {
   plans: PlanSummary[]
@@ -197,25 +198,26 @@ export interface CreateOrderData {
   notes?: string
 }
 
-export interface CreateCustomRequestData {
-  title: string
-  description: string
-  requirements: Record<string, any>
-  squareFootage?: number
-  bedrooms?: number
-  bathrooms?: number
-  floors?: number
-  style?: ArchitecturalStyle
-  buildingType?: BuildingType
-  budget?: number
-  timeline?: string
-  location?: {
-    city?: string
-    state?: string
-    country?: string
-  }
-  attachments?: string[]
-}
+// Commented out since CustomPlanRequest model doesn't exist
+// export interface CreateCustomRequestData {
+//   title: string
+//   description: string
+//   requirements: Record<string, any>
+//   squareFootage?: number
+//   bedrooms?: number
+//   bathrooms?: number
+//   floors?: number
+//   style?: ArchitecturalStyle
+//   buildingType?: BuildingType
+//   budget?: number
+//   timeline?: string
+//   location?: {
+//     city?: string
+//     state?: string
+//     country?: string
+//   }
+//   attachments?: string[]
+// }
 
 export interface CreateReviewData {
   planId: string
@@ -397,29 +399,13 @@ export {
   Category,
   PlanFile,
   PlanImage,
+  PlanTag,
   Order,
   OrderItem,
   License,
   Review,
   Favorite,
-  CustomPlanRequest,
   DownloadLog,
   AuditLog,
-  SupportTicket,
-  SystemConfig,
-  UserRole,
-  CompanySize,
-  ArchitecturalStyle,
-  BuildingType,
-  PlanStatus,
-  FileType,
-  ImageType,
-  OrderStatus,
-  PaymentStatus,
-  FulfillmentStatus,
-  LicenseType,
-  CustomRequestStatus,
-  Priority,
-  TicketCategory,
-  TicketStatus
+  SystemConfig
 }

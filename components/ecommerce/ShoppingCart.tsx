@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { cn } from '@/lib/utils/cn';
 import { Button } from '@/components/ui/Button';
-import { Card, CardContent, CardHeader } from '@/components/ui/Card';
+import { Card } from '@/components/ui/Card';
 import { 
   ShoppingCartIcon, 
   XIcon, 
@@ -410,4 +410,3 @@ const ShoppingCart: React.FC<ShoppingCartProps> = ({
 };
 
 export { ShoppingCart };
-export type { CartItem, CartDiscount };

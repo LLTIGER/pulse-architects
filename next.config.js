@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    appDir: true,
-    typedRoutes: true,
+    // Enable optimized package imports
+    optimizePackageImports: ['lucide-react', '@heroicons/react'],
   },
   
   // Image optimization for architectural plans and photos
@@ -12,7 +12,13 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'res.cloudinary.com',
         port: '',
-        pathname: '/**',
+        pathname: '/pulse-architects/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com',
+        port: '',
+        pathname: '/architectural-plans/**',
       },
       {
         protocol: 'https',
@@ -20,21 +26,17 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
-      {
-        protocol: 'https',
-        hostname: 'unsplash.com',
-        port: '',
-        pathname: '/**',
-      },
     ],
     formats: ['image/avif', 'image/webp'],
+    // Optimized device sizes for architectural content
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 60 * 60 * 24 * 7, // 1 week
+    minimumCacheTTL: 86400, // 24 hours for better performance
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
   // Performance optimizations
-  swcMinify: true,
   poweredByHeader: false,
   
   // Security headers

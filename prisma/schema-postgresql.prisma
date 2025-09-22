@@ -1,0 +1,848 @@
+// Pulse Architects E-commerce Platform
+// Comprehensive PostgreSQL Schema for Vercel Deployment
+// Optimized for architectural plans marketplace
+
+generator client {
+  provider = "prisma-client-js"
+  // Vercel optimization
+  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ===============================
+// AUTHENTICATION & USER MANAGEMENT
+// ===============================
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  emailVerified     DateTime?
+  hashedPassword    String?   // For email/password auth
+  name              String?
+  image             String?
+  role              UserRole  @default(CUSTOMER)
+  isActive          Boolean   @default(true)
+  lastLoginAt       DateTime?
+  emailPreferences  Json?     // GDPR-compliant email preferences
+  
+  // GDPR Compliance
+  gdprConsent       Boolean   @default(false)
+  gdprConsentDate   DateTime?
+  dataRetentionDate DateTime? // Auto-delete date for GDPR
+  
+  // Profile completion
+  profileComplete   Boolean   @default(false)
+  onboardingStep    Int       @default(0)
+  
+  // Relationships
+  profile                 UserProfile?
+  accounts                Account[]
+  sessions                Session[]
+  orders                  Order[]
+  reviews                 Review[]
+  favorites               Favorite[]
+  downloadLogs            DownloadLog[]
+  customRequests          CustomPlanRequest[]
+  assignedCustomRequests  CustomPlanRequest[] @relation("AssignedCustomRequests")
+  auditLogs               AuditLog[]
+  supportTickets          SupportTicket[]
+  assignedTickets         SupportTicket[]     @relation("AssignedTickets")
+  licenses                License[]
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  // Indexes for performance
+  @@index([email])
+  @@index([role])
+  @@index([isActive])
+  @@index([createdAt])
+  @@map("users")
+}
+
+model UserProfile {
+  id                String            @id @default(cuid())
+  userId            String            @unique
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Personal Information
+  firstName         String?
+  lastName          String?
+  phone             String?
+  dateOfBirth       DateTime?
+  profilePicture    String?           // Cloudinary URL
+  
+  // Professional Information
+  profession        String?
+  company           String?
+  companySize       CompanySize?
+  yearsExperience   Int?
+  specializations   String[]          // Array of specialization areas
+  
+  // Address Information
+  street            String?
+  city              String?
+  state             String?
+  zipCode           String?
+  country           String           @default("US")
+  
+  // Preferences
+  currency          String           @default("USD")
+  language          String           @default("en")
+  timezone          String           @default("UTC")
+  
+  // Marketing preferences (GDPR compliant)
+  marketingEmails   Boolean          @default(false)
+  productUpdates    Boolean          @default(true)
+  newsletter        Boolean          @default(false)
+  
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  
+  @@index([userId])
+  @@map("user_profiles")
+}
+
+// NextAuth.js required models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+  
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ===============================
+// PRODUCT CATALOG - ARCHITECTURAL PLANS
+// ===============================
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  icon        String?   // Icon name or URL
+  image       String?   // Category banner image
+  
+  // Hierarchy support
+  parentId    String?
+  parent      Category? @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryHierarchy")
+  
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  
+  // Display settings
+  isActive        Boolean @default(true)
+  sortOrder       Int     @default(0)
+  
+  // Relationships
+  plans           Plan[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([slug])
+  @@index([parentId])
+  @@index([isActive, sortOrder])
+  @@map("categories")
+}
+
+model Plan {
+  id              String        @id @default(cuid())
+  title           String
+  slug            String        @unique
+  description     String
+  shortDescription String?
+  
+  // Architectural specifications
+  squareFootage   Float
+  bedrooms        Int
+  bathrooms       Float
+  floors          Int           @default(1)
+  garageSpaces    Int           @default(0)
+  lotSize         Float?
+  
+  // Dimensions
+  width           Float         // In feet
+  depth           Float         // In feet
+  height          Float?        // In feet
+  
+  // Plan details
+  style           ArchitecturalStyle
+  features        String[]      // Array of features
+  buildingType    BuildingType
+  roofType        String?
+  exteriorMaterial String[]
+  
+  // Pricing
+  basePrice       Float
+  pricePerSqFt    Float?
+  
+  // License types with different pricing
+  licenseOptions  Json          // {single: price, commercial: price, unlimited: price}
+  
+  // SEO and marketing
+  metaTitle       String?
+  metaDescription String?
+  tags            String[]
+  
+  // Status and visibility
+  status          PlanStatus    @default(DRAFT)
+  isActive        Boolean       @default(true)
+  isFeatured      Boolean       @default(false)
+  
+  // Category relationship
+  categoryId      String
+  category        Category      @relation(fields: [categoryId], references: [id])
+  
+  // Plan files and media
+  files           PlanFile[]
+  images          PlanImage[]
+  
+  // Analytics and engagement
+  viewCount       Int           @default(0)
+  downloadCount   Int           @default(0)
+  favoriteCount   Int           @default(0)
+  averageRating   Float?
+  reviewCount     Int           @default(0)
+  
+  // Relationships
+  orderItems      OrderItem[]
+  reviews         Review[]
+  favorites       Favorite[]
+  downloadLogs    DownloadLog[]
+  licenses        License[]
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  publishedAt     DateTime?
+  
+  // Indexes for performance
+  @@index([slug])
+  @@index([categoryId])
+  @@index([status, isActive])
+  @@index([isFeatured])
+  @@index([squareFootage])
+  @@index([bedrooms, bathrooms])
+  @@index([style])
+  @@index([buildingType])
+  @@index([createdAt(sort: Desc)])
+  @@map("plans")
+}
+
+model PlanFile {
+  id           String    @id @default(cuid())
+  planId       String
+  plan         Plan      @relation(fields: [planId], references: [id], onDelete: Cascade)
+  
+  // File information
+  filename     String
+  originalName String
+  fileType     FileType
+  fileFormat   String    // pdf, dwg, skp, etc.
+  fileSize     Int    // In bytes
+  
+  // Storage information
+  cloudinaryUrl String
+  publicId     String    // Cloudinary public ID
+  secureUrl    String    // Secure download URL
+  
+  // File metadata
+  description  String?
+  version      String    @default("1.0")
+  scale        String?   // Drawing scale
+  units        String    @default("feet")
+  
+  // Security and access
+  isSecure     Boolean   @default(true)  // Requires authentication
+  downloadLimit Int?     // Max downloads per license
+  
+  // Display settings
+  sortOrder    Int       @default(0)
+  isPreview    Boolean   @default(false) // Preview file for free viewing
+  
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  
+  @@index([planId])
+  @@index([fileType])
+  @@index([isPreview])
+  @@map("plan_files")
+}
+
+model PlanImage {
+  id           String     @id @default(cuid())
+  planId       String
+  plan         Plan       @relation(fields: [planId], references: [id], onDelete: Cascade)
+  
+  // Image information
+  filename     String
+  alt          String
+  imageType    ImageType
+  
+  // Cloudinary information
+  cloudinaryUrl String
+  publicId     String
+  width        Int
+  height       Int
+  
+  // Image variants/transformations
+  thumbnailUrl String?
+  mediumUrl    String?
+  largeUrl     String?
+  
+  // Display settings
+  sortOrder    Int        @default(0)
+  isPrimary    Boolean    @default(false)
+  
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  
+  @@index([planId])
+  @@index([imageType])
+  @@index([isPrimary])
+  @@map("plan_images")
+}
+
+// ===============================
+// E-COMMERCE & ORDER MANAGEMENT
+// ===============================
+
+model Order {
+  id              String       @id @default(cuid())
+  orderNumber     String       @unique // Human-readable order number
+  
+  // Customer information
+  userId          String
+  user            User         @relation(fields: [userId], references: [id])
+  
+  // Order details
+  status          OrderStatus  @default(PENDING)
+  totalAmount     Float
+  subtotal        Float
+  taxAmount       Float @default(0)
+  discountAmount  Float @default(0)
+  
+  // Payment information
+  paymentStatus   PaymentStatus @default(PENDING)
+  paymentMethod   String?
+  paymentId       String?      // Stripe payment intent ID
+  
+  // Billing information
+  billingEmail    String
+  billingName     String
+  billingAddress  Json         // Flexible billing address object
+  
+  // Order metadata
+  notes           String?
+  internalNotes   String?      // Admin-only notes
+  
+  // Fulfillment
+  fulfillmentStatus FulfillmentStatus @default(PENDING)
+  downloadExpiresAt DateTime?   // When download access expires
+  
+  // Relationships
+  items           OrderItem[]
+  licenses        License[]
+  
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  completedAt     DateTime?
+  
+  @@index([userId])
+  @@index([orderNumber])
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([createdAt(sort: Desc)])
+  @@map("orders")
+}
+
+model OrderItem {
+  id            String      @id @default(cuid())
+  orderId       String
+  order         Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  planId        String
+  plan          Plan        @relation(fields: [planId], references: [id])
+  
+  // Item details at time of purchase
+  quantity      Int         @default(1)
+  unitPrice     Float
+  totalPrice    Float
+  
+  // License type purchased
+  licenseType   LicenseType
+  
+  // Snapshot of plan details at purchase time
+  planSnapshot  Json        // Store plan details for historical reference
+  
+  createdAt     DateTime    @default(now())
+  
+  @@index([orderId])
+  @@index([planId])
+  @@map("order_items")
+}
+
+model License {
+  id                String      @id @default(cuid())
+  orderId           String
+  order             Order       @relation(fields: [orderId], references: [id])
+  
+  planId            String
+  plan              Plan        @relation(fields: [planId], references: [id])
+  
+  userId            String
+  user              User        @relation(fields: [userId], references: [id])
+  
+  // License details
+  licenseType       LicenseType
+  licenseKey        String      @unique // Unique license identifier
+  
+  // Usage tracking
+  downloadCount     Int         @default(0)
+  maxDownloads      Int?        // Null means unlimited
+  
+  // Validity
+  isActive          Boolean     @default(true)
+  expiresAt         DateTime?   // Null means never expires
+  
+  // Terms
+  terms             Json        // License terms and restrictions
+  
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  
+  @@index([userId])
+  @@index([planId])
+  @@index([licenseKey])
+  @@index([isActive])
+  @@map("licenses")
+}
+
+// ===============================
+// REVIEWS & RATINGS
+// ===============================
+
+model Review {
+  id          String      @id @default(cuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  planId      String
+  plan        Plan        @relation(fields: [planId], references: [id], onDelete: Cascade)
+  
+  // Review content
+  rating      Int         // 1-5 stars
+  title       String?
+  content     String
+  
+  // Moderation
+  isApproved  Boolean     @default(false)
+  isVerified  Boolean     @default(false) // Verified purchase
+  
+  // Helpful votes
+  helpfulVotes Int        @default(0)
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  
+  @@index([planId])
+  @@index([userId])
+  @@index([rating])
+  @@index([isApproved])
+  @@unique([userId, planId]) // One review per user per plan
+  @@map("reviews")
+}
+
+model Favorite {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  planId    String
+  plan      Plan     @relation(fields: [planId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  
+  @@unique([userId, planId])
+  @@index([userId])
+  @@index([planId])
+  @@map("favorites")
+}
+
+// ===============================
+// CUSTOM PLAN REQUESTS
+// ===============================
+
+model CustomPlanRequest {
+  id                  String              @id @default(cuid())
+  userId              String
+  user                User                @relation(fields: [userId], references: [id])
+  
+  // Request details
+  title               String
+  description         String
+  requirements        Json                // Detailed requirements object
+  
+  // Specifications
+  squareFootage       Float?
+  bedrooms            Int?
+  bathrooms           Float?
+  floors              Int?
+  style               ArchitecturalStyle?
+  buildingType        BuildingType?
+  
+  // Budget and timeline
+  budget              Float?
+  timeline            String?             // Expected completion time
+  
+  // Location (for code compliance)
+  location            Json?               // City, state, country
+  
+  // Attachments
+  attachments         String[]            // Cloudinary URLs
+  
+  // Status tracking
+  status              CustomRequestStatus @default(SUBMITTED)
+  priority            Priority            @default(MEDIUM)
+  
+  // Admin fields
+  assignedToId        String?
+  assignedTo          User?               @relation("AssignedCustomRequests", fields: [assignedToId], references: [id])
+  estimatedPrice      Float?
+  estimatedDuration   String?
+  
+  // Communication
+  internalNotes       String?
+  clientNotes         String?
+  
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  completedAt         DateTime?
+  
+  @@index([userId])
+  @@index([status])
+  @@index([assignedToId])
+  @@index([priority])
+  @@index([createdAt(sort: Desc)])
+  @@map("custom_plan_requests")
+}
+
+// ===============================
+// DOWNLOAD TRACKING & AUDIT
+// ===============================
+
+model DownloadLog {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  
+  planId      String
+  plan        Plan     @relation(fields: [planId], references: [id])
+  
+  // Download details
+  fileType    FileType
+  fileName    String
+  fileSize    Int
+  
+  // Tracking information
+  ipAddress   String
+  userAgent   String?
+  downloadUrl String   // Temporary secure URL used
+  
+  // License information
+  licenseId   String?
+  licenseType LicenseType?
+  
+  createdAt   DateTime @default(now())
+  
+  @@index([userId])
+  @@index([planId])
+  @@index([createdAt(sort: Desc)])
+  @@index([ipAddress])
+  @@map("download_logs")
+}
+
+model AuditLog {
+  id          String      @id @default(cuid())
+  userId      String?
+  user        User?       @relation(fields: [userId], references: [id])
+  
+  // Action details
+  action      String      // CREATE, UPDATE, DELETE, DOWNLOAD, etc.
+  entityType  String      // Plan, Order, User, etc.
+  entityId    String?     // ID of the affected entity
+  
+  // Change details
+  oldValues   Json?       // Previous values
+  newValues   Json?       // New values
+  
+  // Request context
+  ipAddress   String
+  userAgent   String?
+  endpoint    String?     // API endpoint or page
+  
+  // Metadata
+  metadata    Json?       // Additional context
+  
+  createdAt   DateTime    @default(now())
+  
+  @@index([userId])
+  @@index([action])
+  @@index([entityType, entityId])
+  @@index([createdAt(sort: Desc)])
+  @@map("audit_logs")
+}
+
+// ===============================
+// SUPPORT & COMMUNICATION
+// ===============================
+
+model SupportTicket {
+  id          String        @id @default(cuid())
+  ticketNumber String       @unique
+  
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  
+  // Ticket details
+  subject     String
+  description String
+  category    TicketCategory
+  priority    Priority      @default(MEDIUM)
+  status      TicketStatus  @default(OPEN)
+  
+  // Assignment
+  assignedToId String?
+  assignedTo   User?        @relation("AssignedTickets", fields: [assignedToId], references: [id])
+  
+  // Resolution
+  resolution  String?
+  resolvedAt  DateTime?
+  
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  @@index([userId])
+  @@index([status])
+  @@index([category])
+  @@index([assignedToId])
+  @@index([createdAt(sort: Desc)])
+  @@map("support_tickets")
+}
+
+// ===============================
+// SYSTEM CONFIGURATION
+// ===============================
+
+model SystemConfig {
+  id         String   @id @default(cuid())
+  key        String   @unique
+  value      Json
+  
+  // Metadata
+  description String?
+  category   String?
+  isPublic   Boolean  @default(false) // Can be accessed by frontend
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  @@index([key])
+  @@index([category])
+  @@map("system_config")
+}
+
+// ===============================
+// ENUMS
+// ===============================
+
+enum UserRole {
+  CUSTOMER
+  ARCHITECT
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum CompanySize {
+  INDIVIDUAL
+  SMALL_2_10
+  MEDIUM_11_50
+  LARGE_51_200
+  ENTERPRISE_200_PLUS
+}
+
+enum ArchitecturalStyle {
+  MODERN
+  TRADITIONAL
+  CRAFTSMAN
+  COLONIAL
+  RANCH
+  VICTORIAN
+  MEDITERRANEAN
+  FARMHOUSE
+  CONTEMPORARY
+  INDUSTRIAL
+  MINIMALIST
+  RUSTIC
+}
+
+enum BuildingType {
+  RESIDENTIAL_SINGLE_FAMILY
+  RESIDENTIAL_DUPLEX
+  RESIDENTIAL_TOWNHOUSE
+  COMMERCIAL_OFFICE
+  COMMERCIAL_RETAIL
+  COMMERCIAL_WAREHOUSE
+  MIXED_USE
+  INSTITUTIONAL
+  RELIGIOUS
+  EDUCATIONAL
+}
+
+enum PlanStatus {
+  DRAFT
+  REVIEW
+  APPROVED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum FileType {
+  FLOOR_PLAN
+  ELEVATION
+  SECTION
+  DETAIL
+  SITE_PLAN
+  FOUNDATION
+  ELECTRICAL
+  PLUMBING
+  HVAC
+  STRUCTURAL
+  RENDERING_3D
+  ANIMATION
+  SPECIFICATION
+  OTHER
+}
+
+enum ImageType {
+  EXTERIOR_FRONT
+  EXTERIOR_REAR
+  EXTERIOR_SIDE
+  INTERIOR_LIVING
+  INTERIOR_KITCHEN
+  INTERIOR_BEDROOM
+  INTERIOR_BATHROOM
+  AERIAL_VIEW
+  FLOOR_PLAN_2D
+  RENDERING_3D
+  DETAIL_SHOT
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  COMPLETED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+  REFUNDED
+  PARTIALLY_REFUNDED
+}
+
+enum FulfillmentStatus {
+  PENDING
+  PROCESSING
+  FULFILLED
+  CANCELLED
+}
+
+enum LicenseType {
+  SINGLE_USE
+  COMMERCIAL
+  UNLIMITED
+  DEVELOPER
+}
+
+enum CustomRequestStatus {
+  SUBMITTED
+  UNDER_REVIEW
+  QUOTED
+  APPROVED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  REJECTED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum TicketCategory {
+  TECHNICAL_SUPPORT
+  BILLING
+  DOWNLOAD_ISSUE
+  LICENSE_QUESTION
+  CUSTOM_REQUEST
+  GENERAL_INQUIRY
+  BUG_REPORT
+  FEATURE_REQUEST
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING_FOR_CUSTOMER
+  RESOLVED
+  CLOSED
+}

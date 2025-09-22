@@ -61,7 +61,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
         id: 'ellipsis',
         label: '...',
         isActive: false,
-      },
+      } as BreadcrumbItem,
       ...lastItems,
     ];
   }, [allItems, maxItems]);
@@ -86,7 +86,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
           const isLast = index === displayItems.length - 1;
           const Icon = item.icon;
           const isEllipsis = item.id === 'ellipsis';
-          const isClickable = !isEllipsis && !item.isActive && (item.href || item.onClick);
+          const isClickable = !isEllipsis && !(item as BreadcrumbItem).isActive && (item.href || (item as BreadcrumbItem).onClick);
 
           return (
             <li key={item.id} className="flex items-center">
@@ -111,7 +111,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({
                       'flex items-center space-x-1 text-sm font-medium',
                       isEllipsis 
                         ? 'text-neutral-400 dark:text-neutral-600'
-                        : item.isActive || isLast
+                        : (item as BreadcrumbItem).isActive || isLast
                         ? 'text-neutral-900 dark:text-neutral-100'
                         : 'text-neutral-500 dark:text-neutral-400'
                     )}

@@ -9,10 +9,8 @@ import {
   GridIcon, 
   ListIcon, 
   FilterIcon, 
-  SortAscIcon,
   SearchIcon,
   HeartIcon,
-  ShareIcon,
   DownloadIcon,
   EyeIcon,
   LayersIcon,
@@ -85,7 +83,7 @@ const ArchitecturalGallery: React.FC<ArchitecturalGalleryProps> = ({
   const [selectedPlan, setSelectedPlan] = useState<ArchitecturalPlan | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('newest');
-  const [filters, setFilters] = useState<FilterOption>({});
+  const [filters] = useState<FilterOption>({});
   const [showImageViewer, setShowImageViewer] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [likedPlans, setLikedPlans] = useState<Set<string>>(new Set());
@@ -424,4 +422,3 @@ const ArchitecturalGallery: React.FC<ArchitecturalGalleryProps> = ({
 };
 
 export { ArchitecturalGallery };
-export type { ArchitecturalPlan };

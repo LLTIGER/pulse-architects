@@ -32,14 +32,14 @@ const VirtualizedGallery: React.FC<VirtualizedGalleryProps> = ({
   gap = 24,
   overscan = 5,
   onItemClick,
-  onItemLike,
+  onItemLike: _onItemLike,
   className,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const [scrollTop, setScrollTop] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout>();
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Calculate layout
   const layout = useMemo(() => {

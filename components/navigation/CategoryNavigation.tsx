@@ -2,7 +2,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils/cn';
-import { Button } from '@/components/ui/Button';
 import { 
   ChevronDownIcon, 
   ChevronRightIcon,
@@ -19,11 +18,12 @@ import {
 export interface CategoryItem {
   id: string;
   name: string;
+  slug: string;
   description?: string;
   icon?: React.ComponentType<{ className?: string }>;
-  count?: number;
+  planCount?: number;
   image?: string;
-  subcategories?: CategoryItem[];
+  children?: CategoryItem[];
   featured?: boolean;
   new?: boolean;
 }
@@ -50,7 +50,7 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Handle mouse enter/leave for hover states
   const handleMouseEnter = (categoryId: string) => {
@@ -83,6 +83,21 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
     onCategorySelect?.(category);
   };
 
+  // Get icon for category based on slug
+  const getIconForCategory = (slug: string): React.ComponentType<{ className?: string }> | undefined => {
+    const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+      'residential': HomeIcon,
+      'modern': Building2Icon,
+      'traditional': CastleIcon,
+      'commercial': BuildingIcon,
+      'cabin': TreesIcon,
+      'coastal': WavesIcon,
+      'mountain': MountainIcon,
+      'urban': MapPinIcon,
+    };
+    return iconMap[slug];
+  };
+
   // Cleanup timeout on unmount
   useEffect(() => {
     return () => {
@@ -94,8 +109,8 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
 
   // Render category item
   const renderCategoryItem = (category: CategoryItem, depth = 0, isSubcategory = false) => {
-    const Icon = category.icon;
-    const hasSubcategories = category.subcategories && category.subcategories.length > 0;
+    const Icon = category.icon || getIconForCategory(category.slug);
+    const hasSubcategories = category.children && category.children.length > 0;
     const isExpanded = expandedCategories.has(category.id);
     const isHovered = hoveredCategory === category.id;
     const isActive = activeCategory === category.id;
@@ -120,8 +135,8 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
           >
             {showIcons && Icon && <Icon className="h-5 w-5" />}
             <span>{category.name}</span>
-            {showCounts && category.count && (
-              <span className="text-xs text-neutral-400">({category.count})</span>
+            {showCounts && category.planCount && (
+              <span className="text-xs text-neutral-400">({category.planCount})</span>
             )}
             {category.new && (
               <span className="bg-success-100 text-success-700 text-xs px-2 py-0.5 rounded-full">
@@ -164,7 +179,7 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
                     'grid gap-4',
                     category.featured ? 'col-span-3 grid-cols-3' : 'col-span-4 grid-cols-4'
                   )}>
-                    {category.subcategories?.map((subcategory) => (
+                    {category.children?.map((subcategory) => (
                       <div key={subcategory.id} className="space-y-2">
                         <button
                           onClick={() => handleCategorySelect(subcategory)}
@@ -176,26 +191,26 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
                           <span>{subcategory.name}</span>
                         </button>
                         
-                        {subcategory.subcategories && (
+                        {subcategory.children && (
                           <div className="space-y-1 pl-6">
-                            {subcategory.subcategories.slice(0, 5).map((item) => (
+                            {subcategory.children.slice(0, 5).map((item) => (
                               <button
                                 key={item.id}
                                 onClick={() => handleCategorySelect(item)}
                                 className="block text-sm text-neutral-500 hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400"
                               >
                                 {item.name}
-                                {showCounts && item.count && (
-                                  <span className="ml-1">({item.count})</span>
+                                {showCounts && item.planCount && (
+                                  <span className="ml-1">({item.planCount})</span>
                                 )}
                               </button>
                             ))}
-                            {subcategory.subcategories.length > 5 && (
+                            {subcategory.children.length > 5 && (
                               <button
                                 onClick={() => handleCategorySelect(subcategory)}
                                 className="text-sm text-primary-600 hover:text-primary-700 dark:text-primary-400"
                               >
-                                View all {subcategory.subcategories.length} options →
+                                View all {subcategory.children.length} options →
                               </button>
                             )}
                           </div>
@@ -241,9 +256,9 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
             </div>
             
             <div className="flex items-center space-x-1 flex-shrink-0">
-              {showCounts && category.count && (
+              {showCounts && category.planCount && (
                 <span className="text-xs text-neutral-400">
-                  {category.count}
+                  {category.planCount}
                 </span>
               )}
               {hasSubcategories && (
@@ -260,7 +275,7 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
           {/* Subcategories */}
           {hasSubcategories && isExpanded && depth < maxDepth && (
             <div className="space-y-1">
-              {category.subcategories?.map((subcategory) =>
+              {category.children?.map((subcategory) =>
                 renderCategoryItem(subcategory, depth + 1, true)
               )}
             </div>
@@ -288,8 +303,8 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
         >
           {showIcons && Icon && <Icon className="h-4 w-4" />}
           <span>{category.name}</span>
-          {showCounts && category.count && (
-            <span className="text-xs text-neutral-400">({category.count})</span>
+          {showCounts && category.planCount && (
+            <span className="text-xs text-neutral-400">({category.planCount})</span>
           )}
           {hasSubcategories && (
             <ChevronDownIcon className="h-4 w-4" />
@@ -300,7 +315,7 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
         {hasSubcategories && isHovered && (
           <div className="absolute top-full left-0 min-w-48 bg-white shadow-lg border border-neutral-200 rounded-lg z-40 dark:bg-neutral-900 dark:border-neutral-800">
             <div className="py-2">
-              {category.subcategories?.map((subcategory) => (
+              {category.children?.map((subcategory) => (
                 <button
                   key={subcategory.id}
                   onClick={() => handleCategorySelect(subcategory)}
@@ -312,9 +327,9 @@ const CategoryNavigation: React.FC<CategoryNavigationProps> = ({
                     )}
                     <span>{subcategory.name}</span>
                   </div>
-                  {showCounts && subcategory.count && (
+                  {showCounts && subcategory.planCount && (
                     <span className="text-xs text-neutral-400">
-                      {subcategory.count}
+                      {subcategory.planCount}
                     </span>
                   )}
                 </button>

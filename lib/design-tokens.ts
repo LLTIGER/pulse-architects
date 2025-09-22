@@ -1,17 +1,56 @@
 /**
  * Design Tokens for Pulse Architects E-commerce Platform
+ * Enhanced with Homely Design System integration
  * Comprehensive token system for consistent design across the application
  */
 
 export const designTokens = {
-  // Color system optimized for architectural content
+  // Color system with Homely integration for architectural content
   colors: {
-    // Primary brand colors
+    // Homely Primary Colors
+    homely: {
+      primary: '#07be8a',
+      skyblue: '#79adff',
+      lightskyblue: '#9cc2dd',
+      dark: '#172023',
+    },
+    
+    // Primary brand colors (updated to Homely)
     primary: {
+      50: '#ecfdf5',
+      100: '#d1fae5',
+      200: '#a7f3d0',
+      300: '#6ee7b7',
+      400: '#34d399',
+      500: '#07be8a', // Homely primary
+      600: '#059669',
+      700: '#047857',
+      800: '#065f46',
+      900: '#064e3b',
+      950: '#022c22',
+    },
+    
+    // Sky blue palette (Homely)
+    skyblue: {
+      50: '#eff6ff',
+      100: '#dbeafe',
+      200: '#bfdbfe',
+      300: '#93c5fd',
+      400: '#79adff', // Homely skyblue
+      500: '#3b82f6',
+      600: '#2563eb',
+      700: '#1d4ed8',
+      800: '#1e40af',
+      900: '#1e3a8a',
+      950: '#172554',
+    },
+    
+    // Light sky blue palette (Homely)
+    lightskyblue: {
       50: '#f0f9ff',
       100: '#e0f2fe',
       200: '#bae6fd',
-      300: '#7dd3fc',
+      300: '#9cc2dd', // Homely lightskyblue
       400: '#38bdf8',
       500: '#0ea5e9',
       600: '#0284c7',
@@ -19,6 +58,21 @@ export const designTokens = {
       800: '#075985',
       900: '#0c4a6e',
       950: '#082f49',
+    },
+    
+    // Dark palette (Homely)
+    dark: {
+      50: '#f8fafc',
+      100: '#f1f5f9',
+      200: '#e2e8f0',
+      300: '#cbd5e1',
+      400: '#94a3b8',
+      500: '#64748b',
+      600: '#475569',
+      700: '#334155',
+      800: '#1e293b',
+      900: '#172023', // Homely dark
+      950: '#0f172a',
     },
     
     // Neutral palette for architectural drawings and UI
@@ -88,26 +142,32 @@ export const designTokens = {
     },
   },
 
-  // Typography system optimized for architectural content
+  // Typography system with Homely integration for architectural content
   typography: {
     fontFamily: {
-      sans: ['Inter', 'system-ui', 'sans-serif'],
-      display: ['Cal Sans', 'Inter', 'sans-serif'],
+      sans: ['Bricolage Grotesque', 'Inter', 'system-ui', 'sans-serif'], // Homely primary font
+      display: ['Bricolage Grotesque', 'Cal Sans', 'Inter', 'sans-serif'],
       mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-      architectural: ['Montserrat', 'Inter', 'sans-serif'],
+      architectural: ['Bricolage Grotesque', 'Montserrat', 'Inter', 'sans-serif'],
     },
     
     fontSize: {
       xs: ['0.75rem', { lineHeight: '1rem' }],
-      sm: ['0.875rem', { lineHeight: '1.25rem' }],
+      sm: ['0.875rem', { lineHeight: '1.25rem' }], // Homely --text-sm
       base: ['1rem', { lineHeight: '1.5rem' }],
       lg: ['1.125rem', { lineHeight: '1.75rem' }],
       xl: ['1.25rem', { lineHeight: '1.75rem' }],
+      xm: ['1.125rem', { lineHeight: '1.5rem' }], // Homely --text-xm
       '2xl': ['1.5rem', { lineHeight: '2rem' }],
       '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
       '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
       '5xl': ['3rem', { lineHeight: '1' }],
       '6xl': ['3.75rem', { lineHeight: '1' }],
+      '7xl': ['4.5rem', { lineHeight: '1' }],
+      '8xl': ['6rem', { lineHeight: '1' }],
+      '9xl': ['6.5rem', { lineHeight: '1' }], // Homely --text-9xl
+      '40': ['2.5rem', { lineHeight: '1.2' }], // Homely --text-40
+      '52': ['3.25rem', { lineHeight: '1.2' }], // Homely --text-52
     },
     
     fontWeight: {
@@ -128,7 +188,7 @@ export const designTokens = {
     },
   },
 
-  // Spacing system for architectural layouts
+  // Spacing system with Homely values for architectural layouts
   spacing: {
     0: '0',
     px: '1px',
@@ -166,9 +226,28 @@ export const designTokens = {
     80: '20rem',
     96: '24rem',
     128: '32rem',
+    
+    // Homely specific spacing
+    68: '17.375rem', // Homely --spacing-68
+    540: '33.75rem', // Homely --spacing-540 (540px)
+    '8xl': '87.5rem', // Homely --spacing-8xl (1400px)
+    '45p': '45%', // Homely percentage spacing
+    '85p': '85%',
+    '90p': '90%',
+  },
+  
+  // Homely breakpoints
+  breakpoints: {
+    xs: '375px', // Homely --breakpoint-xs
+    mobile: '520px', // Homely --breakpoint-mobile
+    sm: '640px',
+    md: '768px',
+    lg: '1024px',
+    xl: '1280px',
+    '2xl': '1400px', // Homely container max width
   },
 
-  // Shadow system for depth and elevation
+  // Shadow system with Homely integration for depth and elevation
   shadows: {
     none: 'none',
     sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
@@ -178,6 +257,11 @@ export const designTokens = {
     xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
     '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
     inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+    
+    // Homely shadow system
+    '3xl': '0px 4px 6px -2px #0000000D, 0px 10px 15px -3px #0000001A',
+    auth: '0 20px 25px -5px #0000001a',
+    'dark-auth': 'rgba(255, 255, 255, 0.1) 0px 12px 28px 0px, rgba(255, 255, 255, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset',
     
     // Specialized shadows for architectural content
     glass: '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
@@ -248,6 +332,11 @@ export const designTokens = {
       float: {
         '0%, 100%': { transform: 'translateY(0px)' },
         '50%': { transform: 'translateY(-10px)' },
+      },
+      // Homely slide animation
+      slide: {
+        '0%': { transform: 'translateX(0%)' },
+        '100%': { transform: 'translateX(-103%)' },
       },
     },
   },

@@ -1,21 +1,12 @@
 'use client';
 
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { cn } from '@/lib/utils/cn';
 import { Button } from '@/components/ui/Button';
-import { Card, CardContent, CardHeader } from '@/components/ui/Card';
 import { ArchitecturalGallery, type ArchitecturalPlan } from '@/components/gallery/ArchitecturalGallery';
 import { 
-  FilterIcon, 
-  XIcon, 
-  ChevronDownIcon,
-  StarIcon,
-  MapPinIcon,
-  CalendarIcon,
-  TrendingUpIcon,
-  TagIcon,
-  HomeIcon,
   LayersIcon,
+  SearchIcon,
 } from 'lucide-react';
 
 export interface FilterCategory {
@@ -28,360 +19,317 @@ export interface FilterCategory {
   }>;
 }
 
+export interface ProductCatalogFilters {
+  category?: string;
+  style?: string;
+  minBedrooms?: number;
+  maxBedrooms?: number;
+  minPrice?: number;
+  maxPrice?: number;
+  search?: string;
+  sortBy?: string;
+  page?: number;
+}
+
 export interface ProductCatalogProps {
-  plans: ArchitecturalPlan[];
-  categories: FilterCategory[];
+  filters?: ProductCatalogFilters;
   onPlanSelect?: (plan: ArchitecturalPlan) => void;
   onAddToCart?: (planId: string) => void;
   onToggleWishlist?: (planId: string) => void;
   className?: string;
 }
 
-interface ActiveFilters {
-  [categoryId: string]: string[];
+interface PlanResponse {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  category: string;
+  tags: string[];
+  images: {
+    thumbnail: string;
+    fullSize: string;
+  };
+  specifications: {
+    bedrooms: number;
+    bathrooms: number;
+    area: string;
+    floors: number;
+    garage: boolean;
+    style: string;
+  };
+  price: string;
+  isPremium: boolean;
+  isNew: boolean;
+  downloads: number;
+  likes: number;
+  rating: number;
+  createdAt: string;
+}
+
+interface PaginationResponse {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+interface PlansApiResponse {
+  plans: PlanResponse[];
+  pagination: PaginationResponse;
 }
 
 const ProductCatalog: React.FC<ProductCatalogProps> = ({
-  plans,
-  categories,
+  filters = {},
   onPlanSelect,
   onAddToCart,
   onToggleWishlist,
   className,
 }) => {
-  const [showFilters, setShowFilters] = useState(false);
-  const [activeFilters, setActiveFilters] = useState<ActiveFilters>({});
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(
-    new Set(categories.map(cat => cat.id))
-  );
+  const [plans, setPlans] = useState<ArchitecturalPlan[]>([]);
+  const [pagination, setPagination] = useState<PaginationResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState(filters.search || '');
+  const [localFilters, setLocalFilters] = useState(filters);
 
-  // Calculate price range from plans
-  const { minPrice, maxPrice } = useMemo(() => {
-    const prices = plans.map(plan => parseFloat(plan.price.replace(/[^0-9.]/g, '')));
-    return {
-      minPrice: Math.min(...prices),
-      maxPrice: Math.max(...prices),
-    };
-  }, [plans]);
-
-  // Filter plans based on active filters
-  const filteredPlans = useMemo(() => {
-    return plans.filter(plan => {
-      // Price filter
-      const planPrice = parseFloat(plan.price.replace(/[^0-9.]/g, ''));
-      if (planPrice < priceRange[0] || planPrice > priceRange[1]) {
-        return false;
-      }
-
-      // Category filters
-      for (const [categoryId, selectedOptions] of Object.entries(activeFilters)) {
-        if (selectedOptions.length === 0) continue;
-
-        const categoryMatches = selectedOptions.some(option => {
-          switch (categoryId) {
-            case 'style':
-              return plan.specifications.style === option;
-            case 'bedrooms':
-              return plan.specifications.bedrooms?.toString() === option;
-            case 'bathrooms':
-              return plan.specifications.bathrooms?.toString() === option;
-            case 'floors':
-              return plan.specifications.floors?.toString() === option;
-            case 'category':
-              return plan.category === option;
-            case 'tags':
-              return plan.tags.includes(option);
-            case 'type':
-              if (option === 'premium') return plan.isPremium;
-              if (option === 'new') return plan.isNew;
-              return true;
-            default:
-              return true;
-          }
-        });
-
-        if (!categoryMatches) return false;
-      }
-
-      return true;
-    });
-  }, [plans, activeFilters, priceRange]);
-
-  // Handle filter changes
-  const handleFilterChange = useCallback((categoryId: string, optionId: string, checked: boolean) => {
-    setActiveFilters(prev => {
-      const current = prev[categoryId] || [];
-      const updated = checked
-        ? [...current, optionId]
-        : current.filter(id => id !== optionId);
+  // Fetch plans data
+  const fetchPlans = useCallback(async (currentFilters: ProductCatalogFilters) => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const params = new URLSearchParams();
       
-      return {
-        ...prev,
-        [categoryId]: updated,
-      };
-    });
-  }, []);
-
-  // Clear filters
-  const clearFilters = useCallback(() => {
-    setActiveFilters({});
-    setPriceRange([minPrice, maxPrice]);
-  }, [minPrice, maxPrice]);
-
-  // Toggle category expansion
-  const toggleCategory = useCallback((categoryId: string) => {
-    setExpandedCategories(prev => {
-      const next = new Set(prev);
-      if (next.has(categoryId)) {
-        next.delete(categoryId);
-      } else {
-        next.add(categoryId);
+      // Add filters to params
+      if (currentFilters.category) params.set('category', currentFilters.category);
+      if (currentFilters.style) params.set('style', currentFilters.style);
+      if (currentFilters.minBedrooms) params.set('minBedrooms', currentFilters.minBedrooms.toString());
+      if (currentFilters.maxBedrooms) params.set('maxBedrooms', currentFilters.maxBedrooms.toString());
+      if (currentFilters.minPrice) params.set('minPrice', currentFilters.minPrice.toString());
+      if (currentFilters.maxPrice) params.set('maxPrice', currentFilters.maxPrice.toString());
+      if (currentFilters.search) params.set('search', currentFilters.search);
+      if (currentFilters.sortBy) params.set('sortBy', currentFilters.sortBy);
+      if (currentFilters.page) params.set('page', currentFilters.page.toString());
+      
+      const response = await fetch(`/api/plans?${params.toString()}`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch plans');
       }
-      return next;
-    });
+      
+      const data: PlansApiResponse = await response.json();
+      
+      // Transform API response to ArchitecturalPlan format
+      const transformedPlans: ArchitecturalPlan[] = data.plans.map(plan => ({
+        id: plan.id,
+        title: plan.title,
+        description: plan.description,
+        images: {
+          thumbnail: plan.images.thumbnail,
+          fullSize: plan.images.fullSize
+        },
+        category: plan.category,
+        tags: plan.tags,
+        specifications: plan.specifications,
+        price: plan.price,
+        isPremium: plan.isPremium,
+        isNew: plan.isNew,
+        downloads: plan.downloads,
+        likes: plan.likes,
+        rating: plan.rating,
+        aspectRatio: 'square' as const,
+        createdAt: plan.createdAt
+      }));
+      
+      setPlans(transformedPlans);
+      setPagination(data.pagination);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load plans');
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  // Get active filter count
-  const activeFilterCount = useMemo(() => {
-    return Object.values(activeFilters).reduce((count, options) => count + options.length, 0);
-  }, [activeFilters]);
+  // Effect to fetch data when filters change
+  useEffect(() => {
+    fetchPlans(localFilters);
+  }, [fetchPlans, localFilters]);
 
-  return (
-    <div className={cn('flex flex-col lg:flex-row gap-8', className)}>
-      {/* Mobile Filter Toggle */}
-      <div className="lg:hidden">
-        <Button
-          variant="outline"
-          onClick={() => setShowFilters(!showFilters)}
-          className="w-full justify-between"
-        >
-          <span className="flex items-center">
-            <FilterIcon className="h-4 w-4 mr-2" />
-            Filters {activeFilterCount > 0 && `(${activeFilterCount})`}
-          </span>
-          <ChevronDownIcon 
-            className={cn(
-              'h-4 w-4 transition-transform',
-              showFilters && 'rotate-180'
-            )} 
-          />
+  // Handle search
+  const handleSearch = useCallback((searchValue: string) => {
+    setSearchTerm(searchValue);
+    setLocalFilters(prev => ({
+      ...prev,
+      search: searchValue,
+      page: 1 // Reset to first page on new search
+    }));
+  }, []);
+
+  // Handle sort change
+  const handleSortChange = useCallback((sortBy: string) => {
+    setLocalFilters(prev => ({
+      ...prev,
+      sortBy,
+      page: 1
+    }));
+  }, []);
+
+  // Handle pagination
+  const handlePageChange = useCallback((page: number) => {
+    setLocalFilters(prev => ({
+      ...prev,
+      page
+    }));
+  }, []);
+
+  if (loading) {
+    return (
+      <div className={cn('space-y-6', className)}>
+        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+          <div className="h-8 bg-muted rounded animate-pulse w-64" />
+          <div className="h-10 bg-muted rounded animate-pulse w-48" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          {Array.from({ length: 9 }).map((_, i) => (
+            <div key={i} className="space-y-3">
+              <div className="aspect-square bg-muted rounded-lg animate-pulse" />
+              <div className="h-4 bg-muted rounded animate-pulse" />
+              <div className="h-4 bg-muted rounded animate-pulse w-2/3" />
+              <div className="h-6 bg-muted rounded animate-pulse w-1/3" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={cn('text-center py-16', className)}>
+        <LayersIcon className="mx-auto h-16 w-16 text-muted-foreground mb-4" />
+        <h3 className="text-xl font-semibold mb-2">Failed to load plans</h3>
+        <p className="text-muted-foreground mb-6">{error}</p>
+        <Button onClick={() => fetchPlans(localFilters)} variant="outline">
+          Try Again
         </Button>
       </div>
+    );
+  }
 
-      {/* Filters Sidebar */}
-      <div className={cn(
-        'w-full lg:w-80 flex-shrink-0',
-        'lg:block',
-        showFilters ? 'block' : 'hidden'
-      )}>
-        <Card className="sticky top-8">
-          <CardHeader 
-            title="Filters"
-            action={
-              activeFilterCount > 0 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearFilters}
-                  className="text-primary-600"
-                >
-                  Clear All
-                </Button>
-              )
-            }
-          />
+  return (
+    <div className={cn('space-y-6', className)}>
+      {/* Search and Sort Controls */}
+      <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <div className="flex-1 max-w-md">
+          <div className="relative">
+            <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+            <input
+              type="text"
+              placeholder="Search architectural plans..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSearch(searchTerm)}
+              className="w-full pl-10 pr-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            />
+          </div>
+        </div>
+        
+        <div className="flex gap-2">
+          <select
+            value={localFilters.sortBy || 'newest'}
+            onChange={(e) => handleSortChange(e.target.value)}
+            className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+          >
+            <option value="newest">Newest First</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="popular">Most Popular</option>
+            <option value="rating">Highest Rated</option>
+          </select>
           
-          <CardContent className="space-y-6">
-            {/* Price Range */}
-            <div className="space-y-3">
-              <h3 className="font-medium text-neutral-900 dark:text-white">
-                Price Range
-              </h3>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm text-neutral-500">
-                  <span>${priceRange[0]}</span>
-                  <span>${priceRange[1]}</span>
-                </div>
-                <div className="relative">
-                  <input
-                    type="range"
-                    min={minPrice}
-                    max={maxPrice}
-                    value={priceRange[0]}
-                    onChange={(e) => setPriceRange([parseInt(e.target.value), priceRange[1]])}
-                    className="absolute w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer"
-                  />
-                  <input
-                    type="range"
-                    min={minPrice}
-                    max={maxPrice}
-                    value={priceRange[1]}
-                    onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
-                    className="absolute w-full h-2 bg-neutral-200 rounded-lg appearance-none cursor-pointer"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Filter Categories */}
-            {categories.map((category) => {
-              const isExpanded = expandedCategories.has(category.id);
-              const selectedOptions = activeFilters[category.id] || [];
-
-              return (
-                <div key={category.id} className="space-y-3">
-                  <button
-                    onClick={() => toggleCategory(category.id)}
-                    className="flex items-center justify-between w-full text-left"
-                  >
-                    <h3 className="font-medium text-neutral-900 dark:text-white">
-                      {category.name}
-                      {selectedOptions.length > 0 && (
-                        <span className="ml-2 text-xs bg-primary-100 text-primary-700 px-2 py-1 rounded-full">
-                          {selectedOptions.length}
-                        </span>
-                      )}
-                    </h3>
-                    <ChevronDownIcon 
-                      className={cn(
-                        'h-4 w-4 transition-transform text-neutral-400',
-                        isExpanded && 'rotate-180'
-                      )} 
-                    />
-                  </button>
-
-                  {isExpanded && (
-                    <div className="space-y-2 max-h-48 overflow-y-auto">
-                      {category.options.map((option) => {
-                        const isSelected = selectedOptions.includes(option.id);
-                        
-                        return (
-                          <label
-                            key={option.id}
-                            className="flex items-center justify-between cursor-pointer p-2 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-800"
-                          >
-                            <div className="flex items-center">
-                              <input
-                                type="checkbox"
-                                checked={isSelected}
-                                onChange={(e) => handleFilterChange(category.id, option.id, e.target.checked)}
-                                className="rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
-                              />
-                              <span className="ml-3 text-sm text-neutral-700 dark:text-neutral-300">
-                                {option.label}
-                              </span>
-                            </div>
-                            <span className="text-xs text-neutral-400">
-                              {option.count}
-                            </span>
-                          </label>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-
-            {/* Quick Filters */}
-            <div className="pt-4 border-t border-neutral-200 dark:border-neutral-800">
-              <h3 className="font-medium text-neutral-900 dark:text-white mb-3">
-                Quick Filters
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {[
-                  { id: 'new', label: 'New Plans', icon: StarIcon },
-                  { id: 'premium', label: 'Premium', icon: TrendingUpIcon },
-                  { id: 'popular', label: 'Popular', icon: HomeIcon },
-                ].map((filter) => {
-                  const Icon = filter.icon;
-                  const isActive = activeFilters['type']?.includes(filter.id);
-                  
-                  return (
-                    <Button
-                      key={filter.id}
-                      variant={isActive ? 'primary' : 'outline'}
-                      size="sm"
-                      onClick={() => handleFilterChange('type', filter.id, !isActive)}
-                      className="text-xs"
-                    >
-                      <Icon className="h-3 w-3 mr-1" />
-                      {filter.label}
-                    </Button>
-                  );
-                })}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+          <Button
+            variant="outline"
+            onClick={() => handleSearch(searchTerm)}
+            disabled={loading}
+          >
+            <SearchIcon className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
 
-      {/* Main Content */}
-      <div className="flex-1 min-w-0">
-        {/* Results Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-bold text-neutral-900 dark:text-white">
-              Architectural Plans
-            </h2>
-            <p className="text-neutral-500 mt-1">
-              {filteredPlans.length} plans available
-            </p>
-          </div>
+      {/* Results Count */}
+      <div className="flex items-center justify-between">
+        <p className="text-muted-foreground">
+          {pagination ? `${pagination.total} plans found` : `${plans.length} plans`}
+          {localFilters.search && ` for "${localFilters.search}"`}
+        </p>
+        
+        {pagination && pagination.totalPages > 1 && (
+          <span className="text-sm text-muted-foreground">
+            Page {pagination.page} of {pagination.totalPages}
+          </span>
+        )}
+      </div>
 
-          {/* Active Filters */}
-          {activeFilterCount > 0 && (
-            <div className="hidden md:flex items-center gap-2">
-              <span className="text-sm text-neutral-500">Active filters:</span>
-              {Object.entries(activeFilters).map(([categoryId, options]) =>
-                options.map(option => {
-                  const category = categories.find(cat => cat.id === categoryId);
-                  const optionLabel = category?.options.find(opt => opt.id === option)?.label || option;
-                  
-                  return (
-                    <Button
-                      key={`${categoryId}-${option}`}
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleFilterChange(categoryId, option, false)}
-                      className="text-xs"
-                    >
-                      {optionLabel}
-                      <XIcon className="h-3 w-3 ml-1" />
-                    </Button>
-                  );
-                })
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Gallery */}
+      {/* Plans Gallery */}
+      {plans.length > 0 ? (
         <ArchitecturalGallery
-          plans={filteredPlans}
+          plans={plans}
           onPlanSelect={onPlanSelect}
           onPlanLike={onToggleWishlist}
           onPlanDownload={onAddToCart}
           showFilters={false}
         />
-
-        {/* Empty State */}
-        {filteredPlans.length === 0 && (
-          <div className="text-center py-16">
-            <LayersIcon className="mx-auto h-16 w-16 text-neutral-400 mb-4" />
-            <h3 className="text-xl font-semibold text-neutral-900 dark:text-white mb-2">
-              No plans match your criteria
-            </h3>
-            <p className="text-neutral-500 mb-6 max-w-md mx-auto">
-              Try adjusting your filters or search terms to find the perfect architectural plan for your project.
-            </p>
-            <Button onClick={clearFilters} variant="primary">
-              Clear Filters
+      ) : (
+        <div className="text-center py-16">
+          <LayersIcon className="mx-auto h-16 w-16 text-muted-foreground mb-4" />
+          <h3 className="text-xl font-semibold mb-2">No plans found</h3>
+          <p className="text-muted-foreground mb-6 max-w-md mx-auto">
+            {localFilters.search
+              ? `No plans match your search for "${localFilters.search}". Try different keywords.`
+              : 'No architectural plans are currently available. Check back later!'
+            }
+          </p>
+          {localFilters.search && (
+            <Button 
+              onClick={() => handleSearch('')} 
+              variant="outline"
+            >
+              Clear Search
             </Button>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
+
+      {/* Pagination */}
+      {pagination && pagination.totalPages > 1 && (
+        <div className="flex items-center justify-center gap-2 pt-8">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(pagination.page - 1)}
+            disabled={!pagination.hasPreviousPage || loading}
+          >
+            Previous
+          </Button>
+          
+          <span className="px-4 py-2 text-sm">
+            Page {pagination.page} of {pagination.totalPages}
+          </span>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => handlePageChange(pagination.page + 1)}
+            disabled={!pagination.hasNextPage || loading}
+          >
+            Next
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

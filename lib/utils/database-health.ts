@@ -44,7 +44,7 @@ export async function checkDatabaseHealth(): Promise<DatabaseHealth> {
     performance: {
       avgQueryTime: 0,
       activeConnections: 0,
-      status: 'good' as const
+      status: 'good' as 'good' | 'warning' | 'critical'
     }
   }
 
@@ -181,10 +181,11 @@ export async function checkPerformanceIssues(): Promise<{
       recommendations.push('Fix user profile completion status')
     }
 
-    // Check for orphaned records
+    // Check for orphaned records (files without corresponding plans)
+    const allPlanIds = await prisma.plan.findMany({ select: { id: true } }).then(plans => plans.map(p => p.id))
     const orphanedFiles = await prisma.planFile.count({
       where: {
-        plan: null
+        planId: { notIn: allPlanIds }
       }
     })
 
@@ -342,9 +343,13 @@ export async function verifyDataIntegrity(): Promise<{
 
   try {
     // Check referential integrity
+    const allOrderIds = await prisma.order.findMany({ select: { id: true } }).then(orders => orders.map(o => o.id))
+    const allPlanIds = await prisma.plan.findMany({ select: { id: true } }).then(plans => plans.map(p => p.id))
+    const allUserIds = await prisma.user.findMany({ select: { id: true } }).then(users => users.map(u => u.id))
+    
     const orphanedOrderItems = await prisma.orderItem.count({
       where: {
-        order: null
+        orderId: { notIn: allOrderIds }
       }
     })
 
@@ -352,13 +357,12 @@ export async function verifyDataIntegrity(): Promise<{
       issues.push(`${orphanedOrderItems} order items without valid orders`)
       fixes.push('Delete orphaned order items')
     }
-
     const orphanedLicenses = await prisma.license.count({
       where: {
         OR: [
-          { order: null },
-          { user: null },
-          { plan: null }
+          { orderId: { notIn: allOrderIds } },
+          { userId: { notIn: allUserIds } },
+          { planId: { notIn: allPlanIds } }
         ]
       }
     })
@@ -386,7 +390,7 @@ export async function verifyDataIntegrity(): Promise<{
     // Check required fields
     const usersWithoutEmails = await prisma.user.count({
       where: {
-        email: null
+        email: ""
       }
     })
 

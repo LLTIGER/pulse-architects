@@ -17,22 +17,52 @@ const config: Config = {
       },
     },
     extend: {
-      // Design System Colors
+      // Homely Design System Colors for Pulse Architects
       colors: {
-        // Brand colors for architectural platform
-        primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#0ea5e9',
-          600: '#0284c7',
-          700: '#0369a1',
-          800: '#075985',
-          900: '#0c4a6e',
-          950: '#082f49',
-        },
+        // Homely Brand Colors
+        primary: '#07be8a',
+        skyblue: '#79adff',
+        lightskyblue: '#9cc2dd',
+        dark: '#172023',
+        
+        // Extended primary palette
+        'primary-50': '#ecfdf5',
+        'primary-100': '#d1fae5',
+        'primary-200': '#a7f3d0',
+        'primary-300': '#6ee7b7',
+        'primary-400': '#34d399',
+        'primary-500': '#07be8a',
+        'primary-600': '#059669',
+        'primary-700': '#047857',
+        'primary-800': '#065f46',
+        'primary-900': '#064e3b',
+        'primary-950': '#022c22',
+        
+        // Sky blue palette
+        'skyblue-50': '#eff6ff',
+        'skyblue-100': '#dbeafe',
+        'skyblue-200': '#bfdbfe',
+        'skyblue-300': '#93c5fd',
+        'skyblue-400': '#79adff',
+        'skyblue-500': '#3b82f6',
+        'skyblue-600': '#2563eb',
+        'skyblue-700': '#1d4ed8',
+        'skyblue-800': '#1e40af',
+        'skyblue-900': '#1e3a8a',
+        'skyblue-950': '#172554',
+        
+        // Light sky blue palette
+        'lightskyblue-50': '#f0f9ff',
+        'lightskyblue-100': '#e0f2fe',
+        'lightskyblue-200': '#bae6fd',
+        'lightskyblue-300': '#9cc2dd',
+        'lightskyblue-400': '#38bdf8',
+        'lightskyblue-500': '#0ea5e9',
+        'lightskyblue-600': '#0284c7',
+        'lightskyblue-700': '#0369a1',
+        'lightskyblue-800': '#075985',
+        'lightskyblue-900': '#0c4a6e',
+        'lightskyblue-950': '#082f49',
         // Architectural neutral palette
         neutral: {
           50: '#fafafa',
@@ -110,38 +140,62 @@ const config: Config = {
         },
       },
       
-      // Typography system optimized for architectural content
+      // Typography system with Homely font (Bricolage Grotesque fallback to Inter)
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Cal Sans', 'Inter', 'sans-serif'],
+        sans: ['Bricolage Grotesque', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['Bricolage Grotesque', 'Cal Sans', 'Inter', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
-        architectural: ['Montserrat', 'Inter', 'sans-serif'], // For technical specs
+        architectural: ['Bricolage Grotesque', 'Montserrat', 'Inter', 'sans-serif'],
       },
       
       fontSize: {
-        // Fluid typography scale
-        'xs': ['clamp(0.75rem, 0.75rem + 0vw, 0.75rem)', { lineHeight: '1rem' }],
-        'sm': ['clamp(0.875rem, 0.875rem + 0vw, 0.875rem)', { lineHeight: '1.25rem' }],
-        'base': ['clamp(1rem, 1rem + 0.125vw, 1.125rem)', { lineHeight: '1.5rem' }],
-        'lg': ['clamp(1.125rem, 1.125rem + 0.25vw, 1.25rem)', { lineHeight: '1.75rem' }],
-        'xl': ['clamp(1.25rem, 1.25rem + 0.5vw, 1.5rem)', { lineHeight: '1.75rem' }],
-        '2xl': ['clamp(1.5rem, 1.5rem + 0.75vw, 1.875rem)', { lineHeight: '2rem' }],
-        '3xl': ['clamp(1.875rem, 1.875rem + 1vw, 2.25rem)', { lineHeight: '2.25rem' }],
-        '4xl': ['clamp(2.25rem, 2.25rem + 1.25vw, 2.5rem)', { lineHeight: '2.5rem' }],
-        '5xl': ['clamp(3rem, 3rem + 1.5vw, 3.5rem)', { lineHeight: '1' }],
-        '6xl': ['clamp(3.75rem, 3.75rem + 2vw, 4.5rem)', { lineHeight: '1' }],
+        // Homely typography scale
+        'xs': ['0.75rem', { lineHeight: '1rem' }],
+        'sm': ['var(--text-sm)', { lineHeight: '1.25rem' }], // 0.875rem
+        'base': ['1rem', { lineHeight: '1.5rem' }],
+        'lg': ['1.125rem', { lineHeight: '1.75rem' }],
+        'xl': ['1.25rem', { lineHeight: '1.75rem' }],
+        'xm': ['var(--text-xm)', { lineHeight: '1.5rem' }], // 1.125rem
+        '2xl': ['1.5rem', { lineHeight: '2rem' }],
+        '3xl': ['1.875rem', { lineHeight: '2.25rem' }],
+        '4xl': ['2.25rem', { lineHeight: '2.5rem' }],
+        '5xl': ['3rem', { lineHeight: '1' }],
+        '6xl': ['3.75rem', { lineHeight: '1' }],
+        '7xl': ['4.5rem', { lineHeight: '1' }],
+        '8xl': ['6rem', { lineHeight: '1' }],
+        '9xl': ['var(--text-9xl)', { lineHeight: '1' }], // 6.5rem
+        '40': ['var(--text-40)', { lineHeight: '1.2' }], // 2.5rem
+        '52': ['var(--text-52)', { lineHeight: '1.2' }], // 3.25rem
       },
 
-      // Spacing system for architectural layouts
+      // Spacing system with Homely values
       spacing: {
         '18': '4.5rem',
         '72': '18rem',
         '84': '21rem',
         '96': '24rem',
         '128': '32rem',
+        // Homely specific spacing
+        '68': 'var(--spacing-68)', // 17.375rem
+        '540': 'var(--spacing-540)', // 33.75rem (540px)
+        '8xl': 'var(--spacing-8xl)', // 87.5rem (1400px)
+        '45p': 'var(--spacing-45p)', // 45%
+        '85p': 'var(--spacing-85p)', // 85%
+        '90p': 'var(--spacing-90p)', // 90%
+      },
+      
+      // Homely breakpoints
+      screens: {
+        'xs': 'var(--breakpoint-xs)', // 375px
+        'mobile': 'var(--breakpoint-mobile)', // 520px
+        'sm': '640px',
+        'md': '768px',
+        'lg': '1024px',
+        'xl': '1280px',
+        '2xl': '1400px',
       },
 
-      // Animation system
+      // Animation system with Homely animations
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
         'fade-in-up': 'fadeInUp 0.6s ease-out',
@@ -152,6 +206,8 @@ const config: Config = {
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'float': 'float 6s ease-in-out infinite',
         'glow': 'glow 2s ease-in-out infinite alternate',
+        // Homely animation
+        'slide': 'var(--animate-slide)',
       },
       
       keyframes: {
@@ -189,7 +245,7 @@ const config: Config = {
         },
       },
 
-      // Shadows for depth and elevation
+      // Shadows for depth and elevation with Homely system
       boxShadow: {
         'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
         'glass-inset': 'inset 0 1px 0 0 rgba(255, 255, 255, 0.1)',
@@ -199,6 +255,10 @@ const config: Config = {
         'elevation-medium': '0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23)',
         'elevation-high': '0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23)',
         'elevation-highest': '0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22)',
+        // Homely shadows
+        '3xl': 'var(--shadow-3xl)',
+        'auth': 'var(--shadow-auth)',
+        'dark-auth': 'var(--shadow-dark-auth)',
       },
 
       // Border radius system

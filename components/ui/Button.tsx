@@ -7,12 +7,12 @@ import { cn } from '@/lib/utils/cn';
 
 const buttonVariants = cva(
   [
-    // Base styles
-    'inline-flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-200',
+    // Base styles with Homely integration
+    'inline-flex items-center justify-center rounded-full text-base font-semibold transition-all duration-300',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
     'disabled:pointer-events-none disabled:opacity-50',
     // Premium effects
-    'relative overflow-hidden',
+    'relative overflow-hidden cursor-pointer',
     'before:absolute before:inset-0 before:bg-gradient-to-r before:from-transparent before:via-white/10 before:to-transparent',
     'before:translate-x-[-100%] before:transition-transform before:duration-700',
     'hover:before:translate-x-[100%]',
@@ -20,19 +20,29 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        // Homely primary button style
         primary: [
-          'bg-gradient-to-r from-primary-600 to-blueprint-600',
+          'px-8 py-4 border border-white dark:border-dark bg-white dark:bg-dark',
+          'text-dark dark:text-white',
+          'hover:bg-transparent hover:text-white dark:hover:text-dark',
+          'hover:scale-[1.02] active:scale-[0.98]',
+          'focus-visible:ring-primary-500',
+        ],
+        // Homely secondary button style
+        secondary: [
+          'px-8 py-4 border border-white dark:border-dark bg-transparent',
+          'text-white dark:text-dark',
+          'hover:bg-white dark:hover:bg-dark hover:text-dark dark:hover:text-white',
+          'hover:scale-[1.02] active:scale-[0.98]',
+          'focus-visible:ring-primary-500',
+        ],
+        // Original design system variants
+        'design-primary': [
+          'bg-gradient-to-r from-primary-600 to-skyblue-600',
           'text-white shadow-lg shadow-primary-500/25',
           'hover:shadow-xl hover:shadow-primary-500/40',
           'hover:scale-[1.02] active:scale-[0.98]',
           'focus-visible:ring-primary-500',
-        ],
-        secondary: [
-          'bg-neutral-100 text-neutral-900 border border-neutral-200',
-          'hover:bg-neutral-50 hover:border-neutral-300',
-          'dark:bg-neutral-800 dark:text-neutral-100 dark:border-neutral-700',
-          'dark:hover:bg-neutral-700',
-          'focus-visible:ring-neutral-500',
         ],
         outline: [
           'border border-primary-200 text-primary-700',
@@ -47,12 +57,12 @@ const buttonVariants = cva(
           'focus-visible:ring-neutral-500',
         ],
         premium: [
-          'bg-gradient-to-r from-purple-600 via-blueprint-600 to-primary-600',
-          'text-white shadow-2xl shadow-purple-500/50',
-          'hover:shadow-purple-500/60 hover:shadow-3xl',
+          'bg-gradient-to-r from-primary-600 via-skyblue-600 to-lightskyblue-600',
+          'text-white shadow-2xl shadow-primary-500/50',
+          'hover:shadow-primary-500/60 hover:shadow-3xl',
           'hover:scale-[1.05] active:scale-[0.95]',
           'bg-size-200 hover:bg-pos-0',
-          'focus-visible:ring-purple-500',
+          'focus-visible:ring-primary-500',
         ],
         glass: [
           'bg-white/10 backdrop-blur-xl border border-white/20',
@@ -68,11 +78,11 @@ const buttonVariants = cva(
         ],
       },
       size: {
-        sm: 'h-8 px-3 text-xs',
-        default: 'h-10 px-4 py-2',
-        lg: 'h-12 px-6 text-base',
-        xl: 'h-14 px-8 text-lg',
-        icon: 'h-10 w-10',
+        sm: 'px-6 py-3 text-sm',
+        default: 'px-8 py-4 text-base', // Homely default
+        lg: 'px-10 py-5 text-lg',
+        xl: 'px-12 py-6 text-xl',
+        icon: 'p-4 w-auto h-auto aspect-square',
       },
       animation: {
         none: '',
