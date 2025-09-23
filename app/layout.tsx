@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Bricolage_Grotesque } from 'next/font/google'
 import './globals.css'
+import { ThemeProvider } from '@/components/providers/ThemeProvider'
 
-const inter = Inter({ subsets: ['latin'] })
+const font = Bricolage_Grotesque({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: {
@@ -74,10 +75,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <div className="min-h-screen bg-background">
-          {children}
-        </div>
+      <body className={`${font.className} bg-white dark:bg-dark antialiased`}>
+        <ThemeProvider
+          attribute='class'
+          enableSystem={true}
+          defaultTheme='light'>
+          <div className="min-h-screen">
+            {children}
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   )

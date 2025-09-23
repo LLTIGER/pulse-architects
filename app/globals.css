@@ -1,111 +1,56 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@plugin 'tailwindcss-animate';
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-:root {
-  /* Homely Design System Colors for Pulse Architects */
+@theme {
+  /* Gradient colors */
   --color-primary: #07be8a;
   --color-skyblue: #79adff;
   --color-lightskyblue: #9cc2dd;
   --color-dark: #172023;
-  
-  /* Design tokens for Pulse Architects */
-  /* Base Colors */
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 158 79% 39%; /* #07be8a converted to HSL */
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96%;
-  --secondary-foreground: 222.2 84% 4.9%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96%;
-  --accent-foreground: 222.2 84% 4.9%;
-  --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 158 79% 39%;
-  --radius: 0.5rem;
-  
-  /* Homely Shadow System */
+
+  /* Shadow */
   --shadow-3xl: 0px 4px 6px -2px #0000000D, 0px 10px 15px -3px #0000001A;
   --shadow-auth: 0 20px 25px -5px #0000001a;
   --shadow-dark-auth: rgba(255, 255, 255, 0.1) 0px 12px 28px 0px, rgba(255, 255, 255, 0.1) 0px 2px 4px 0px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset;
-  
-  /* Homely Typography */
+
+  /* font size */
   --text-xm: 1.125rem;
   --text-9xl: 6.5rem;
   --text-40: 2.5rem;
   --text-52: 3.25rem;
   --text-sm: 0.875rem;
-  
-  /* Homely Breakpoints */
-  --breakpoint-xs: 23.438rem; /* 375px */
-  --breakpoint-mobile: 32.5rem; /* 520px */
-  
-  /* Homely Spacing */
+
+  /* Breakpoint */
+  --breakpoint-xs: 23.438rem;
+  /* 375px */
+  --breakpoint-mobile: 32.5rem;
+  /* 520px */
+
+  /* breakpoint / max-w */
   --spacing-45p: 45%;
   --spacing-85p: 85%;
   --spacing-90p: 90%;
   --spacing-68: 17.375rem;
-  --spacing-540: 33.75rem; /* 540px */
-  --spacing-8xl: 87.5rem; /* 1400px */
-  
-  /* Homely Animation */
+
+  --spacing-540: 33.75rem;
+  /* 540px */
+  --spacing-8xl: 87.5rem;
+  /* 1400px */
+
+  /* animation */
   --animate-slide: slide 20s linear infinite;
-  
-  /* Architectural theme colors with Homely palette */
-  --architect-primary: #07be8a;
-  --architect-blue: #79adff;
-  --architect-light-blue: #9cc2dd;
-  --architect-dark: #172023;
-}
 
-.dark {
-  --background: 192 32% 10%; /* #172023 converted to HSL */
-  --foreground: 210 40% 98%;
-  --card: 192 32% 10%;
-  --card-foreground: 210 40% 98%;
-  --popover: 192 32% 10%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 158 79% 39%; /* Keep Homely primary in dark mode */
-  --primary-foreground: 192 32% 10%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 224.3 76.3% 94.1%;
-}
+  @keyframes slide {
+    0% {
+      transform: translateX(0%);
+    }
 
-@keyframes slide {
-  0% {
-    transform: translateX(0%);
+    100% {
+      transform: translateX(-103%);
+    }
   }
-  100% {
-    transform: translateX(-103%);
-  }
-}
-
-* {
-  border-color: hsl(var(--border));
-}
-
-body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
 }
 
 html {
@@ -119,16 +64,16 @@ html {
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .no-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
-/* Homely Section Styles */
 section {
-  @apply py-24;
+  @apply py-24
 }
 
-/* Blog Detail Styles (from Homely) */
 .blog-details p, .blog-details hr {
   @apply mb-8;
 }
@@ -150,7 +95,7 @@ section {
 }
 
 .blog-details ol li {
-  @apply mb-0;
+  @apply mb-0
 }
 
 .blog-details h1 {
@@ -170,14 +115,14 @@ section {
 }
 
 .blog-details hr {
-  @apply border-white;
+  @apply border-white
 }
 
 .blog-details p {
-  @apply text-dark dark:text-white text-xm leading-[1.2];
+  @apply text-dark dark:text-white text-xm leading-[1.2]
 }
 
-/* Custom styles for architectural content */
+/* Pulse Architects Specific Styles */
 .architectural-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -185,7 +130,7 @@ section {
 }
 
 .plan-card {
-  @apply bg-card rounded-lg border shadow-sm hover:shadow-md transition-shadow duration-200;
+  @apply bg-white dark:bg-dark rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow duration-200;
 }
 
 .plan-image {
@@ -196,19 +141,28 @@ section {
   @apply p-4;
 }
 
-/* Hero Section with Gradient (Homely Style) */
+/* Hero Section with Homely Gradient */
 .hero-gradient {
-  @apply bg-gradient-to-b from-skyblue via-lightskyblue dark:via-[#4298b0] to-white/10 dark:to-black/10;
+  @apply bg-gradient-to-b from-skyblue via-lightskyblue to-white/10 dark:to-dark;
+}
+
+/* Button Styles from Homely */
+.btn-homely-primary {
+  @apply px-8 py-4 border border-white dark:border-dark bg-white dark:bg-dark text-dark dark:text-white duration-300 dark:hover:text-dark hover:bg-transparent hover:text-white text-base font-semibold rounded-full hover:cursor-pointer;
+}
+
+.btn-homely-secondary {
+  @apply px-8 py-4 border border-white dark:border-dark bg-transparent text-white dark:text-dark hover:bg-white dark:hover:bg-dark dark:hover:text-white hover:text-dark duration-300 text-base font-semibold rounded-full hover:cursor-pointer;
 }
 
 /* Loading states */
 .skeleton {
-  @apply animate-pulse bg-muted rounded;
+  @apply animate-pulse bg-gray-200 dark:bg-gray-700 rounded;
 }
 
 /* Focus styles for accessibility */
 .focus-visible {
-  @apply outline-none ring-2 ring-ring ring-offset-2;
+  @apply outline-none ring-2 ring-primary ring-offset-2;
 }
 
 /* Image optimization for architectural plans */
@@ -218,13 +172,4 @@ section {
 
 .hero-image {
   @apply object-cover w-full h-full;
-}
-
-/* Homely Button Styles */
-.btn-homely-primary {
-  @apply px-8 py-4 border border-white dark:border-dark bg-white dark:bg-dark text-dark dark:text-white duration-300 dark:hover:text-dark hover:bg-transparent hover:text-white text-base font-semibold rounded-full hover:cursor-pointer;
-}
-
-.btn-homely-secondary {
-  @apply px-8 py-4 border border-white dark:border-dark bg-transparent text-white dark:text-dark hover:bg-white dark:hover:bg-dark dark:hover:text-white hover:text-dark duration-300 text-base font-semibold rounded-full hover:cursor-pointer;
 }
