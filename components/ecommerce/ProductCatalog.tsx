@@ -33,6 +33,7 @@ export interface ProductCatalogFilters {
 
 export interface ProductCatalogProps {
   filters?: ProductCatalogFilters;
+  viewMode?: 'grid' | 'list';
   onPlanSelect?: (plan: ArchitecturalPlan) => void;
   onAddToCart?: (planId: string) => void;
   onToggleWishlist?: (planId: string) => void;

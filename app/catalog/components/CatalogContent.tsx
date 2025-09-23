@@ -4,6 +4,8 @@ import { useState, Suspense } from 'react'
 import { Filter, Grid3X3, List } from 'lucide-react'
 import FilterSidebar from '@/components/catalog/FilterSidebar'
 import { ProductCatalog } from '@/components/ecommerce/ProductCatalog'
+import { useCartStore } from '@/lib/stores/cart-store'
+import { toast } from 'react-hot-toast'
 
 interface CatalogContentProps {
   searchParams?: {
@@ -22,6 +24,7 @@ interface CatalogContentProps {
 export function CatalogContent({ searchParams }: CatalogContentProps) {
   const [isFilterOpen, setIsFilterOpen] = useState(false)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const { addItem, openCart } = useCartStore()
 
   const getActiveFiltersCount = () => {
     if (!searchParams) return 0
@@ -29,6 +32,35 @@ export function CatalogContent({ searchParams }: CatalogContentProps) {
   }
 
   const activeFiltersCount = getActiveFiltersCount()
+
+  const handleAddToCart = (planId: string) => {
+    // We'll need to fetch the plan details to add to cart
+    // For now, we'll simulate this with the plan data we have
+    // In a real app, you'd make an API call to get the full plan details
+    console.log('Adding plan to cart:', planId)
+    
+    // Simulated plan data - in production this would come from API
+    const plan = {
+      id: planId,
+      title: 'Architectural Plan',
+      price: 299,
+      image: '/api/placeholder/400/400',
+      category: 'Residential',
+      bedrooms: 3,
+      bathrooms: 2,
+      squareFootage: 2500
+    }
+    
+    addItem(plan)
+    toast.success('Plan added to cart!')
+    openCart()
+  }
+
+  const handleToggleWishlist = (planId: string) => {
+    // Wishlist functionality would be implemented here
+    console.log('Toggle wishlist for plan:', planId)
+    toast.success('Added to wishlist!')
+  }
 
   return (
     <div className="flex gap-8">
@@ -106,6 +138,8 @@ export function CatalogContent({ searchParams }: CatalogContentProps) {
               sortBy: searchParams?.sortBy || 'newest',
               page: searchParams?.page ? parseInt(searchParams.page) : 1
             }}
+            onAddToCart={handleAddToCart}
+            onToggleWishlist={handleToggleWishlist}
           />
         </Suspense>
       </div>

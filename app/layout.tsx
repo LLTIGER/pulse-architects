@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Bricolage_Grotesque } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
+import { ToastProvider } from '@/components/providers/ToastProvider'
 
 const font = Bricolage_Grotesque({ subsets: ['latin'] })
 
@@ -83,6 +84,7 @@ export default function RootLayout({
           <div className="min-h-screen">
             {children}
           </div>
+          <ToastProvider />
         </ThemeProvider>
       </body>
     </html>

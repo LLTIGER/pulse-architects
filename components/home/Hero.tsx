@@ -1,5 +1,5 @@
-import Image from 'next/image'
 import Link from 'next/link'
+import Image from 'next/image'
 
 const Hero: React.FC = () => {
   return (
@@ -21,33 +21,78 @@ const Hero: React.FC = () => {
             </div>
           </div>
           <div className='hidden md:block absolute -top-2 -right-68'>
-            <div className='w-[1082px] h-[1016px] bg-white/10 rounded-lg flex items-center justify-center text-white/60'>
-              <span>Architectural Visualization</span>
-            </div>
+            <Image
+              src={'/images/hero/heroBanner.png'}
+              alt='Architectural Visualization'
+              width={1082}
+              height={1016}
+              priority={true}
+              unoptimized={true}
+              className='object-cover'
+            />
           </div>
         </div>
         <div className='md:absolute bottom-0 md:-right-68 xl:right-0 bg-white dark:bg-black py-12 px-8 mobile:px-16 md:pl-16 md:pr-[295px] rounded-2xl md:rounded-none md:rounded-tl-2xl mt-24'>
           <div className='grid grid-cols-2 sm:grid-cols-4 md:flex gap-16 md:gap-24 sm:text-center dark:text-white text-black'>
             <div className='flex flex-col sm:items-center gap-3'>
-              <div className='w-8 h-8 bg-primary rounded-lg flex items-center justify-center'>
-                <span className='text-white text-sm font-bold'>🏠</span>
-              </div>
+              <Image
+                src={'/images/hero/sofa.svg'}
+                alt='Residential Plans'
+                width={32}
+                height={32}
+                className='block dark:hidden'
+                unoptimized={true}
+              />
+              <Image
+                src={'/images/hero/dark-sofa.svg'}
+                alt='Residential Plans'
+                width={32}
+                height={32}
+                className='hidden dark:block'
+                unoptimized={true}
+              />
               <p className='text-sm sm:text-base font-normal text-inherit'>
                 Residential Plans
               </p>
             </div>
             <div className='flex flex-col sm:items-center gap-3'>
-              <div className='w-8 h-8 bg-primary rounded-lg flex items-center justify-center'>
-                <span className='text-white text-sm font-bold'>🏢</span>
-              </div>
+              <Image
+                src={'/images/hero/tube.svg'}
+                alt='Commercial Designs'
+                width={32}
+                height={32}
+                className='block dark:hidden'
+                unoptimized={true}
+              />
+              <Image
+                src={'/images/hero/dark-tube.svg'}
+                alt='Commercial Designs'
+                width={32}
+                height={32}
+                className='hidden dark:block'
+                unoptimized={true}
+              />
               <p className='text-sm sm:text-base font-normal text-inherit'>
                 Commercial Designs
               </p>
             </div>
             <div className='flex flex-col sm:items-center gap-3'>
-              <div className='w-8 h-8 bg-primary rounded-lg flex items-center justify-center'>
-                <span className='text-white text-sm font-bold'>📐</span>
-              </div>
+              <Image
+                src={'/images/hero/parking.svg'}
+                alt='Custom Blueprints'
+                width={32}
+                height={32}
+                className='block dark:hidden'
+                unoptimized={true}
+              />
+              <Image
+                src={'/images/hero/dark-parking.svg'}
+                alt='Custom Blueprints'
+                width={32}
+                height={32}
+                className='hidden dark:block'
+                unoptimized={true}
+              />
               <p className='text-sm sm:text-base font-normal text-inherit'>
                 Custom Blueprints
               </p>

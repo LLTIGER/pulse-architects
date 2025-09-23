@@ -341,16 +341,6 @@ export const designTokens = {
     },
   },
 
-  // Breakpoints for responsive design
-  breakpoints: {
-    xs: '320px',
-    sm: '640px',
-    md: '768px',
-    lg: '1024px',
-    xl: '1280px',
-    '2xl': '1536px',
-  },
-
   // Z-index scale for layering
   zIndex: {
     auto: 'auto',

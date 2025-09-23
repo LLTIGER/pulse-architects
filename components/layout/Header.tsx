@@ -1,10 +1,12 @@
 'use client'
-import { Icon } from '@iconify/react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { useTheme } from 'next-themes'
 import { usePathname } from 'next/navigation'
-import Image from 'next/image'
+import { Sun, Moon, Phone, Menu, X } from 'lucide-react'
+import CartButton from '@/components/ecommerce/CartButton'
+import CartDrawer from '@/components/ecommerce/CartDrawer'
 
 // Navigation links for Pulse Architects
 const navLinks = [
@@ -50,20 +52,37 @@ const Header: React.FC = () => {
         <div className='flex justify-between items-center gap-2 w-full'>
           <div>
             <Link href='/'>
-              <span className={`text-2xl font-bold ${isHomepage ? sticky ? "text-dark dark:text-white" : "text-white" : "text-dark dark:text-white"}`}>
-                Pulse Architects
-              </span>
+              <div className="flex items-center">
+                <Image
+                  src={'/images/header/logo.svg'}
+                  alt='Pulse Architects'
+                  width={40}
+                  height={40}
+                  className={`block dark:hidden mr-3 ${isHomepage && !sticky ? 'brightness-0 invert' : ''}`}
+                  unoptimized={true}
+                />
+                <Image
+                  src={'/images/header/dark-logo.svg'}
+                  alt='Pulse Architects'
+                  width={40}
+                  height={40}
+                  className="hidden dark:block mr-3"
+                  unoptimized={true}
+                />
+                <span className={`text-2xl font-bold ${isHomepage ? sticky ? "text-dark dark:text-white" : "text-white" : "text-dark dark:text-white"}`}>
+                  Pulse Architects
+                </span>
+              </div>
             </Link>
           </div>
           <div className='flex items-center gap-2 sm:gap-6'>
+            <CartButton />
             <button
-              className='hover:cursor-pointer'
+              className='hover:cursor-pointer p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors'
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             >
-              <Icon
-                icon={'solar:sun-bold'}
-                width={32}
-                height={32}
+              <Sun
+                size={24}
                 className={`dark:hidden block ${isHomepage
                   ? sticky
                     ? 'text-dark'
@@ -71,38 +90,34 @@ const Header: React.FC = () => {
                   : 'text-dark'
                   }`}
               />
-              <Icon
-                icon={'solar:moon-bold'}
-                width={32}
-                height={32}
+              <Moon
+                size={24}
                 className='dark:block hidden text-white'
               />
             </button>
             <div className={`hidden md:block`}>
-              <Link href='#' className={`text-base text-inherit flex items-center gap-2 border-r pr-6 ${isHomepage
+              <Link href='tel:+1-555-3374467' className={`text-base text-inherit flex items-center gap-2 border-r pr-6 transition-colors ${isHomepage
                 ? sticky
-                  ? 'text-dark dark:text-white hover:text-primary border-dark dark:border-white'
-                  : 'text-white hover:text-primary'
-                : 'text-dark hover:text-primary'
+                  ? 'text-dark dark:text-white hover:text-primary border-gray-300 dark:border-gray-600'
+                  : 'text-white hover:text-primary border-white/30'
+                : 'text-dark dark:text-white hover:text-primary border-gray-300 dark:border-gray-600'
                 }`}
               >
-                <Icon icon={'ph:phone-bold'} width={24} height={24} />
+                <Phone size={20} />
                 +1-555-DESIGN
               </Link>
             </div>
             <div>
               <button
                 onClick={() => setNavbarOpen(!navbarOpen)}
-                className={`flex items-center gap-3 p-2 sm:px-5 sm:py-3 rounded-full font-semibold hover:cursor-pointer border ${isHomepage
+                className={`flex items-center gap-3 p-2 sm:px-5 sm:py-3 rounded-full font-semibold hover:cursor-pointer border transition-all duration-300 ${isHomepage
                   ? sticky
-                    ? 'text-white bg-dark dark:bg-white dark:text-dark dark:hover:text-white dark:hover:bg-dark hover:text-dark hover:bg-white border-dark dark:border-white'
-                    : 'text-dark bg-white dark:text-dark hover:bg-transparent hover:text-white border-white'
-                  : 'bg-dark text-white hover:bg-transparent hover:text-dark dark:bg-white dark:text-dark dark:hover:bg-transparent dark:hover:text-white duration-300'
+                    ? 'bg-gray-900 text-white hover:bg-gray-700 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 border-gray-900 dark:border-white'
+                    : 'bg-white text-gray-900 hover:bg-gray-100 border-white'
+                  : 'bg-gray-900 text-white hover:bg-gray-700 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 border-gray-900 dark:border-white'
                   }`}
                 aria-label='Toggle mobile menu'>
-                <span>
-                  <Icon icon={'ph:list'} width={24} height={24} />
-                </span>
+                <Menu size={24} />
                 <span className='hidden sm:block'>Menu</span>
               </button>
             </div>
@@ -118,7 +133,7 @@ const Header: React.FC = () => {
 
       <div
         ref={sideMenuRef}
-        className={`fixed top-0 right-0 h-full w-full bg-dark shadow-lg transition-transform duration-300 max-w-2xl ${navbarOpen ? 'translate-x-0' : 'translate-x-full'} z-50 px-20 overflow-auto no-scrollbar`}
+        className={`fixed top-0 right-0 h-full w-full bg-gray-900 dark:bg-gray-800 shadow-lg transition-transform duration-300 max-w-2xl ${navbarOpen ? 'translate-x-0' : 'translate-x-full'} z-50 px-8 sm:px-20 overflow-auto`}
       >
         <div className="flex flex-col h-full justify-between">
           <div className="">
@@ -126,38 +141,28 @@ const Header: React.FC = () => {
               <button
                 onClick={() => setNavbarOpen(false)}
                 aria-label='Close mobile menu'
-                className='bg-white p-3 rounded-full hover:cursor-pointer'>
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  width='24'
-                  height='24'
-                  viewBox='0 0 24 24'>
-                  <path
-                    fill='none'
-                    stroke='black'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth='2'
-                    d='M6 18L18 6M6 6l12 12'
-                  />
-                </svg>
+                className='bg-white p-3 rounded-full hover:bg-gray-100 transition-colors'>
+                <X size={24} className='text-black' />
               </button>
             </div>
             <nav className='flex flex-col items-start gap-4'>
-              <ul className='w-full'>
+              <ul className='w-full space-y-4'>
                 {navLinks.map((item, index) => (
-                  <li key={index} className='w-full border-b border-white/10 py-4'>
+                  <li key={index}>
                     <Link 
                       href={item.href}
                       onClick={() => setNavbarOpen(false)}
-                      className='text-white text-xl font-medium hover:text-primary transition-colors duration-300'
+                      className={`block text-2xl font-medium text-white hover:text-blue-400 transition-colors py-2 ${pathname === item.href ? 'text-blue-400' : ''}`}
                     >
                       {item.label}
                     </Link>
                   </li>
                 ))}
-                <li className='flex items-center gap-4'>
-                  <Link href="/contact" className='py-4 px-8 bg-primary text-base leading-4 block w-fit text-white rounded-full border border-primary font-semibold mt-3 hover:bg-transparent hover:text-primary duration-300'>
+                <li className='flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-8'>
+                  <Link href="/auth/login" className='py-4 px-8 bg-blue-600 text-base leading-4 block w-fit text-white rounded-full border border-blue-600 font-semibold hover:bg-blue-700 transition-colors'>
+                    Sign In
+                  </Link>
+                  <Link href="/contact" className='py-4 px-8 bg-transparent border border-blue-600 text-base leading-4 block w-fit text-blue-400 rounded-full font-semibold hover:bg-blue-600 hover:text-white transition-colors'>
                     Get Quote
                   </Link>
                 </li>
@@ -178,6 +183,8 @@ const Header: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      <CartDrawer />
     </header>
   )
 }

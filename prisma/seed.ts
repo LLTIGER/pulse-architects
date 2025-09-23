@@ -281,6 +281,109 @@ async function main() {
     ]
   })
 
+  // Create additional sample plans
+  const luxuryVillaPlan = await prisma.plan.create({
+    data: {
+      title: 'Mediterranean Luxury Villa',
+      slug: 'mediterranean-luxury-villa',
+      description: `An elegant 4-bedroom, 3.5-bathroom Mediterranean-style luxury villa featuring sophisticated design elements, spacious living areas, and premium finishes throughout.
+
+      Luxury Features:
+      - Grand foyer with marble flooring
+      - Gourmet kitchen with premium appliances
+      - Master suite with spa-like bathroom
+      - Three additional bedrooms with en-suite bathrooms
+      - Formal dining room and living room
+      - Family room with fireplace
+      - Three-car garage
+      - Outdoor entertainment area with pool deck`,
+      shortDescription: 'An elegant 4-bedroom Mediterranean luxury villa with sophisticated design and premium finishes.',
+      squareFootage: 3850.0,
+      bedrooms: 4,
+      bathrooms: 3.5,
+      floors: 2,
+      garageSpaces: 3,
+      lotSize: 12000.0,
+      width: 85.0,
+      depth: 65.0,
+      height: 28.0,
+      style: 'MEDITERRANEAN',
+      buildingType: 'RESIDENTIAL_SINGLE_FAMILY',
+      roofType: 'Tile/Clay',
+      basePrice: 2299.00,
+      pricePerSqFt: 0.597,
+      singleLicensePrice: 2299.00,
+      commercialLicensePrice: 4599.00,
+      unlimitedLicensePrice: 7699.00,
+      metaTitle: 'Mediterranean Luxury Villa Plan - 4BR/3.5BA',
+      metaDescription: 'Download this elegant Mediterranean luxury villa plan with 4 bedrooms, 3.5 bathrooms, and 3,850 sq ft of sophisticated living space.',
+      status: 'PUBLISHED',
+      isActive: true,
+      isFeatured: true,
+      categoryId: residentialCategory.id,
+      publishedAt: new Date(),
+    }
+  })
+
+  const modernTownhousePlan = await prisma.plan.create({
+    data: {
+      title: 'Urban Modern Townhouse',
+      slug: 'urban-modern-townhouse',
+      description: `A sleek 3-bedroom, 2.5-bathroom modern townhouse designed for urban living. Features contemporary design with efficient use of space and natural light.
+
+      Modern Design Elements:
+      - Open-concept main floor
+      - Large windows for natural light
+      - Modern kitchen with island
+      - Master bedroom with walk-in closet
+      - Two additional bedrooms
+      - Rooftop deck access
+      - Attached garage
+      - Energy-efficient systems`,
+      shortDescription: 'A sleek 3-bedroom modern townhouse designed for efficient urban living.',
+      squareFootage: 1950.0,
+      bedrooms: 3,
+      bathrooms: 2.5,
+      floors: 3,
+      garageSpaces: 1,
+      lotSize: 2800.0,
+      width: 25.0,
+      depth: 45.0,
+      height: 35.0,
+      style: 'CONTEMPORARY',
+      buildingType: 'RESIDENTIAL_TOWNHOUSE',
+      roofType: 'Flat/Low-slope',
+      basePrice: 1599.00,
+      pricePerSqFt: 0.820,
+      singleLicensePrice: 1599.00,
+      commercialLicensePrice: 3199.00,
+      unlimitedLicensePrice: 5299.00,
+      metaTitle: 'Urban Modern Townhouse Plan - 3BR/2.5BA',
+      metaDescription: 'Download this sleek modern townhouse plan with 3 bedrooms, 2.5 bathrooms, and 1,950 sq ft of contemporary urban living.',
+      status: 'PUBLISHED',
+      isActive: true,
+      isFeatured: true,
+      categoryId: modernCategory.id,
+      publishedAt: new Date(),
+    }
+  })
+
+  // Add tags for the new plans
+  await prisma.planTag.createMany({
+    data: [
+      { planId: luxuryVillaPlan.id, tag: 'luxury' },
+      { planId: luxuryVillaPlan.id, tag: 'mediterranean' },
+      { planId: luxuryVillaPlan.id, tag: 'villa' },
+      { planId: luxuryVillaPlan.id, tag: 'two story' },
+      { planId: luxuryVillaPlan.id, tag: 'swimming pool' },
+      { planId: modernTownhousePlan.id, tag: 'townhouse' },
+      { planId: modernTownhousePlan.id, tag: 'urban' },
+      { planId: modernTownhousePlan.id, tag: 'contemporary' },
+      { planId: modernTownhousePlan.id, tag: 'compact' },
+      { planId: modernTownhousePlan.id, tag: 'rooftop deck' },
+    ]
+  })
+
   console.log('✅ Created sample plans')
 
   // Create sample plan files
@@ -359,55 +462,147 @@ async function main() {
 
   console.log('✅ Created sample plan files')
 
-  // Create sample plan images
+  // Create sample plan images using template property images
   await prisma.planImage.createMany({
     data: [
-      // Aurora Modern Home images
+      // Aurora Modern Home images - using property1 from template
       {
         planId: modernFamilyPlan.id,
-        filename: 'aurora_front_exterior.jpg',
+        filename: 'property1.jpg',
         alt: 'Aurora Modern Home - Front Exterior View',
         imageType: 'EXTERIOR_FRONT',
-        cloudinaryUrl: 'https://res.cloudinary.com/sample/image/aurora_front_exterior.jpg',
-        publicId: 'plans/aurora_front_exterior',
+        cloudinaryUrl: '/images/properties/property1/property1.jpg',
+        publicId: 'plans/property1',
         width: 1920,
         height: 1080,
-        thumbnailUrl: 'https://res.cloudinary.com/sample/image/aurora_front_exterior/c_thumb,w_300,h_200',
-        mediumUrl: 'https://res.cloudinary.com/sample/image/aurora_front_exterior/c_fit,w_800,h_600',
-        largeUrl: 'https://res.cloudinary.com/sample/image/aurora_front_exterior/c_fit,w_1920,h_1080',
+        thumbnailUrl: '/images/properties/property1/property1.jpg',
+        mediumUrl: '/images/properties/property1/property1.jpg',
+        largeUrl: '/images/properties/property1/property1.jpg',
         sortOrder: 1,
         isPrimary: true,
       },
       {
         planId: modernFamilyPlan.id,
-        filename: 'aurora_kitchen_interior.jpg',
-        alt: 'Aurora Modern Home - Kitchen Interior',
+        filename: 'image-2.jpg',
+        alt: 'Aurora Modern Home - Interior View',
         imageType: 'INTERIOR_KITCHEN',
-        cloudinaryUrl: 'https://res.cloudinary.com/sample/image/aurora_kitchen_interior.jpg',
-        publicId: 'plans/aurora_kitchen_interior',
+        cloudinaryUrl: '/images/properties/property1/image-2.jpg',
+        publicId: 'plans/property1_interior_2',
         width: 1920,
         height: 1280,
-        thumbnailUrl: 'https://res.cloudinary.com/sample/image/aurora_kitchen_interior/c_thumb,w_300,h_200',
-        mediumUrl: 'https://res.cloudinary.com/sample/image/aurora_kitchen_interior/c_fit,w_800,h_600',
-        largeUrl: 'https://res.cloudinary.com/sample/image/aurora_kitchen_interior/c_fit,w_1920,h_1280',
+        thumbnailUrl: '/images/properties/property1/image-2.jpg',
+        mediumUrl: '/images/properties/property1/image-2.jpg',
+        largeUrl: '/images/properties/property1/image-2.jpg',
         sortOrder: 2,
         isPrimary: false,
       },
-      // Craftsman Cottage images
+      {
+        planId: modernFamilyPlan.id,
+        filename: 'image-3.jpg',
+        alt: 'Aurora Modern Home - Living Area',
+        imageType: 'INTERIOR_LIVING',
+        cloudinaryUrl: '/images/properties/property1/image-3.jpg',
+        publicId: 'plans/property1_interior_3',
+        width: 1920,
+        height: 1280,
+        thumbnailUrl: '/images/properties/property1/image-3.jpg',
+        mediumUrl: '/images/properties/property1/image-3.jpg',
+        largeUrl: '/images/properties/property1/image-3.jpg',
+        sortOrder: 3,
+        isPrimary: false,
+      },
+      // Craftsman Cottage images - using property2 from template
       {
         planId: craftmanCottagePlan.id,
-        filename: 'cottage_front_exterior.jpg',
+        filename: 'property2.jpg',
         alt: 'Craftsman Cottage - Front Exterior with Porch',
         imageType: 'EXTERIOR_FRONT',
-        cloudinaryUrl: 'https://res.cloudinary.com/sample/image/cottage_front_exterior.jpg',
-        publicId: 'plans/cottage_front_exterior',
+        cloudinaryUrl: '/images/properties/property2/property2.jpg',
+        publicId: 'plans/property2',
         width: 1920,
         height: 1080,
-        thumbnailUrl: 'https://res.cloudinary.com/sample/image/cottage_front_exterior/c_thumb,w_300,h_200',
-        mediumUrl: 'https://res.cloudinary.com/sample/image/cottage_front_exterior/c_fit,w_800,h_600',
-        largeUrl: 'https://res.cloudinary.com/sample/image/cottage_front_exterior/c_fit,w_1920,h_1080',
+        thumbnailUrl: '/images/properties/property2/property2.jpg',
+        mediumUrl: '/images/properties/property2/property2.jpg',
+        largeUrl: '/images/properties/property2/property2.jpg',
         sortOrder: 1,
         isPrimary: true,
+      },
+      {
+        planId: craftmanCottagePlan.id,
+        filename: 'image-2.jpg',
+        alt: 'Craftsman Cottage - Interior View',
+        imageType: 'INTERIOR_LIVING',
+        cloudinaryUrl: '/images/properties/property2/image-2.jpg',
+        publicId: 'plans/property2_interior_2',
+        width: 1920,
+        height: 1280,
+        thumbnailUrl: '/images/properties/property2/image-2.jpg',
+        mediumUrl: '/images/properties/property2/image-2.jpg',
+        largeUrl: '/images/properties/property2/image-2.jpg',
+        sortOrder: 2,
+        isPrimary: false,
+      },
+      // Mediterranean Luxury Villa images - using property3 from template
+      {
+        planId: luxuryVillaPlan.id,
+        filename: 'property3.jpg',
+        alt: 'Mediterranean Luxury Villa - Front Exterior View',
+        imageType: 'EXTERIOR_FRONT',
+        cloudinaryUrl: '/images/properties/property3/property3.jpg',
+        publicId: 'plans/property3',
+        width: 1920,
+        height: 1080,
+        thumbnailUrl: '/images/properties/property3/property3.jpg',
+        mediumUrl: '/images/properties/property3/property3.jpg',
+        largeUrl: '/images/properties/property3/property3.jpg',
+        sortOrder: 1,
+        isPrimary: true,
+      },
+      {
+        planId: luxuryVillaPlan.id,
+        filename: 'image-2.jpg',
+        alt: 'Mediterranean Luxury Villa - Interior Living Area',
+        imageType: 'INTERIOR_LIVING',
+        cloudinaryUrl: '/images/properties/property3/image-2.jpg',
+        publicId: 'plans/property3_interior_2',
+        width: 1920,
+        height: 1280,
+        thumbnailUrl: '/images/properties/property3/image-2.jpg',
+        mediumUrl: '/images/properties/property3/image-2.jpg',
+        largeUrl: '/images/properties/property3/image-2.jpg',
+        sortOrder: 2,
+        isPrimary: false,
+      },
+      // Urban Modern Townhouse images - using property4 from template
+      {
+        planId: modernTownhousePlan.id,
+        filename: 'property4.jpg',
+        alt: 'Urban Modern Townhouse - Front Exterior View',
+        imageType: 'EXTERIOR_FRONT',
+        cloudinaryUrl: '/images/properties/property4/property4.jpg',
+        publicId: 'plans/property4',
+        width: 1920,
+        height: 1080,
+        thumbnailUrl: '/images/properties/property4/property4.jpg',
+        mediumUrl: '/images/properties/property4/property4.jpg',
+        largeUrl: '/images/properties/property4/property4.jpg',
+        sortOrder: 1,
+        isPrimary: true,
+      },
+      {
+        planId: modernTownhousePlan.id,
+        filename: 'image-3.jpg',
+        alt: 'Urban Modern Townhouse - Modern Interior',
+        imageType: 'INTERIOR_KITCHEN',
+        cloudinaryUrl: '/images/properties/property4/image-3.jpg',
+        publicId: 'plans/property4_interior_3',
+        width: 1920,
+        height: 1280,
+        thumbnailUrl: '/images/properties/property4/image-3.jpg',
+        mediumUrl: '/images/properties/property4/image-3.jpg',
+        largeUrl: '/images/properties/property4/image-3.jpg',
+        sortOrder: 2,
+        isPrimary: false,
       },
     ]
   })
@@ -493,6 +688,28 @@ async function main() {
       favoriteCount: 7,
       averageRating: 4.6,
       reviewCount: 3,
+    }
+  })
+
+  await prisma.plan.update({
+    where: { id: luxuryVillaPlan.id },
+    data: {
+      viewCount: 156,
+      downloadCount: 12,
+      favoriteCount: 18,
+      averageRating: 4.9,
+      reviewCount: 8,
+    }
+  })
+
+  await prisma.plan.update({
+    where: { id: modernTownhousePlan.id },
+    data: {
+      viewCount: 73,
+      downloadCount: 4,
+      favoriteCount: 5,
+      averageRating: 4.4,
+      reviewCount: 2,
     }
   })
 
