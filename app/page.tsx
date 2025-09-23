@@ -1,4 +1,5 @@
 import Hero from '@/components/home/Hero'
+import PropertyCategoriesSection from '@/components/home/PropertyCategoriesSection'
 import TestimonialsSection from '@/components/home/TestimonialsSection'
 import BlogPreviewSection from '@/components/home/BlogPreviewSection'
 import LuxuryDesignSection from '@/components/home/LuxuryDesignSection'
@@ -10,6 +11,9 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <Hero />
+
+      {/* Property Categories Section */}
+      <PropertyCategoriesSection />
 
       {/* Features Section */}
       <section className="py-24 bg-white dark:bg-black">
