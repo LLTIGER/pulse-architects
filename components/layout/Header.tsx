@@ -19,10 +19,15 @@ const navLinks = [
 const Header: React.FC = () => {
   const [sticky, setSticky] = useState(false)
   const [navbarOpen, setNavbarOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
   const pathname = usePathname()
 
   const sideMenuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const handleClickOutside = (event: MouseEvent) => {
     if (sideMenuRef.current && !sideMenuRef.current.contains(event.target as Node)) {
@@ -45,6 +50,10 @@ const Header: React.FC = () => {
   }, [handleScroll])
 
   const isHomepage = pathname === '/'
+
+  if (!mounted) {
+    return null
+  }
 
   return (
     <header className={`fixed h-24 py-1 z-50 w-full bg-transparent transition-all duration-300 lg:px-0 px-4 ${sticky ? "top-3" : "top-0"}`}>

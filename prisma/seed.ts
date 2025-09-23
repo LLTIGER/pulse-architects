@@ -384,6 +384,300 @@ async function main() {
     ]
   })
 
+  // Create additional plans to ensure we have at least 5 per category
+  const farmhousePlan = await prisma.plan.create({
+    data: {
+      title: 'Classic Farmhouse Design',
+      slug: 'classic-farmhouse-design',
+      description: `A beautiful 3-bedroom, 2.5-bathroom farmhouse featuring wrap-around porch, shiplap siding, and traditional charm with modern conveniences.
+
+      Farmhouse Features:
+      - Wrap-around front porch
+      - Open concept kitchen and living
+      - Farmhouse kitchen with island
+      - Master suite on main floor
+      - Two bedrooms upstairs
+      - Mudroom and pantry
+      - Traditional detailing throughout`,
+      shortDescription: 'A beautiful 3-bedroom farmhouse with wrap-around porch and traditional charm.',
+      squareFootage: 2480.0,
+      bedrooms: 3,
+      bathrooms: 2.5,
+      floors: 2,
+      garageSpaces: 2,
+      lotSize: 8500.0,
+      width: 62.0,
+      depth: 48.0,
+      height: 24.0,
+      style: 'FARMHOUSE',
+      buildingType: 'RESIDENTIAL_SINGLE_FAMILY',
+      roofType: 'Gable',
+      basePrice: 1799.00,
+      pricePerSqFt: 0.725,
+      singleLicensePrice: 1799.00,
+      commercialLicensePrice: 3599.00,
+      unlimitedLicensePrice: 5999.00,
+      metaTitle: 'Classic Farmhouse Design Plan - 3BR/2.5BA',
+      metaDescription: 'Download this classic farmhouse plan with 3 bedrooms, 2.5 bathrooms, and 2,480 sq ft of traditional charm.',
+      status: 'PUBLISHED',
+      isActive: true,
+      isFeatured: true,
+      categoryId: traditionalCategory.id,
+      publishedAt: new Date(),
+    }
+  })
+
+  const victorianMansion = await prisma.plan.create({
+    data: {
+      title: 'Victorian Mansion Estate',
+      slug: 'victorian-mansion-estate',
+      description: `An elegant 5-bedroom, 4.5-bathroom Victorian mansion featuring ornate details, bay windows, and timeless architectural elements.
+
+      Victorian Features:
+      - Ornate exterior detailing
+      - Grand entry foyer
+      - Formal parlor and dining
+      - Gourmet kitchen with butler's pantry
+      - Master suite with sitting area
+      - Four additional bedrooms
+      - Multiple fireplaces
+      - Wraparound porch`,
+      shortDescription: 'An elegant 5-bedroom Victorian mansion with ornate details and timeless charm.',
+      squareFootage: 4250.0,
+      bedrooms: 5,
+      bathrooms: 4.5,
+      floors: 3,
+      garageSpaces: 3,
+      lotSize: 15000.0,
+      width: 75.0,
+      depth: 68.0,
+      height: 38.0,
+      style: 'VICTORIAN',
+      buildingType: 'RESIDENTIAL_SINGLE_FAMILY',
+      roofType: 'Complex/Multiple',
+      basePrice: 2899.00,
+      pricePerSqFt: 0.682,
+      singleLicensePrice: 2899.00,
+      commercialLicensePrice: 5799.00,
+      unlimitedLicensePrice: 9699.00,
+      metaTitle: 'Victorian Mansion Estate Plan - 5BR/4.5BA',
+      metaDescription: 'Download this elegant Victorian mansion plan with 5 bedrooms, 4.5 bathrooms, and 4,250 sq ft of timeless design.',
+      status: 'PUBLISHED',
+      isActive: true,
+      isFeatured: true,
+      categoryId: traditionalCategory.id,
+      publishedAt: new Date(),
+    }
+  })
+
+  const colonialRevival = await prisma.plan.create({
+    data: {
+      title: 'Colonial Revival Classic',
+      slug: 'colonial-revival-classic',
+      description: `A stately 4-bedroom, 3.5-bathroom Colonial Revival featuring symmetrical facade, columns, and traditional American architecture.
+
+      Colonial Features:
+      - Symmetrical facade design
+      - Grand center hall entry
+      - Formal living and dining rooms
+      - Family room with fireplace
+      - Gourmet kitchen with breakfast room
+      - Master suite with walk-in closet
+      - Three additional bedrooms
+      - Two-car attached garage`,
+      shortDescription: 'A stately 4-bedroom Colonial Revival with symmetrical facade and traditional design.',
+      squareFootage: 3150.0,
+      bedrooms: 4,
+      bathrooms: 3.5,
+      floors: 2,
+      garageSpaces: 2,
+      lotSize: 10000.0,
+      width: 68.0,
+      depth: 52.0,
+      height: 26.0,
+      style: 'COLONIAL',
+      buildingType: 'RESIDENTIAL_SINGLE_FAMILY',
+      roofType: 'Gable',
+      basePrice: 1999.00,
+      pricePerSqFt: 0.635,
+      singleLicensePrice: 1999.00,
+      commercialLicensePrice: 3999.00,
+      unlimitedLicensePrice: 6699.00,
+      metaTitle: 'Colonial Revival Classic Plan - 4BR/3.5BA',
+      metaDescription: 'Download this stately Colonial Revival plan with 4 bedrooms, 3.5 bathrooms, and 3,150 sq ft of traditional American design.',
+      status: 'PUBLISHED',
+      isActive: true,
+      isFeatured: true,
+      categoryId: traditionalCategory.id,
+      publishedAt: new Date(),
+    }
+  })
+
+  const minimalistLoft = await prisma.plan.create({
+    data: {
+      title: 'Minimalist Urban Loft',
+      slug: 'minimalist-urban-loft',
+      description: `A sleek 2-bedroom, 2-bathroom minimalist loft featuring open spaces, floor-to-ceiling windows, and contemporary finishes.
+
+      Minimalist Features:
+      - Open concept living space
+      - Floor-to-ceiling windows
+      - Polished concrete floors
+      - Modern kitchen with waterfall island
+      - Master loft bedroom
+      - Guest bedroom with en-suite
+      - Industrial-modern aesthetic
+      - Rooftop terrace access`,
+      shortDescription: 'A sleek 2-bedroom minimalist loft with open spaces and contemporary finishes.',
+      squareFootage: 1680.0,
+      bedrooms: 2,
+      bathrooms: 2.0,
+      floors: 2,
+      garageSpaces: 1,
+      lotSize: 2200.0,
+      width: 32.0,
+      depth: 42.0,
+      height: 22.0,
+      style: 'MINIMALIST',
+      buildingType: 'RESIDENTIAL_LOFT',
+      roofType: 'Flat/Low-slope',
+      basePrice: 1399.00,
+      pricePerSqFt: 0.833,
+      singleLicensePrice: 1399.00,
+      commercialLicensePrice: 2799.00,
+      unlimitedLicensePrice: 4699.00,
+      metaTitle: 'Minimalist Urban Loft Plan - 2BR/2BA',
+      metaDescription: 'Download this sleek minimalist loft plan with 2 bedrooms, 2 bathrooms, and 1,680 sq ft of contemporary living.',
+      status: 'PUBLISHED',
+      isActive: true,
+      isFeatured: true,
+      categoryId: modernCategory.id,
+      publishedAt: new Date(),
+    }
+  })
+
+  const smartHomePlan = await prisma.plan.create({
+    data: {
+      title: 'Smart Home Technology Villa',
+      slug: 'smart-home-technology-villa',
+      description: `A cutting-edge 4-bedroom, 3.5-bathroom smart home featuring integrated technology, sustainable systems, and modern automation.
+
+      Smart Home Features:
+      - Fully integrated home automation
+      - Smart lighting and climate control
+      - Solar panel ready roof
+      - Electric vehicle charging station
+      - Smart security system
+      - Energy-efficient appliances
+      - Sustainable building materials
+      - Modern open floor plan`,
+      shortDescription: 'A cutting-edge 4-bedroom smart home with integrated technology and sustainable systems.',
+      squareFootage: 2890.0,
+      bedrooms: 4,
+      bathrooms: 3.5,
+      floors: 2,
+      garageSpaces: 3,
+      lotSize: 9200.0,
+      width: 72.0,
+      depth: 58.0,
+      height: 28.0,
+      style: 'CONTEMPORARY',
+      buildingType: 'RESIDENTIAL_SINGLE_FAMILY',
+      roofType: 'Flat/Low-slope',
+      basePrice: 2199.00,
+      pricePerSqFt: 0.761,
+      singleLicensePrice: 2199.00,
+      commercialLicensePrice: 4399.00,
+      unlimitedLicensePrice: 7399.00,
+      metaTitle: 'Smart Home Technology Villa Plan - 4BR/3.5BA',
+      metaDescription: 'Download this cutting-edge smart home plan with 4 bedrooms, 3.5 bathrooms, and 2,890 sq ft of modern technology.',
+      status: 'PUBLISHED',
+      isActive: true,
+      isFeatured: true,
+      categoryId: modernCategory.id,
+      publishedAt: new Date(),
+    }
+  })
+
+  const commercialOffice = await prisma.plan.create({
+    data: {
+      title: 'Modern Office Complex',
+      slug: 'modern-office-complex',
+      description: `A contemporary 2-story office building designed for efficiency and employee well-being, featuring flexible workspace layouts and sustainable design.
+
+      Commercial Features:
+      - Open office floor plans
+      - Private meeting rooms
+      - Break room and kitchen facilities
+      - Reception and waiting area
+      - IT server room
+      - Sustainable HVAC systems
+      - Large windows for natural light
+      - Parking for 50 vehicles`,
+      shortDescription: 'A contemporary 2-story office building with flexible workspace layouts.',
+      squareFootage: 8500.0,
+      bedrooms: 0,
+      bathrooms: 8.0,
+      floors: 2,
+      garageSpaces: 50,
+      lotSize: 25000.0,
+      width: 120.0,
+      depth: 85.0,
+      height: 32.0,
+      style: 'CONTEMPORARY',
+      buildingType: 'COMMERCIAL_OFFICE',
+      roofType: 'Flat/Low-slope',
+      basePrice: 4999.00,
+      pricePerSqFt: 0.588,
+      singleLicensePrice: 4999.00,
+      commercialLicensePrice: 9999.00,
+      unlimitedLicensePrice: 16999.00,
+      metaTitle: 'Modern Office Complex Plan - 8,500 Sq Ft',
+      metaDescription: 'Download this contemporary office building plan with 8,500 sq ft of flexible workspace design.',
+      status: 'PUBLISHED',
+      isActive: true,
+      isFeatured: true,
+      categoryId: commercialCategory.id,
+      publishedAt: new Date(),
+    }
+  })
+
+  // Add tags for the new plans
+  await prisma.planTag.createMany({
+    data: [
+      { planId: farmhousePlan.id, tag: 'farmhouse' },
+      { planId: farmhousePlan.id, tag: 'wrap-around porch' },
+      { planId: farmhousePlan.id, tag: 'traditional' },
+      { planId: farmhousePlan.id, tag: 'shiplap' },
+      { planId: farmhousePlan.id, tag: 'mudroom' },
+      { planId: victorianMansion.id, tag: 'victorian' },
+      { planId: victorianMansion.id, tag: 'mansion' },
+      { planId: victorianMansion.id, tag: 'ornate' },
+      { planId: victorianMansion.id, tag: 'bay windows' },
+      { planId: victorianMansion.id, tag: 'luxury' },
+      { planId: colonialRevival.id, tag: 'colonial' },
+      { planId: colonialRevival.id, tag: 'symmetrical' },
+      { planId: colonialRevival.id, tag: 'traditional' },
+      { planId: colonialRevival.id, tag: 'formal' },
+      { planId: colonialRevival.id, tag: 'center hall' },
+      { planId: minimalistLoft.id, tag: 'minimalist' },
+      { planId: minimalistLoft.id, tag: 'loft' },
+      { planId: minimalistLoft.id, tag: 'urban' },
+      { planId: minimalistLoft.id, tag: 'contemporary' },
+      { planId: minimalistLoft.id, tag: 'industrial' },
+      { planId: smartHomePlan.id, tag: 'smart home' },
+      { planId: smartHomePlan.id, tag: 'technology' },
+      { planId: smartHomePlan.id, tag: 'sustainable' },
+      { planId: smartHomePlan.id, tag: 'automation' },
+      { planId: smartHomePlan.id, tag: 'solar ready' },
+      { planId: commercialOffice.id, tag: 'commercial' },
+      { planId: commercialOffice.id, tag: 'office' },
+      { planId: commercialOffice.id, tag: 'flexible workspace' },
+      { planId: commercialOffice.id, tag: 'sustainable' },
+      { planId: commercialOffice.id, tag: 'modern' },
+    ]
+  })
+
   console.log('✅ Created sample plans')
 
   // Create sample plan files
