@@ -1,155 +1,104 @@
-import Link from 'next/link'
+import ProfessionalHeader from '@/components/layout/ProfessionalHeader'
+import ArchitecturalHero from '@/components/layout/ArchitecturalHero'
+import CategoryGrid from '@/components/layout/CategoryGrid'
+import FeaturedPlans from '@/components/layout/FeaturedPlans'
+import ProfessionalFooter from '@/components/layout/ProfessionalFooter'
+import { Shield, Download, FileText, Users, Award, Clock } from 'lucide-react'
 
 export default function HomePage() {
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="min-h-screen">
       {/* Header */}
-      <header className="border-b">
-        <div className="container mx-auto px-4 py-4">
-          <nav className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="h-8 w-8 bg-primary rounded" />
-              <span className="text-xl font-bold">Pulse Architects</span>
-            </div>
-            <div className="hidden md:flex items-center space-x-6">
-              <Link href="/catalog" className="text-foreground hover:text-primary">
-                Browse Plans
-              </Link>
-              <Link href="/categories" className="text-foreground hover:text-primary">
-                Categories
-              </Link>
-              <Link href="/about" className="text-foreground hover:text-primary">
-                About
-              </Link>
-              <Link href="/contact" className="text-foreground hover:text-primary">
-                Contact
-              </Link>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Link 
-                href="/auth/login" 
-                className="text-foreground hover:text-primary"
-              >
-                Sign In
-              </Link>
-              <Link 
-                href="/auth/register" 
-                className="bg-primary text-primary-foreground px-4 py-2 rounded-md hover:bg-primary/90"
-              >
-                Get Started
-              </Link>
-            </div>
-          </nav>
-        </div>
-      </header>
+      <ProfessionalHeader />
 
       {/* Hero Section */}
-      <section className="flex-1 flex items-center justify-center py-20 px-4">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-                Premium 
-                <span className="text-primary"> Architectural Plans</span> 
-                for Your Dream Project
-              </h1>
-              <p className="text-xl text-muted-foreground">
-                Discover thousands of professional house designs, blueprints, and architectural plans. 
-                From modern homes to commercial buildings, find the perfect design for your next project.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Link 
-                  href="/catalog" 
-                  className="bg-primary text-primary-foreground px-8 py-4 rounded-lg hover:bg-primary/90 text-center font-medium"
-                >
-                  Browse Plans
-                </Link>
-                <Link 
-                  href="/custom-request" 
-                  className="border border-border px-8 py-4 rounded-lg hover:bg-accent text-center font-medium"
-                >
-                  Request Custom Design
-                </Link>
-              </div>
-            </div>
-            
-            <div className="relative">
-              <div className="aspect-square bg-muted rounded-2xl flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-24 h-24 bg-primary/20 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <div className="w-12 h-12 bg-primary rounded-lg" />
-                  </div>
-                  <p className="text-muted-foreground">Hero Image Placeholder</p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Will be replaced with architectural showcase
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ArchitecturalHero />
 
       {/* Features Section */}
-      <section className="py-20 bg-secondary/30">
-        <div className="container mx-auto px-4">
+      <section className="py-20 bg-gray-50 dark:bg-gray-900">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Why Choose Pulse Architects?
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+              Why Choose 
+              <span className="text-blue-600 dark:text-blue-400"> Pulse Architects?</span>
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Professional architectural plans with instant download and comprehensive documentation.
+            <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+              Professional architectural plans with instant download, comprehensive documentation, and unmatched quality standards.
             </p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-primary/20 rounded-full mx-auto flex items-center justify-center">
-                <div className="w-8 h-8 bg-primary rounded" />
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-2xl flex items-center justify-center mb-6">
+                <Shield className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               </div>
-              <h3 className="text-xl font-semibold">Professional Quality</h3>
-              <p className="text-muted-foreground">
-                All plans are created by licensed architects and comply with building codes.
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Professional Quality</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                All plans are created by licensed architects and comply with international building codes and safety standards.
               </p>
             </div>
             
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-primary/20 rounded-full mx-auto flex items-center justify-center">
-                <div className="w-8 h-8 bg-primary rounded" />
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-2xl flex items-center justify-center mb-6">
+                <Download className="w-8 h-8 text-green-600 dark:text-green-400" />
               </div>
-              <h3 className="text-xl font-semibold">Instant Download</h3>
-              <p className="text-muted-foreground">
-                Get your plans immediately after purchase with secure digital delivery.
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Instant Download</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                Get your plans immediately after purchase with secure digital delivery and lifetime access to updates.
               </p>
             </div>
             
-            <div className="text-center space-y-4">
-              <div className="w-16 h-16 bg-primary/20 rounded-full mx-auto flex items-center justify-center">
-                <div className="w-8 h-8 bg-primary rounded" />
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-2xl flex items-center justify-center mb-6">
+                <FileText className="w-8 h-8 text-purple-600 dark:text-purple-400" />
               </div>
-              <h3 className="text-xl font-semibold">Complete Documentation</h3>
-              <p className="text-muted-foreground">
-                Floor plans, elevations, sections, and construction details included.
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Complete Documentation</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                Floor plans, elevations, sections, construction details, and material specifications all included.
+              </p>
+            </div>
+            
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900 rounded-2xl flex items-center justify-center mb-6">
+                <Users className="w-8 h-8 text-orange-600 dark:text-orange-400" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Expert Support</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                24/7 customer support and consultation with our team of experienced architects and designers.
+              </p>
+            </div>
+            
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="w-16 h-16 bg-red-100 dark:bg-red-900 rounded-2xl flex items-center justify-center mb-6">
+                <Award className="w-8 h-8 text-red-600 dark:text-red-400" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Award-Winning Designs</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                Our plans have won multiple architectural awards and have been featured in leading design publications.
+              </p>
+            </div>
+            
+            <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <div className="w-16 h-16 bg-indigo-100 dark:bg-indigo-900 rounded-2xl flex items-center justify-center mb-6">
+                <Clock className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">Fast Delivery</h3>
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                Most plans are delivered within minutes of purchase, with custom modifications available within 48 hours.
               </p>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Featured Plans */}
+      <FeaturedPlans />
+
+      {/* Categories */}
+      <CategoryGrid />
+
       {/* Footer */}
-      <footer className="border-t mt-auto">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <div className="flex items-center justify-center space-x-2 mb-4">
-              <div className="h-6 w-6 bg-primary rounded" />
-              <span className="font-bold">Pulse Architects</span>
-            </div>
-            <p className="text-muted-foreground">
-              © 2025 Pulse Architects. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <ProfessionalFooter />
     </div>
   )
 }

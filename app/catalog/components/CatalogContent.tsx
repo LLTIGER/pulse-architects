@@ -1,16 +1,9 @@
-import { Suspense } from 'react'
-import { ProductCatalog } from '@/components/ecommerce/ProductCatalog'
-import { CategoryNavigation } from '@/components/navigation/CategoryNavigation'
+'use client'
 
-interface Category {
-  id: string
-  name: string
-  slug: string
-  description?: string
-  image?: string
-  planCount?: number
-  children?: Category[]
-}
+import { useState, Suspense } from 'react'
+import { Filter, Grid3X3, List } from 'lucide-react'
+import FilterSidebar from '@/components/catalog/FilterSidebar'
+import { ProductCatalog } from '@/components/ecommerce/ProductCatalog'
 
 interface CatalogContentProps {
   searchParams?: {
@@ -26,54 +19,82 @@ interface CatalogContentProps {
   }
 }
 
-async function fetchCategories(): Promise<Category[]> {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/categories?includeCount=true`, {
-      cache: 'force-cache',
-      next: { revalidate: 900 }
-    })
-    
-    if (!response.ok) {
-      throw new Error('Failed to fetch categories')
-    }
-    
-    const data = await response.json()
-    return data.data || []
-  } catch (error) {
-    console.error('Error fetching categories:', error)
-    return []
-  }
-}
+export function CatalogContent({ searchParams }: CatalogContentProps) {
+  const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
-export async function CatalogContent({ searchParams }: CatalogContentProps) {
-  const categories = await fetchCategories()
+  const getActiveFiltersCount = () => {
+    if (!searchParams) return 0
+    return Object.values(searchParams).filter(value => value && value !== '').length
+  }
+
+  const activeFiltersCount = getActiveFiltersCount()
 
   return (
-    <div className="space-y-8">
-      {/* Category Navigation */}
-      <section>
-        <h2 className="text-2xl font-semibold mb-6">Browse by Category</h2>
-        <CategoryNavigation categories={categories} />
-      </section>
+    <div className="flex gap-8">
+      {/* Filter Sidebar */}
+      <div className="hidden lg:block flex-shrink-0">
+        <FilterSidebar isOpen={true} onClose={() => {}} />
+      </div>
 
-      {/* Product Catalog */}
-      <section>
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-semibold">
-            {searchParams?.category 
-              ? `${categories.find(c => c.slug === searchParams.category)?.name || 'Category'} Plans`
-              : 'All Architectural Plans'
-            }
-          </h2>
-          {searchParams?.search && (
-            <p className="text-muted-foreground">
-              Search results for "{searchParams.search}"
-            </p>
-          )}
+      {/* Main Content */}
+      <div className="flex-1 min-w-0">
+        {/* Mobile filter trigger and view controls */}
+        <div className="flex items-center justify-between mb-8 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm">
+          <div className="flex items-center gap-4">
+            {/* Mobile filter button */}
+            <button
+              onClick={() => setIsFilterOpen(true)}
+              className="lg:hidden flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <Filter size={20} />
+              Filters
+              {activeFiltersCount > 0 && (
+                <span className="bg-blue-800 text-xs px-2 py-1 rounded-full">
+                  {activeFiltersCount}
+                </span>
+              )}
+            </button>
+
+            {/* Results count */}
+            <div className="text-gray-600 dark:text-gray-400">
+              {searchParams?.search && (
+                <p className="text-sm">
+                  Search results for <span className="font-medium">"{searchParams.search}"</span>
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* View mode toggle */}
+          <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 p-1 rounded-lg">
+            <button
+              onClick={() => setViewMode('grid')}
+              className={`p-2 rounded transition-colors ${
+                viewMode === 'grid' 
+                  ? 'bg-white dark:bg-gray-600 shadow-sm' 
+                  : 'hover:bg-gray-200 dark:hover:bg-gray-600'
+              }`}
+            >
+              <Grid3X3 size={18} className="text-gray-600 dark:text-gray-400" />
+            </button>
+            <button
+              onClick={() => setViewMode('list')}
+              className={`p-2 rounded transition-colors ${
+                viewMode === 'list' 
+                  ? 'bg-white dark:bg-gray-600 shadow-sm' 
+                  : 'hover:bg-gray-200 dark:hover:bg-gray-600'
+              }`}
+            >
+              <List size={18} className="text-gray-600 dark:text-gray-400" />
+            </button>
+          </div>
         </div>
-        
+
+        {/* Products Grid */}
         <Suspense fallback={<ProductCatalogSkeleton />}>
           <ProductCatalog 
+            viewMode={viewMode}
             filters={{
               category: searchParams?.category,
               style: searchParams?.style,
@@ -87,7 +108,13 @@ export async function CatalogContent({ searchParams }: CatalogContentProps) {
             }}
           />
         </Suspense>
-      </section>
+      </div>
+
+      {/* Mobile filter sidebar */}
+      <FilterSidebar 
+        isOpen={isFilterOpen} 
+        onClose={() => setIsFilterOpen(false)} 
+      />
     </div>
   )
 }

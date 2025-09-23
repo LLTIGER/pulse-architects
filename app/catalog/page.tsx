@@ -1,5 +1,7 @@
 import { Metadata } from 'next'
 import { Suspense } from 'react'
+import ProfessionalHeader from '@/components/layout/ProfessionalHeader'
+import ProfessionalFooter from '@/components/layout/ProfessionalFooter'
 import { CatalogContent } from './components/CatalogContent'
 
 export const metadata: Metadata = {
@@ -9,27 +11,35 @@ export const metadata: Metadata = {
 
 export default function CatalogPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Header */}
-      <header className="border-b bg-white">
-        <div className="container mx-auto px-4 py-6">
-          <div className="mb-6">
-            <h1 className="text-4xl font-bold text-foreground mb-2">
-              Architectural Plans Catalog
+      <ProfessionalHeader />
+
+      {/* Hero Section */}
+      <section className="pt-32 pb-16 bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+        <div className="container mx-auto px-4 max-w-7xl">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
+              Architectural Plans
+              <span className="block text-blue-200">Catalog</span>
             </h1>
-            <p className="text-lg text-muted-foreground">
-              Discover premium house designs and blueprints for your next project
+            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
+              Discover our complete collection of premium architectural plans, house designs, and blueprints. 
+              From modern homes to commercial buildings, find the perfect design for your project.
             </p>
           </div>
         </div>
-      </header>
+      </section>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 py-12 max-w-7xl">
         <Suspense fallback={<ProductSkeleton />}>
           <CatalogContent />
         </Suspense>
       </main>
+
+      {/* Footer */}
+      <ProfessionalFooter />
     </div>
   )
 }
