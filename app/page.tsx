@@ -13,9 +13,6 @@ export default function HomePage() {
       {/* Hero Section */}
       <Hero />
 
-      {/* Everything About Pulse Architects Section */}
-      <EverythingAboutSection />
-
       {/* Property Categories Section */}
       <PropertyCategoriesSection />
 
@@ -124,6 +121,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Everything About Pulse Architects Section */}
+      <EverythingAboutSection />
 
       {/* About Our Homes Section */}
       <AboutHomesSection />
