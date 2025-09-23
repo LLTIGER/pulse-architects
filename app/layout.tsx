@@ -3,6 +3,9 @@ import { Bricolage_Grotesque } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { ToastProvider } from '@/components/providers/ToastProvider'
+import Header from '@/components/layout/Header'
+import Footer from '@/components/layout/Footer'
+import ScrollToTop from '@/components/ui/ScrollToTop'
 
 const font = Bricolage_Grotesque({ subsets: ['latin'] })
 
@@ -81,9 +84,12 @@ export default function RootLayout({
           attribute='class'
           enableSystem={true}
           defaultTheme='light'>
+          <Header />
           <div className="min-h-screen">
             {children}
           </div>
+          <Footer />
+          <ScrollToTop />
           <ToastProvider />
         </ThemeProvider>
       </body>

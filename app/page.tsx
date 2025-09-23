@@ -1,13 +1,13 @@
-import Header from '@/components/layout/Header'
 import Hero from '@/components/home/Hero'
+import TestimonialsSection from '@/components/home/TestimonialsSection'
+import BlogPreviewSection from '@/components/home/BlogPreviewSection'
+import LuxuryDesignSection from '@/components/home/LuxuryDesignSection'
+import AboutHomesSection from '@/components/home/AboutHomesSection'
 import { Shield, Download, FileText, Users, Award, Clock } from 'lucide-react'
 
 export default function HomePage() {
   return (
     <div className="min-h-screen">
-      {/* Header */}
-      <Header />
-
       {/* Hero Section */}
       <Hero />
 
@@ -88,6 +88,15 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Luxury Design Section */}
+      <LuxuryDesignSection />
+
+      {/* Testimonials Section */}
+      <TestimonialsSection />
+
+      {/* Blog Preview Section */}
+      <BlogPreviewSection />
+
       {/* Call to Action Section */}
       <section className="py-24 bg-gradient-to-b from-skyblue via-lightskyblue to-white/10 dark:to-dark/10">
         <div className="container mx-auto px-5 max-w-8xl text-center">
@@ -107,6 +116,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* About Our Homes Section */}
+      <AboutHomesSection />
     </div>
   )
 }

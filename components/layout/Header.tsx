@@ -12,6 +12,8 @@ import CartDrawer from '@/components/ecommerce/CartDrawer'
 const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'Catalog', href: '/catalog' },
+  { label: 'Categories', href: '/categories' },
+  { label: 'Blog', href: '/blog' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' }
 ]
