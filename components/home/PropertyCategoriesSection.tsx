@@ -1,90 +1,173 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { ArrowRight, Home } from 'lucide-react'
 
 const PropertyCategoriesSection = () => {
-  const propertyTypes = [
-    {
-      id: 1,
-      title: 'Villa',
-      image: '/images/categories/villas.jpg',
-      description: 'Luxury villas with premium amenities',
-      link: '/catalog?category=villa'
-    },
-    {
-      id: 2,
-      title: 'Apartments',
-      image: '/images/categories/appartment.jpg',
-      description: 'Modern apartment complexes',
-      link: '/catalog?category=apartment'
-    },
-    {
-      id: 3,
-      title: 'Office Space',
-      image: '/images/categories/office.jpg',
-      description: 'Commercial office buildings',
-      link: '/catalog?category=office'
-    },
-    {
-      id: 4,
-      title: 'Residential',
-      image: '/images/categories/luxury-villa.jpg',
-      description: 'Family homes and residences',
-      link: '/catalog?category=residential'
-    }
-  ]
-
   return (
-    <section className="py-20 bg-gray-50 dark:bg-dark/50">
-      <div className="container mx-auto px-5 max-w-8xl">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-52 font-semibold text-dark dark:text-white mb-6">
-            Explore Best 
-            <span className="text-primary"> Properties</span> with Expert Services
-          </h2>
-          <p className="text-xm text-dark/60 dark:text-white/60 max-w-3xl mx-auto mb-8">
-            Discover our comprehensive collection of architectural plans across different property types, 
-            each designed with precision and attention to detail.
-          </p>
-          <Link href="/catalog">
-            <button className="btn-homely-primary">
-              View Properties
-            </button>
-          </Link>
-        </div>
+    <section className="relative overflow-hidden py-20">
+      {/* Background Vectors */}
+      <div className="absolute left-0 top-0">
+        <Image
+          src="/images/categories/Vector.svg"
+          alt="vector"
+          width={800}
+          height={1050}
+          className="dark:hidden"
+        />
+        <Image
+          src="/images/categories/Vector-dark.svg"
+          alt="vector"
+          width={800}
+          height={1050}
+          className="hidden dark:block"
+        />
+      </div>
 
-        {/* Property Categories Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
-          {propertyTypes.map((property) => (
+      <div className="container max-w-8xl mx-auto px-5 2xl:px-0 relative z-10">
+        <div className="grid grid-cols-12 items-center gap-10">
+          {/* Left Column - Text Content */}
+          <div className="lg:col-span-6 col-span-12">
+            <p className="text-dark/75 dark:text-white/75 text-base font-semibold flex gap-2.5">
+              <Home className="text-2xl text-primary" />
+              Categories
+            </p>
+            <h2 className="lg:text-52 text-40 mt-4 mb-2 lg:max-w-full font-medium leading-[1.2] text-dark dark:text-white">
+              Explore best properties with expert services.
+            </h2>
+            <p className="text-dark/50 dark:text-white/50 text-lg lg:max-w-full leading-[1.3] md:max-w-3/4">
+              Discover a diverse range of premium properties, from luxurious apartments to spacious villas, tailored to your needs
+            </p>
             <Link 
-              key={property.id} 
-              href={property.link}
-              className="group block"
+              href="/catalog"
+              className="py-4 px-8 bg-primary text-base leading-4 block w-fit text-white rounded-full font-semibold mt-8 hover:bg-dark duration-300"
             >
-              <div className="bg-white dark:bg-dark rounded-2xl overflow-hidden shadow-3xl hover:shadow-auth transition-all duration-300 transform hover:-translate-y-2">
-                {/* Image Container */}
-                <div className="relative h-64 overflow-hidden">
-                  <Image
-                    src={property.image}
-                    alt={property.title}
-                    fill
-                    className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              View properties
+            </Link>
+          </div>
+
+          {/* Right Column - Large Property Card */}
+          <div className="lg:col-span-6 col-span-12">
+            <div className="relative rounded-2xl overflow-hidden group">
+              <Link href="/catalog?category=residential">
+                <Image
+                  src="/images/categories/villas.jpg"
+                  alt="Residential Homes"
+                  width={680}
+                  height={386}
+                  className="w-full object-cover"
+                />
+              </Link>
+              <Link
+                href="/catalog?category=residential"
+                className="absolute w-full h-full bg-gradient-to-b from-black/0 to-black/80 top-full flex flex-col justify-between pl-10 pb-10 group-hover:top-0 duration-500"
+              >
+                <div className="flex justify-end mt-6 mr-6">
+                  <div className="bg-white text-dark rounded-full w-fit p-4">
+                    <ArrowRight size={24} />
+                  </div>
                 </div>
-                
-                {/* Content */}
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-dark dark:text-white mb-2 group-hover:text-primary transition-colors duration-300">
-                    {property.title}
-                  </h3>
-                  <p className="text-sm text-dark/60 dark:text-white/60">
-                    {property.description}
+                <div className="flex flex-col gap-2.5">
+                  <h3 className="text-white text-2xl">Residential Homes</h3>
+                  <p className="text-white/80 text-base leading-6">
+                    Experience elegance and comfort with our exclusive luxury villas, designed for sophisticated living.
                   </p>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            </div>
+          </div>
+
+          {/* Bottom Left - Luxury Villas */}
+          <div className="lg:col-span-6 col-span-12">
+            <div className="relative rounded-2xl overflow-hidden group">
+              <Link href="/catalog?category=villa">
+                <Image
+                  src="/images/categories/luxury-villa.jpg"
+                  alt="Luxury Villas"
+                  width={680}
+                  height={386}
+                  className="w-full object-cover"
+                />
+              </Link>
+              <Link
+                href="/catalog?category=villa"
+                className="absolute w-full h-full bg-gradient-to-b from-black/0 to-black/80 top-full flex flex-col justify-between pl-10 pb-10 group-hover:top-0 duration-500"
+              >
+                <div className="flex justify-end mt-6 mr-6">
+                  <div className="bg-white text-dark rounded-full w-fit p-4">
+                    <ArrowRight size={24} />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2.5">
+                  <h3 className="text-white text-2xl">Luxury villas</h3>
+                  <p className="text-white/80 text-base leading-6">
+                    Experience elegance and comfort with our exclusive luxury villas, designed for sophisticated living.
+                  </p>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          {/* Bottom Right Small - Apartments */}
+          <div className="lg:col-span-3 col-span-6">
+            <div className="relative rounded-2xl overflow-hidden group">
+              <Link href="/catalog?category=apartment">
+                <Image
+                  src="/images/categories/appartment.jpg"
+                  alt="Apartments"
+                  width={320}
+                  height={386}
+                  className="w-full object-cover"
+                />
+              </Link>
+              <Link
+                href="/catalog?category=apartment"
+                className="absolute w-full h-full bg-gradient-to-b from-black/0 to-black/80 top-full flex flex-col justify-between pl-10 pb-10 group-hover:top-0 duration-500"
+              >
+                <div className="flex justify-end mt-6 mr-6">
+                  <div className="bg-white text-dark rounded-full w-fit p-4">
+                    <ArrowRight size={24} />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2.5">
+                  <h3 className="text-white text-2xl">Apartment</h3>
+                  <p className="text-white/80 text-base leading-6">
+                    Experience elegance and comfort with our exclusive luxury villas, designed for sophisticated living.
+                  </p>
+                </div>
+              </Link>
+            </div>
+          </div>
+
+          {/* Bottom Right Small - Office Spaces */}
+          <div className="lg:col-span-3 col-span-6">
+            <div className="relative rounded-2xl overflow-hidden group">
+              <Link href="/catalog?category=office">
+                <Image
+                  src="/images/categories/office.jpg"
+                  alt="Office Spaces"
+                  width={320}
+                  height={386}
+                  className="w-full object-cover"
+                />
+              </Link>
+              <Link
+                href="/catalog?category=office"
+                className="absolute w-full h-full bg-gradient-to-b from-black/0 to-black/80 top-full flex flex-col justify-between pl-10 pb-10 group-hover:top-0 duration-500"
+              >
+                <div className="flex justify-end mt-6 mr-6">
+                  <div className="bg-white text-dark rounded-full w-fit p-4">
+                    <ArrowRight size={24} />
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2.5">
+                  <h3 className="text-white text-2xl">Office Spaces</h3>
+                  <p className="text-white/80 text-base leading-6">
+                    Experience elegance and comfort with our exclusive luxury villas, designed for sophisticated living.
+                  </p>
+                </div>
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </section>
