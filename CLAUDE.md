@@ -1,0 +1,1 @@
+- "\\wsl.localhost\Ubuntu\home\lltiger\Digital Office\Projects\Pulse Architects\templates\homely-nextjs-tailwind-v1"Remember to use the template as your reference for the design language, fonts, colors and grid setup, so always use those as a reference whenever I ask you to add the section. Use that to keep the design consistency. Of the app.

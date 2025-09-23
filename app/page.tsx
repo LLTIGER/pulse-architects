@@ -1,4 +1,5 @@
 import Hero from '@/components/home/Hero'
+import EverythingAboutSection from '@/components/home/EverythingAboutSection'
 import PropertyCategoriesSection from '@/components/home/PropertyCategoriesSection'
 import TestimonialsSection from '@/components/home/TestimonialsSection'
 import BlogPreviewSection from '@/components/home/BlogPreviewSection'
@@ -11,6 +12,9 @@ export default function HomePage() {
     <div className="min-h-screen">
       {/* Hero Section */}
       <Hero />
+
+      {/* Everything About Pulse Architects Section */}
+      <EverythingAboutSection />
 
       {/* Property Categories Section */}
       <PropertyCategoriesSection />
