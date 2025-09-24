@@ -93,9 +93,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Luxury Design Section */}
-      <LuxuryDesignSection />
-
       {/* Testimonials Section */}
       <TestimonialsSection />
 
@@ -127,6 +124,9 @@ export default function HomePage() {
 
       {/* About Our Homes Section */}
       <AboutHomesSection />
+
+      {/* Luxury Design Section */}
+      <LuxuryDesignSection />
     </div>
   )
 }

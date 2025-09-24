@@ -28,7 +28,7 @@ const AboutHomesSection: React.FC = () => {
   ]
 
   return (
-    <section className='bg-black dark:bg-gray-900 py-20 md:py-28'>
+    <section className='bg-dark py-20 md:py-28'>
       <div className='container max-w-8xl mx-auto px-5 2xl:px-0'>
         <div className='grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20'>
           <div>
@@ -87,7 +87,7 @@ const AboutHomesSection: React.FC = () => {
             <div className='grid grid-cols-2 gap-4'>
               <div>
                 <Image
-                  src='/images/about/architecture1.jpg'
+                  src='/images/about/service1.jpg'
                   alt='Modern architectural design'
                   width={300}
                   height={400}
@@ -97,7 +97,7 @@ const AboutHomesSection: React.FC = () => {
               </div>
               <div className='mt-8'>
                 <Image
-                  src='/images/about/architecture2.jpg'
+                  src='/images/about/service2.jpg'
                   alt='Luxury home design'
                   width={300}
                   height={400}
