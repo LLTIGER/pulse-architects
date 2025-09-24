@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowLeft, Download, Eye, CheckCircle, Layers, Home, Mountain, Foundation, Roof, Cube, Map } from 'lucide-react'
+import { ArrowLeft, Download, Eye, CheckCircle, Layers, Home, Mountain, Square, Triangle, Box, Map } from 'lucide-react'
 
 const ArchitecturalPlansPage: React.FC = () => {
   const [selectedPlan, setSelectedPlan] = useState('topographic')
@@ -27,7 +27,7 @@ const ArchitecturalPlansPage: React.FC = () => {
     {
       id: 'threed',
       title: '3D Dimensional Views',
-      icon: Cube,
+      icon: Box,
       description: 'Comprehensive three-dimensional renderings that bring your architectural vision to life with realistic materials and lighting.',
       features: [
         'Photorealistic exterior renderings',
@@ -57,7 +57,7 @@ const ArchitecturalPlansPage: React.FC = () => {
     {
       id: 'roof',
       title: 'Roof Plans',
-      icon: Roof,
+      icon: Triangle,
       description: 'Complete roofing systems including structural elements, drainage, ventilation, and integration with building systems.',
       features: [
         'Roof structure and framing',
@@ -72,7 +72,7 @@ const ArchitecturalPlansPage: React.FC = () => {
     {
       id: 'foundation',
       title: 'Foundation Plans',
-      icon: Foundation,
+      icon: Square,
       description: 'Structural foundation designs ensuring stability, proper drainage, and integration with utility systems.',
       features: [
         'Foundation type and sizing',
