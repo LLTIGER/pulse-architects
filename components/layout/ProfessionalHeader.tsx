@@ -133,9 +133,9 @@ const ProfessionalHeader: React.FC = () => {
       {/* Slide-out menu */}
       <div
         ref={sideMenuRef}
-        className={`fixed top-0 right-0 h-full w-full bg-gray-900 dark:bg-gray-800 shadow-lg transition-transform duration-300 max-w-2xl ${
+        className={`fixed top-0 right-0 h-full w-full bg-dark shadow-lg transition-transform duration-300 max-w-2xl ${
           navbarOpen ? 'translate-x-0' : 'translate-x-full'
-        } z-50 px-8 sm:px-20 overflow-auto`}
+        } z-50 px-20 overflow-auto no-scrollbar`}
       >
         <div className="flex flex-col h-full justify-between">
           <div>
@@ -144,7 +144,7 @@ const ProfessionalHeader: React.FC = () => {
               <button
                 onClick={() => setNavbarOpen(false)}
                 aria-label='Close mobile menu'
-                className='bg-white p-3 rounded-full hover:bg-gray-100 transition-colors'
+                className='bg-white p-3 rounded-full hover:cursor-pointer'
               >
                 <X size={24} className="text-black" />
               </button>
