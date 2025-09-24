@@ -1,37 +1,19 @@
 'use client'
+import { navLinks } from '@/app/api/navlink'
+import { Icon } from '@iconify/react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { useEffect, useRef, useState, useCallback } from 'react'
+import NavLink from './Navigation/NavLink'
 import { useTheme } from 'next-themes'
 import { usePathname } from 'next/navigation'
-import { Sun, Moon, Phone, Menu, X } from 'lucide-react'
-import CartButton from '@/components/ecommerce/CartButton'
-import CartDrawer from '@/components/ecommerce/CartDrawer'
-
-// Navigation links for Pulse Architects
-const navLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'About Us', href: '/about' },
-  { label: 'Services', href: '/services' },
-  { label: 'Catalog', href: '/catalog' },
-  { label: 'Categories', href: '/categories' },
-  { label: 'Gallery', href: '/gallery' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Contact', href: '/contact' }
-]
 
 const Header: React.FC = () => {
   const [sticky, setSticky] = useState(false)
   const [navbarOpen, setNavbarOpen] = useState(false)
-  const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
   const pathname = usePathname()
 
   const sideMenuRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   const handleClickOutside = (event: MouseEvent) => {
     if (sideMenuRef.current && !sideMenuRef.current.contains(event.target as Node)) {
@@ -55,47 +37,29 @@ const Header: React.FC = () => {
 
   const isHomepage = pathname === '/'
 
-  if (!mounted) {
-    return null
-  }
-
   return (
     <header className={`fixed h-24 py-1 z-50 w-full bg-transparent transition-all duration-300 lg:px-0 px-4 ${sticky ? "top-3" : "top-0"}`}>
       <nav className={`container mx-auto max-w-8xl flex items-center justify-between py-4 duration-300 ${sticky ? "shadow-lg bg-white dark:bg-dark rounded-full top-5 px-4 " : "shadow-none top-0"}`}>
         <div className='flex justify-between items-center gap-2 w-full'>
           <div>
-            <Link href='/'>
-              <div className="flex items-center">
-                <Image
-                  src={'/images/header/logo.svg'}
-                  alt='Pulse Architects'
-                  width={40}
-                  height={40}
-                  className={`block dark:hidden mr-3 ${isHomepage && !sticky ? 'brightness-0 invert' : ''}`}
-                  unoptimized={true}
-                />
-                <Image
-                  src={'/images/header/dark-logo.svg'}
-                  alt='Pulse Architects'
-                  width={40}
-                  height={40}
-                  className="hidden dark:block mr-3"
-                  unoptimized={true}
-                />
-                <span className={`text-2xl font-bold ${isHomepage ? sticky ? "text-dark dark:text-white" : "text-white" : "text-dark dark:text-white"}`}>
-                  Pulse Architects
-                </span>
+            <Link href='/' className="flex items-center space-x-2">
+              <div className="h-8 w-8 bg-blue-600 rounded flex items-center justify-center">
+                <div className="w-4 h-4 bg-white rounded-sm" />
               </div>
+              <span className={`text-xl font-bold ${isHomepage ? (sticky ? "text-gray-900 dark:text-white" : "text-white") : "text-gray-900 dark:text-white"}`}>
+                Pulse Architects
+              </span>
             </Link>
           </div>
           <div className='flex items-center gap-2 sm:gap-6'>
-            <CartButton />
             <button
-              className='hover:cursor-pointer p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors'
+              className='hover:cursor-pointer'
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             >
-              <Sun
-                size={24}
+              <Icon
+                icon={'solar:sun-bold'}
+                width={32}
+                height={32}
                 className={`dark:hidden block ${isHomepage
                   ? sticky
                     ? 'text-dark'
@@ -103,34 +67,38 @@ const Header: React.FC = () => {
                   : 'text-dark'
                   }`}
               />
-              <Moon
-                size={24}
+              <Icon
+                icon={'solar:moon-bold'}
+                width={32}
+                height={32}
                 className='dark:block hidden text-white'
               />
             </button>
             <div className={`hidden md:block`}>
-              <Link href='tel:+1-555-3374467' className={`text-base text-inherit flex items-center gap-2 border-r pr-6 transition-colors ${isHomepage
+              <Link href='tel:+33612776498' className={`text-base text-inherit flex items-center gap-2 border-r pr-6 ${isHomepage
                 ? sticky
-                  ? 'text-dark dark:text-white hover:text-primary border-gray-300 dark:border-gray-600'
-                  : 'text-white hover:text-primary border-white/30'
-                : 'text-dark dark:text-white hover:text-primary border-gray-300 dark:border-gray-600'
+                  ? 'text-dark dark:text-white hover:text-primary border-dark dark:border-white'
+                  : 'text-white hover:text-primary'
+                : 'text-dark hover:text-primary'
                 }`}
               >
-                <Phone size={20} />
-                +1-555-DESIGN
+                <Icon icon={'ph:phone-bold'} width={24} height={24} />
+                +33 6 12 77 64 98
               </Link>
             </div>
             <div>
               <button
                 onClick={() => setNavbarOpen(!navbarOpen)}
-                className={`flex items-center gap-3 p-2 sm:px-5 sm:py-3 rounded-full font-semibold hover:cursor-pointer border transition-all duration-300 ${isHomepage
+                className={`flex items-center gap-3 p-2 sm:px-5 sm:py-3 rounded-full font-semibold hover:cursor-pointer border ${isHomepage
                   ? sticky
-                    ? 'bg-gray-900 text-white hover:bg-gray-700 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 border-gray-900 dark:border-white'
-                    : 'bg-white text-gray-900 hover:bg-gray-100 border-white'
-                  : 'bg-gray-900 text-white hover:bg-gray-700 dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200 border-gray-900 dark:border-white'
+                    ? 'text-white bg-dark dark:bg-white dark:text-dark dark:hover:text-white dark:hover:bg-dark hover:text-dark hover:bg-white border-dark dark:border-white'
+                    : 'text-dark bg-white dark:text-dark hover:bg-transparent hover:text-white border-white'
+                  : 'bg-dark text-white hover:bg-transparent hover:text-dark dark:bg-white dark:text-dark dark:hover:bg-transparent dark:hover:text-white duration-300'
                   }`}
                 aria-label='Toggle mobile menu'>
-                <Menu size={24} />
+                <span>
+                  <Icon icon={'ph:list'} width={24} height={24} />
+                </span>
                 <span className='hidden sm:block'>Menu</span>
               </button>
             </div>
@@ -146,48 +114,42 @@ const Header: React.FC = () => {
 
       <div
         ref={sideMenuRef}
-        className={`fixed top-0 right-0 h-full w-full bg-dark shadow-lg transition-transform duration-300 max-w-2xl ${navbarOpen ? 'translate-x-0' : 'translate-x-full'} z-50 px-8 sm:px-20 overflow-auto relative`}
+        className={`fixed top-0 right-0 h-full w-full bg-dark shadow-lg transition-transform duration-300 max-w-2xl ${navbarOpen ? 'translate-x-0' : 'translate-x-full'} z-50 px-20 overflow-auto no-scrollbar`}
       >
-        {/* Background Vector Image */}
-        <div className="absolute right-0 top-0 opacity-20">
-          <Image
-            src="/images/testimonial/Vector.png"
-            alt="background"
-            width={400}
-            height={600}
-            className="object-cover"
-            unoptimized={true}
-          />
-        </div>
-        <div className="flex flex-col h-full justify-between relative z-10">
+        <div className="flex flex-col h-full justify-between">
           <div className="">
             <div className='flex items-center justify-start py-10'>
               <button
                 onClick={() => setNavbarOpen(false)}
                 aria-label='Close mobile menu'
-                className='bg-white p-3 rounded-full hover:bg-gray-100 transition-colors'>
-                <X size={24} className='text-black' />
+                className='bg-white p-3 rounded-full hover:cursor-pointer'>
+                <svg
+                  xmlns='http://www.w3.org/2000/svg'
+                  width='24'
+                  height='24'
+                  viewBox='0 0 24 24'>
+                  <path
+                    fill='none'
+                    stroke='black'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
+                    d='M6 18L18 6M6 6l12 12'
+                  />
+                </svg>
               </button>
             </div>
             <nav className='flex flex-col items-start gap-4'>
-              <ul className='w-full space-y-4'>
+              <ul className='w-full'>
                 {navLinks.map((item, index) => (
-                  <li key={index}>
-                    <Link 
-                      href={item.href}
-                      onClick={() => setNavbarOpen(false)}
-                      className={`block text-2xl font-medium text-white hover:text-primary transition-colors py-2 ${pathname === item.href ? 'text-primary' : ''}`}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
+                  <NavLink key={index} item={item} onClick={() => setNavbarOpen(false)} />
                 ))}
-                <li className='flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-8'>
-                  <Link href="/auth/login" className='py-4 px-8 bg-primary text-base leading-4 block w-fit text-white rounded-full border border-primary font-semibold hover:bg-primary/90 transition-colors'>
+                <li className='flex items-center gap-4'>
+                  <Link href="/auth/login" className='py-4 px-8 bg-primary text-base leading-4 block w-fit text-white rounded-full border border-primary font-semibold mt-3 hover:bg-transparent hover:text-primary duration-300'>
                     Sign In
                   </Link>
-                  <Link href="/contact" className='py-4 px-8 bg-transparent border border-primary text-base leading-4 block w-fit text-primary rounded-full font-semibold hover:bg-primary hover:text-white transition-colors'>
-                    Get Quote
+                  <Link href="/auth/register" className='py-4 px-8 bg-transparent border border-primary text-base leading-4 block w-fit text-primary rounded-full font-semibold mt-3 hover:bg-primary hover:text-white duration-300'>
+                    Sign up
                   </Link>
                 </li>
               </ul>
@@ -207,9 +169,7 @@ const Header: React.FC = () => {
           </div>
         </div>
       </div>
-      
-      <CartDrawer />
-    </header>
+    </header >
   )
 }
 
