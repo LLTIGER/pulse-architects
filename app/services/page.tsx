@@ -42,7 +42,7 @@ const ServicesPage: React.FC = () => {
         'Safety and fire code certifications'
       ],
       image: '/images/services/permits.jpg',
-      link: '/services/permits'
+      link: '/services/building-permits'
     }
   ]
 
