@@ -3,6 +3,7 @@ import { Bricolage_Grotesque } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
 import { ToastProvider } from '@/components/providers/ToastProvider'
+import { AuthProvider } from '@/lib/auth/auth-context'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import ScrollToTop from '@/components/ui/ScrollToTop'
@@ -84,13 +85,15 @@ export default function RootLayout({
           attribute='class'
           enableSystem={true}
           defaultTheme='light'>
-          <Header />
-          <div className="min-h-screen">
-            {children}
-          </div>
-          <Footer />
-          <ScrollToTop />
-          <ToastProvider />
+          <AuthProvider>
+            <Header />
+            <div className="min-h-screen">
+              {children}
+            </div>
+            <Footer />
+            <ScrollToTop />
+            <ToastProvider />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

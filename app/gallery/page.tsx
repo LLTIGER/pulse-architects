@@ -236,7 +236,7 @@ const GalleryPage: React.FC = () => {
                       <div className='flex items-center gap-4 text-xs text-dark/60 dark:text-white/60'>
                         <span className='flex items-center gap-1'>
                           <Eye className='w-3 h-3' />
-                          {item.views.toLocaleString()}
+                          {item.views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         </span>
                         <span className='flex items-center gap-1'>
                           <Download className='w-3 h-3' />

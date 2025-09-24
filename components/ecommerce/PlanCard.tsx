@@ -92,7 +92,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className='text-2xl font-bold text-blue-600 dark:text-blue-400'>
-                  ${price.toLocaleString()}
+                  ${price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 </span>
                 {downloads > 0 && (
                   <span className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1">

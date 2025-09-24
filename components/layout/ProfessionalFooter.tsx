@@ -87,15 +87,15 @@ const ProfessionalFooter = () => {
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-gray-400">
                   <Mail size={20} className="text-blue-400" />
-                  <span>hello@pulsearchitects.com</span>
+                  <span>chicco007@PulseArchitects.com</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-400">
                   <Phone size={20} className="text-blue-400" />
-                  <span>+1-212-456-7890</span>
+                  <span>+33 6 12 77 64 98</span>
                 </div>
                 <div className="flex items-center gap-3 text-gray-400">
                   <MapPin size={20} className="text-blue-400" />
-                  <span>123 Architecture Ave, Design City, DC 12345</span>
+                  <span>3 Avenue Jacques Prévert, 77200 Torcy, France</span>
                 </div>
               </div>
               

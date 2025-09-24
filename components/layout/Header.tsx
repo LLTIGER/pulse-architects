@@ -11,12 +11,12 @@ import CartDrawer from '@/components/ecommerce/CartDrawer'
 // Navigation links for Pulse Architects
 const navLinks = [
   { label: 'Home', href: '/' },
+  { label: 'About Us', href: '/about' },
+  { label: 'Services', href: '/services' },
   { label: 'Catalog', href: '/catalog' },
   { label: 'Categories', href: '/categories' },
-  { label: 'Services', href: '/services' },
   { label: 'Gallery', href: '/gallery' },
   { label: 'Blog', href: '/blog' },
-  { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' }
 ]
 
@@ -146,9 +146,20 @@ const Header: React.FC = () => {
 
       <div
         ref={sideMenuRef}
-        className={`fixed top-0 right-0 h-full w-full bg-gray-900 dark:bg-gray-800 shadow-lg transition-transform duration-300 max-w-2xl ${navbarOpen ? 'translate-x-0' : 'translate-x-full'} z-50 px-8 sm:px-20 overflow-auto`}
+        className={`fixed top-0 right-0 h-full w-full bg-dark shadow-lg transition-transform duration-300 max-w-2xl ${navbarOpen ? 'translate-x-0' : 'translate-x-full'} z-50 px-8 sm:px-20 overflow-auto relative`}
       >
-        <div className="flex flex-col h-full justify-between">
+        {/* Background Vector Image */}
+        <div className="absolute right-0 top-0 opacity-20">
+          <Image
+            src="/images/testimonial/Vector.png"
+            alt="background"
+            width={400}
+            height={600}
+            className="object-cover"
+            unoptimized={true}
+          />
+        </div>
+        <div className="flex flex-col h-full justify-between relative z-10">
           <div className="">
             <div className='flex items-center justify-start py-10'>
               <button
@@ -165,17 +176,17 @@ const Header: React.FC = () => {
                     <Link 
                       href={item.href}
                       onClick={() => setNavbarOpen(false)}
-                      className={`block text-2xl font-medium text-white hover:text-blue-400 transition-colors py-2 ${pathname === item.href ? 'text-blue-400' : ''}`}
+                      className={`block text-2xl font-medium text-white hover:text-primary transition-colors py-2 ${pathname === item.href ? 'text-primary' : ''}`}
                     >
                       {item.label}
                     </Link>
                   </li>
                 ))}
                 <li className='flex flex-col sm:flex-row items-start sm:items-center gap-4 mt-8'>
-                  <Link href="/auth/login" className='py-4 px-8 bg-blue-600 text-base leading-4 block w-fit text-white rounded-full border border-blue-600 font-semibold hover:bg-blue-700 transition-colors'>
+                  <Link href="/auth/login" className='py-4 px-8 bg-primary text-base leading-4 block w-fit text-white rounded-full border border-primary font-semibold hover:bg-primary/90 transition-colors'>
                     Sign In
                   </Link>
-                  <Link href="/contact" className='py-4 px-8 bg-transparent border border-blue-600 text-base leading-4 block w-fit text-blue-400 rounded-full font-semibold hover:bg-blue-600 hover:text-white transition-colors'>
+                  <Link href="/contact" className='py-4 px-8 bg-transparent border border-primary text-base leading-4 block w-fit text-primary rounded-full font-semibold hover:bg-primary hover:text-white transition-colors'>
                     Get Quote
                   </Link>
                 </li>
@@ -187,11 +198,11 @@ const Header: React.FC = () => {
             <p className='text-base sm:text-xm font-normal text-white/40'>
               Contact
             </p>
-            <Link href="#" className='text-base sm:text-xm font-medium text-inherit hover:text-primary'>
-              info@pulsearchitects.com
+            <Link href="mailto:chicco007@PulseArchitects.com" className='text-base sm:text-xm font-medium text-inherit hover:text-primary'>
+              chicco007@PulseArchitects.com
             </Link>
-            <Link href="#" className='text-base sm:text-xm font-medium text-inherit hover:text-primary'>
-              +1-555-DESIGN
+            <Link href="tel:+33612776498" className='text-base sm:text-xm font-medium text-inherit hover:text-primary'>
+              +33 6 12 77 64 98
             </Link>
           </div>
         </div>

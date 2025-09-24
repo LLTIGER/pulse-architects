@@ -62,7 +62,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
             </div>
             <div>
               <button className='text-base font-normal text-primary px-5 py-2 rounded-full bg-primary/10'>
-                ${basePrice.toLocaleString()}
+                ${basePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
               </button>
             </div>
           </div>
@@ -82,7 +82,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
             <div className='flex flex-col gap-2 pl-2 xs:pl-4 mobile:pl-8'>
               <Square size={20} />
               <p className='text-sm mobile:text-base font-normal text-black dark:text-white'>
-                {squareFootage.toLocaleString()} ft<sup>2</sup>
+                {squareFootage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} ft<sup>2</sup>
               </p>
             </div>
           </div>

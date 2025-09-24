@@ -80,11 +80,10 @@ export default function RegisterPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          firstName: formData.firstName,
-          lastName: formData.lastName,
+          name: `${formData.firstName} ${formData.lastName}`,
           email: formData.email,
           password: formData.password,
-          marketingEmails: formData.marketingEmails,
+          role: 'CUSTOMER',
         }),
       })
 
@@ -95,8 +94,9 @@ export default function RegisterPage() {
         return
       }
 
-      // Redirect to email verification page
-      router.push(`/auth/verify-email?email=${encodeURIComponent(formData.email)}`)
+      // Store token and redirect to dashboard
+      localStorage.setItem('authToken', data.token)
+      router.push('/dashboard')
 
     } catch (error) {
       setError('An unexpected error occurred')

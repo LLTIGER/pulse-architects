@@ -192,16 +192,16 @@ const ProfessionalHeader: React.FC = () => {
               Contact
             </p>
             <Link 
-              href="mailto:hello@pulsearchitects.com" 
+              href="mailto:chicco007@PulseArchitects.com" 
               className='text-base font-medium text-inherit hover:text-blue-400 transition-colors'
             >
-              hello@pulsearchitects.com
+              chicco007@PulseArchitects.com
             </Link>
             <Link 
-              href="tel:+1-212-456-7890" 
+              href="tel:+33612776498" 
               className='text-base font-medium text-inherit hover:text-blue-400 transition-colors'
             >
-              +1-212-456-7890
+              +33 6 12 77 64 98
             </Link>
           </div>
         </div>

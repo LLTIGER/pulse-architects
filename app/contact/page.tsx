@@ -55,26 +55,26 @@ export default function ContactPage() {
               </p>
             </div>
             <div className='absolute bottom-6 left-6 lg:bottom-12 lg:left-12 flex flex-col gap-4 text-white'>
-              <Link href={'tel:+15553374467'} className='w-fit'>
+              <Link href={'tel:+33612776498'} className='w-fit'>
                 <div className='flex items-center gap-4 group w-fit'>
                   <Phone size={32} />
                   <p className='text-sm xs:text-base mobile:text-xm font-normal group-hover:text-primary'>
-                    +1-555-DESIGN
+                    +33 6 12 77 64 98
                   </p>
                 </div>
               </Link>
-              <Link href={'mailto:info@pulsearchitects.com'} className='w-fit'>
+              <Link href={'mailto:chicco007@PulseArchitects.com'} className='w-fit'>
                 <div className='flex items-center gap-4 group w-fit'>
                   <Mail size={32} />
                   <p className='text-sm xs:text-base mobile:text-xm font-normal group-hover:text-primary'>
-                    info@pulsearchitects.com
+                    chicco007@PulseArchitects.com
                   </p>
                 </div>
               </Link>
               <div className='flex items-center gap-4'>
                 <MapPin size={32} />
                 <p className='text-sm xs:text-base mobile:text-xm font-normal'>
-                  123 Architecture Lane, Design City
+                  3 Avenue Jacques Prévert, 77200 Torcy, France
                 </p>
               </div>
             </div>

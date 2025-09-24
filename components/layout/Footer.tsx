@@ -87,15 +87,15 @@ const Footer = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
                 <div className="flex items-center gap-3 text-white/80">
                   <Phone size={20} className="text-primary" />
-                  <span className="text-sm">+1-555-DESIGN</span>
+                  <span className="text-sm">+33 6 12 77 64 98</span>
                 </div>
                 <div className="flex items-center gap-3 text-white/80">
                   <Mail size={20} className="text-primary" />
-                  <span className="text-sm">info@pulsearchitects.com</span>
+                  <span className="text-sm">chicco007@PulseArchitects.com</span>
                 </div>
                 <div className="flex items-center gap-3 text-white/80 sm:col-span-2">
                   <MapPin size={20} className="text-primary" />
-                  <span className="text-sm">123 Architecture Lane, Design City, DC 12345</span>
+                  <span className="text-sm">3 Avenue Jacques Prévert, 77200 Torcy, France</span>
                 </div>
               </div>
             </div>

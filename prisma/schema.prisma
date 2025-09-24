@@ -166,6 +166,7 @@ model Category {
 
 model Plan {
   id              String        @id @default(cuid())
+  planNumber      String        @unique // Auto-generated plan number (PA-2024-0001)
   title           String
   slug            String        @unique
   description     String
@@ -211,9 +212,14 @@ model Plan {
   categoryId      String
   category        Category      @relation(fields: [categoryId], references: [id])
   
+  // Project relationship
+  projectId       String?
+  project         Project?      @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  
   // Plan files and media
   files           PlanFile[]
   images          PlanImage[]
+  visualizations  Visualization[]
   
   // Analytics and engagement
   viewCount       Int           @default(0)
@@ -229,6 +235,7 @@ model Plan {
   downloadLogs    DownloadLog[]
   licenses        License[]
   tags            PlanTag[]
+  galleryItems    GalleryItem[]
   
   createdAt       DateTime      @default(now())
   updatedAt       DateTime      @updatedAt
@@ -314,6 +321,296 @@ model PlanTag {
   
   @@unique([planId, tag])
   @@map("plan_tags")
+}
+
+// ===============================
+// PROJECTS & GALLERY MANAGEMENT
+// ===============================
+
+model Project {
+  id              String        @id @default(cuid())
+  projectNumber   String        @unique // Auto-generated project number (PRJ-2024-0001)
+  
+  // Basic information
+  title           String
+  slug            String        @unique
+  description     String
+  shortDescription String?
+  
+  // Project details
+  projectType     String        // RESIDENTIAL, COMMERCIAL, INDUSTRIAL, MIXED_USE
+  status          String        @default("PLANNING") // PLANNING, DESIGN, CONSTRUCTION, COMPLETED
+  
+  // Client information (optional)
+  clientName      String?
+  location        String?       // City, State/Country
+  
+  // Project specifications
+  totalArea       Float?        // In square feet
+  budget          Float?        // Project budget
+  startDate       DateTime?
+  completionDate  DateTime?
+  
+  // Display settings
+  isFeatured      Boolean       @default(false)
+  isPublished     Boolean       @default(true)
+  sortOrder       Int           @default(0)
+  
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+  
+  // Relationships
+  plans           Plan[]        // Plans used in this project
+  visualizations  Visualization[] // Renderings for this project
+  galleryItems    GalleryItem[] // Gallery items for this project
+  tags            ProjectTag[]
+  
+  // Analytics
+  viewCount       Int           @default(0)
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  publishedAt     DateTime?
+  
+  @@map("projects")
+}
+
+model ProjectTag {
+  id        String  @id @default(cuid())
+  projectId String
+  tag       String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  @@unique([projectId, tag])
+  @@map("project_tags")
+}
+
+// Gallery management with categories
+model GalleryCategory {
+  id          String        @id @default(cuid())
+  name        String        @unique
+  slug        String        @unique
+  description String?
+  icon        String?
+  color       String?       // For UI theming
+  
+  // Hierarchy support
+  parentId    String?
+  parent      GalleryCategory? @relation("GalleryCategoryHierarchy", fields: [parentId], references: [id])
+  children    GalleryCategory[] @relation("GalleryCategoryHierarchy")
+  
+  // Display settings
+  isActive    Boolean       @default(true)
+  sortOrder   Int           @default(0)
+  
+  // Relationships
+  galleryItems GalleryItem[]
+  
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  
+  @@map("gallery_categories")
+}
+
+model GalleryItem {
+  id          String        @id @default(cuid())
+  itemNumber  String        @unique // Auto-generated number (GAL-2024-0001)
+  
+  // Basic information
+  title       String
+  description String?
+  itemType    String        // PLAN, RENDER, PHOTO, VIDEO, DOCUMENT
+  
+  // File information
+  cloudinaryUrl String
+  publicId    String
+  secureUrl   String
+  filename    String
+  fileFormat  String        // jpg, png, pdf, mp4, etc.
+  fileSize    Int           // In bytes
+  
+  // Media specifications (for images/videos)
+  width       Int?
+  height      Int?
+  duration    Float?        // For videos in seconds
+  
+  // Thumbnails and variants
+  thumbnailUrl String?
+  mediumUrl   String?
+  largeUrl    String?
+  
+  // Categorization
+  categoryId  String
+  category    GalleryCategory @relation(fields: [categoryId], references: [id])
+  
+  // Relationships (optional connections)
+  planId      String?
+  plan        Plan?         @relation(fields: [planId], references: [id], onDelete: SetNull)
+  
+  visualizationId String?
+  visualization   Visualization? @relation(fields: [visualizationId], references: [id], onDelete: SetNull)
+  
+  projectId   String?
+  project     Project?      @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  
+  // Display settings
+  isFeatured  Boolean       @default(false)
+  isPublished Boolean       @default(true)
+  sortOrder   Int           @default(0)
+  
+  // SEO and metadata
+  alt         String?
+  caption     String?
+  metaTitle   String?
+  metaDescription String?
+  
+  // Analytics
+  viewCount   Int           @default(0)
+  likeCount   Int           @default(0)
+  
+  // Tags
+  tags        GalleryItemTag[]
+  
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  publishedAt DateTime?
+  
+  @@map("gallery_items")
+}
+
+model GalleryItemTag {
+  id            String      @id @default(cuid())
+  galleryItemId String
+  tag           String
+  galleryItem   GalleryItem @relation(fields: [galleryItemId], references: [id], onDelete: Cascade)
+  
+  @@unique([galleryItemId, tag])
+  @@map("gallery_item_tags")
+}
+
+// Project numbering sequence tracker
+model ProjectSequence {
+  id              String        @id @default(cuid())
+  year            Int           @unique
+  nextSequence    Int           @default(1)
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@map("project_sequences")
+}
+
+// Gallery item numbering sequence tracker
+model GallerySequence {
+  id              String        @id @default(cuid())
+  year            Int           @unique
+  nextSequence    Int           @default(1)
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@map("gallery_sequences")
+}
+
+// ===============================
+// 3D VISUALIZATIONS & RENDERINGS
+// ===============================
+
+model Visualization {
+  id              String        @id @default(cuid())
+  visualizationNumber String    @unique // Auto-generated number (VIS-2024-0001)
+  
+  // Basic information
+  title           String
+  description     String
+  category        String        // EXTERIOR, INTERIOR, LIGHTING_STUDY, MATERIAL_STUDY, WALKTHROUGH
+  renderType      String        // STATIC, ANIMATION, 360_TOUR, VR
+  
+  // Technical specifications
+  resolution      String        // 4K, 8K, HD, etc.
+  fileFormat      String        // JPG, PNG, MP4, etc.
+  fileSize        Int           // In bytes
+  duration        Float?        // For animations/videos in seconds
+  
+  // Rendering details
+  software        String?       // Blender, 3ds Max, V-Ray, etc.
+  renderEngine    String?       // V-Ray, Corona, Cycles, etc.
+  lightingSetup   String?       // NATURAL, ARTIFICIAL, MIXED
+  
+  // File storage
+  cloudinaryUrl   String
+  publicId        String
+  secureUrl       String
+  thumbnailUrl    String?
+  previewUrl      String?       // For 360 tours or video previews
+  
+  // Plan relationship (optional - visualizations can be standalone)
+  planId          String?
+  plan            Plan?         @relation(fields: [planId], references: [id], onDelete: SetNull)
+  
+  // Project relationship
+  projectId       String?
+  project         Project?      @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  
+  // Display settings
+  isFeatured      Boolean       @default(false)
+  isPublished     Boolean       @default(true)
+  sortOrder       Int           @default(0)
+  
+  // Analytics
+  viewCount       Int           @default(0)
+  downloadCount   Int           @default(0)
+  likeCount       Int           @default(0)
+  
+  // SEO
+  alt             String?
+  metaTitle       String?
+  metaDescription String?
+  
+  // Tags and categorization
+  tags            VisualizationTag[]
+  galleryItems    GalleryItem[]
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  publishedAt     DateTime?
+  
+  @@map("visualizations")
+}
+
+model VisualizationTag {
+  id              String        @id @default(cuid())
+  visualizationId String
+  tag             String
+  visualization   Visualization @relation(fields: [visualizationId], references: [id], onDelete: Cascade)
+  
+  @@unique([visualizationId, tag])
+  @@map("visualization_tags")
+}
+
+// Plan numbering sequence tracker
+model PlanSequence {
+  id              String        @id @default(cuid())
+  year            Int           @unique
+  nextSequence    Int           @default(1)
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@map("plan_sequences")
+}
+
+// Visualization numbering sequence tracker  
+model VisualizationSequence {
+  id              String        @id @default(cuid())
+  year            Int           @unique
+  nextSequence    Int           @default(1)
+  
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  
+  @@map("visualization_sequences")
 }
 
 // ===============================

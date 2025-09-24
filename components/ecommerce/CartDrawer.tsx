@@ -132,7 +132,7 @@ export default function CartDrawer() {
                             {item.bedrooms && item.bathrooms && ' • '}
                             {item.bathrooms && `${item.bathrooms} bath`}
                             {(item.bedrooms || item.bathrooms) && item.squareFootage && ' • '}
-                            {item.squareFootage && `${item.squareFootage.toLocaleString()} sq ft`}
+                            {item.squareFootage && `${item.squareFootage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} sq ft`}
                           </p>
                         )}
                         <div className="flex items-center justify-between">

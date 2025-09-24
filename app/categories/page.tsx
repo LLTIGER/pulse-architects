@@ -110,7 +110,7 @@ export default function CategoriesPage() {
                           {category.name}
                         </h3>
                         <p className="text-sm text-muted-foreground">
-                          {category.count.toLocaleString()} plans
+                          {category.count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} plans
                         </p>
                       </div>
                     </div>
@@ -160,7 +160,7 @@ export default function CategoriesPage() {
                         {category.name}
                       </h3>
                       <p className="text-sm text-muted-foreground">
-                        {category.count.toLocaleString()} plans available
+                        {category.count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} plans available
                       </p>
                     </div>
                     <Button variant="ghost" size="sm">
