@@ -16,7 +16,7 @@ const ServicesPage: React.FC = () => {
         'Multiple file formats (PDF, DWG, RVT)'
       ],
       image: '/images/services/architectural-plans.jpg',
-      link: '/catalog?category=plans'
+      link: '/services/architectural-plans'
     },
     {
       icon: Palette,
@@ -29,7 +29,7 @@ const ServicesPage: React.FC = () => {
         'Virtual reality presentations'
       ],
       image: '/images/services/3d-renders.jpg', 
-      link: '/services/visualizations'
+      link: '/services/3d-rendering'
     },
     {
       icon: FileCheck,
