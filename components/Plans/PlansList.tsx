@@ -2,43 +2,56 @@
 
 import React, { useState, useEffect } from 'react';
 import PlanCard from './PlanCard';
-import { getAllPlans } from '@/lib/database/plans';
-import { Plan } from '@prisma/client';
 
-interface PlanWithImages extends Plan {
-  images: Array<{
-    cloudinaryUrl: string;
-    alt: string;
-  }>;
+interface PlanData {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  category: string;
+  tags: string[];
+  images: {
+    thumbnail: string;
+    fullSize: string;
+  };
+  specifications: {
+    bedrooms: number;
+    bathrooms: number;
+    area: string;
+    floors: number;
+    garage: boolean;
+    style: string;
+  };
+  price: string;
+  isPremium: boolean;
+  isNew: boolean;
+  downloads: number;
+  likes: number;
+  rating: number;
+  createdAt: string;
 }
 
 const PlansList: React.FC = () => {
-  const [plans, setPlans] = useState<PlanWithImages[]>([]);
+  const [plans, setPlans] = useState<PlanData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const dbPlans = await getAllPlans({ 
-          includeProjects: true, 
-          includeGalleryItems: true 
-        });
+        const response = await fetch('/api/plans?featured=true&limit=12');
         
-        // Transform database plans to match component interface
-        const transformedPlans: PlanWithImages[] = dbPlans.map(plan => ({
-          ...plan,
-          // Convert gallery items to images format expected by PlanCard
-          images: plan.galleryItems?.map(item => ({
-            cloudinaryUrl: item.imageUrl || '/images/properties/default.jpg',
-            alt: plan.title || 'Architectural Plan'
-          })) || [{
-            cloudinaryUrl: '/images/properties/default.jpg',
-            alt: plan.title || 'Architectural Plan'
-          }]
-        }));
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         
-        setPlans(transformedPlans);
+        const data = await response.json();
+        
+        if (data.plans) {
+          setPlans(data.plans);
+        } else {
+          setPlans([]);
+        }
       } catch (err) {
         console.error('Failed to fetch plans:', err);
         setError('Failed to load architectural plans. Please try again later.');
@@ -129,7 +142,7 @@ const PlansList: React.FC = () => {
     <section className='pt-0!'>
       <div className='container max-w-8xl mx-auto px-5 2xl:px-0'>
         <div className='grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10'>
-          {plans.map((plan, index) => (
+          {plans.map((plan) => (
             <div key={plan.id} className=''>
               <PlanCard plan={plan} />
             </div>
