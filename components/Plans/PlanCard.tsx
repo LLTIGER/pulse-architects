@@ -8,22 +8,35 @@ interface PlanCardProps {
     id: string;
     title: string;
     slug: string;
-    shortDescription: string;
-    squareFootage: number;
-    bedrooms: number;
-    bathrooms: number;
-    basePrice: number;
-    images: Array<{
-      cloudinaryUrl: string;
-      alt: string;
-    }>;
+    description: string;
+    specifications: {
+      bedrooms: number;
+      bathrooms: number;
+      area: string;
+      floors: number;
+      garage: boolean;
+      style: string;
+    };
+    price: string;
+    images: {
+      thumbnail: string;
+      fullSize: string;
+    };
+    tags: string[];
+    category: string;
+    isPremium: boolean;
+    isNew: boolean;
+    downloads: number;
+    likes: number;
+    rating: number;
+    createdAt: string;
   };
 }
 
 const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
-  const { title, slug, shortDescription, squareFootage, bedrooms, bathrooms, basePrice, images } = plan;
+  const { title, slug, description, specifications, price, images } = plan;
 
-  const mainImage = images[0]?.cloudinaryUrl;
+  const mainImage = images.thumbnail;
 
   return (
     <div>
@@ -57,12 +70,12 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
                 </h3>
               </Link>
               <p className='text-base font-normal text-black/50 dark:text-white/50'>
-                {shortDescription}
+                {description}
               </p>
             </div>
             <div>
               <button className='text-base font-normal text-primary px-5 py-2 rounded-full bg-primary/10'>
-                ${basePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                {price}
               </button>
             </div>
           </div>
@@ -70,19 +83,19 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
             <div className='flex flex-col gap-2 border-e border-black/10 dark:border-white/20 pr-2 xs:pr-4 mobile:pr-8'>
               <Bed size={20} />
               <p className='text-sm mobile:text-base font-normal text-black dark:text-white'>
-                {bedrooms} Bedrooms
+                {specifications.bedrooms} Bedrooms
               </p>
             </div>
             <div className='flex flex-col gap-2 border-e border-black/10 dark:border-white/20 px-2 xs:px-4 mobile:px-8'>
               <Bath size={20} />
               <p className='text-sm mobile:text-base font-normal text-black dark:text-white'>
-                {bathrooms} Bathrooms
+                {specifications.bathrooms} Bathrooms
               </p>
             </div>
             <div className='flex flex-col gap-2 pl-2 xs:pl-4 mobile:pl-8'>
               <Square size={20} />
               <p className='text-sm mobile:text-base font-normal text-black dark:text-white'>
-                {squareFootage.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} ft<sup>2</sup>
+                {specifications.area}
               </p>
             </div>
           </div>
