@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ user })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Token verification API error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },

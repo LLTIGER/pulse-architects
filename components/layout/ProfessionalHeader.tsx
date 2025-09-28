@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
 import { Menu, X, Phone, Sun, Moon } from 'lucide-react'
+import Logo from '@/components/ui/Logo'
 
 interface NavLink {
   label: string
@@ -59,14 +60,12 @@ const ProfessionalHeader: React.FC = () => {
         <div className='flex justify-between items-center gap-2 w-full'>
           {/* Logo */}
           <div>
-            <Link href='/' className="flex items-center space-x-2">
-              <div className="h-8 w-8 bg-blue-600 rounded flex items-center justify-center">
-                <div className="w-4 h-4 bg-white rounded-sm" />
-              </div>
-              <span className={`text-xl font-bold ${isHomepage ? (sticky ? "text-gray-900 dark:text-white" : "text-white") : "text-gray-900 dark:text-white"}`}>
-                Pulse Architects
-              </span>
-            </Link>
+            <Logo 
+              variant="icon"
+              width={40}
+              height={40}
+              textColor={isHomepage ? (sticky ? "text-gray-900 dark:text-white" : "text-white") : "text-gray-900 dark:text-white"}
+            />
           </div>
 
           {/* Right side controls */}

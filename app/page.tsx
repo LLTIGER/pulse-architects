@@ -1,3 +1,4 @@
+'use client'
 import Hero from '@/components/home/Hero'
 import EverythingAboutSection from '@/components/home/EverythingAboutSection'
 import PropertyCategoriesSection from '@/components/home/PropertyCategoriesSection'
@@ -6,8 +7,12 @@ import BlogPreviewSection from '@/components/home/BlogPreviewSection'
 import LuxuryDesignSection from '@/components/home/LuxuryDesignSection'
 import AboutHomesSection from '@/components/home/AboutHomesSection'
 import { Shield, Download, FileText, Users, Award, Clock } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 export default function HomePage() {
+  const tFeatures = useTranslations('features')
+  const tCta = useTranslations('cta')
+  
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
@@ -21,11 +26,11 @@ export default function HomePage() {
         <div className="container mx-auto px-5 max-w-8xl">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-52 font-semibold text-dark dark:text-white mb-6">
-              Why Choose 
-              <span className="text-primary"> Pulse Architects?</span>
+              {tFeatures('title')}
+              <span className="text-primary"> {tFeatures('titleHighlight')}</span>
             </h2>
             <p className="text-xm text-dark/60 dark:text-white/60 max-w-3xl mx-auto">
-              Professional architectural plans with instant download, comprehensive documentation, and unmatched quality standards.
+              {tFeatures('description')}
             </p>
           </div>
           
@@ -34,9 +39,9 @@ export default function HomePage() {
               <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
                 <Shield className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-bold text-dark dark:text-white mb-4">Professional Quality</h3>
+              <h3 className="text-xl font-bold text-dark dark:text-white mb-4">{tFeatures('quality.title')}</h3>
               <p className="text-dark/60 dark:text-white/60 leading-relaxed">
-                All plans are created by licensed architects and comply with international building codes and safety standards.
+                {tFeatures('quality.description')}
               </p>
             </div>
             
@@ -44,9 +49,9 @@ export default function HomePage() {
               <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
                 <Download className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-bold text-dark dark:text-white mb-4">Instant Download</h3>
+              <h3 className="text-xl font-bold text-dark dark:text-white mb-4">{tFeatures('instant.title')}</h3>
               <p className="text-dark/60 dark:text-white/60 leading-relaxed">
-                Get your plans immediately after purchase with secure digital delivery and lifetime access to updates.
+                {tFeatures('instant.description')}
               </p>
             </div>
             
@@ -54,9 +59,9 @@ export default function HomePage() {
               <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
                 <FileText className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-bold text-dark dark:text-white mb-4">Complete Documentation</h3>
+              <h3 className="text-xl font-bold text-dark dark:text-white mb-4">{tFeatures('documentation.title')}</h3>
               <p className="text-dark/60 dark:text-white/60 leading-relaxed">
-                Floor plans, elevations, sections, construction details, and material specifications all included.
+                {tFeatures('documentation.description')}
               </p>
             </div>
             
@@ -64,9 +69,9 @@ export default function HomePage() {
               <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
                 <Users className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-bold text-dark dark:text-white mb-4">Expert Support</h3>
+              <h3 className="text-xl font-bold text-dark dark:text-white mb-4">{tFeatures('support.title')}</h3>
               <p className="text-dark/60 dark:text-white/60 leading-relaxed">
-                24/7 customer support and consultation with our team of experienced architects and designers.
+                {tFeatures('support.description')}
               </p>
             </div>
             
@@ -74,9 +79,9 @@ export default function HomePage() {
               <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
                 <Award className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-bold text-dark dark:text-white mb-4">Award-Winning Designs</h3>
+              <h3 className="text-xl font-bold text-dark dark:text-white mb-4">{tFeatures('awards.title')}</h3>
               <p className="text-dark/60 dark:text-white/60 leading-relaxed">
-                Our plans have won multiple architectural awards and have been featured in leading design publications.
+                {tFeatures('awards.description')}
               </p>
             </div>
             
@@ -84,9 +89,9 @@ export default function HomePage() {
               <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mb-6">
                 <Clock className="w-8 h-8 text-primary" />
               </div>
-              <h3 className="text-xl font-bold text-dark dark:text-white mb-4">Fast Delivery</h3>
+              <h3 className="text-xl font-bold text-dark dark:text-white mb-4">{tFeatures('delivery.title')}</h3>
               <p className="text-dark/60 dark:text-white/60 leading-relaxed">
-                Most plans are delivered within minutes of purchase, with custom modifications available within 48 hours.
+                {tFeatures('delivery.description')}
               </p>
             </div>
           </div>
@@ -103,17 +108,17 @@ export default function HomePage() {
       <section className="py-24 bg-gradient-to-b from-skyblue via-lightskyblue to-white/10 dark:to-dark/10">
         <div className="container mx-auto px-5 max-w-8xl text-center">
           <h2 className="text-4xl md:text-52 font-semibold text-white dark:text-dark mb-6">
-            Ready to Start Building?
+            {tCta('title')}
           </h2>
           <p className="text-xm text-white/80 dark:text-dark/80 max-w-2xl mx-auto mb-8">
-            Browse our extensive collection of premium architectural plans and find the perfect design for your next project.
+            {tCta('description')}
           </p>
           <div className='flex flex-col xs:flex-row justify-center gap-4'>
             <button className='btn-homely-primary'>
-              Browse Catalog
+              {tCta('browseCatalog')}
             </button>
             <button className='btn-homely-secondary'>
-              Get Custom Quote
+              {tCta('getQuote')}
             </button>
           </div>
         </div>

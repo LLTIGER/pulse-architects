@@ -1,8 +1,17 @@
+const createNextIntlPlugin = require('next-intl/plugin');
+
+const withNextIntl = createNextIntlPlugin('./lib/i18n/config.ts');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
     // Enable optimized package imports
-    optimizePackageImports: ['lucide-react', '@heroicons/react'],
+    optimizePackageImports: ['lucide-react', '@heroicons/react', '@nextui-org/react'],
+    // Enable edge runtime for API routes where possible
+    // edgeApi: true,
+    serverActions: {
+      allowedOrigins: ['localhost:3000', 'pulse-architects.com']
+    }
   },
   
   // Image optimization for architectural plans and photos
@@ -38,6 +47,7 @@ const nextConfig = {
 
   // Performance optimizations
   poweredByHeader: false,
+  compress: true,
   
   // Security headers
   async headers() {
@@ -132,4 +142,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withNextIntl(nextConfig);

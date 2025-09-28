@@ -28,7 +28,7 @@ export async function GET() {
 
     return NextResponse.json(status)
 
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json(
       {
         status: 'error',

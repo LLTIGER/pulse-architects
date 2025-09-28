@@ -25,6 +25,10 @@ model User {
   isActive          Boolean   @default(true)
   lastLoginAt       DateTime?
   
+  // JWT Security
+  refreshToken      String?
+  refreshTokenExpiry DateTime?
+  
   // GDPR Compliance
   gdprConsent       Boolean   @default(false)
   gdprConsentDate   DateTime?
@@ -42,7 +46,11 @@ model User {
   favorites         Favorite[]
   downloadLogs      DownloadLog[]
   auditLogs         AuditLog[]
-  licenses          License[]
+  imageLicenses     ImageLicense[]
+  uploadedImages    Image[]       @relation("ImageUploadedBy")
+  reviewedImages    Image[]       @relation("ImageReviewedBy")
+  deletedImages     Image[]       @relation("ImageDeletedBy")
+  downloads         Download[]
   
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
@@ -128,6 +136,50 @@ model VerificationToken {
   
   @@unique([identifier, token])
   @@map("verification_tokens")
+}
+
+// ===============================
+// IMAGE MANAGEMENT SYSTEM
+// ===============================
+
+model Image {
+  id                String    @id @default(cuid())
+  title             String
+  cloudinaryUrl     String
+  category          String    // ARCHITECTURAL_PLAN, RESIDENTIAL, COMMERCIAL, LUXURY
+  
+  // Upload information
+  uploadedById      String
+  uploadedBy        User      @relation("ImageUploadedBy", fields: [uploadedById], references: [id])
+  uploadedAt        DateTime  @default(now())
+  
+  // Review information
+  status            String    @default("PENDING") // PENDING, APPROVED, REJECTED
+  reviewedById      String?
+  reviewedBy        User?     @relation("ImageReviewedBy", fields: [reviewedById], references: [id])
+  reviewedAt        DateTime?
+  
+  // Soft delete
+  isActive          Boolean   @default(true)
+  deletedAt         DateTime?
+  deletedById       String?
+  deletedBy         User?     @relation("ImageDeletedBy", fields: [deletedById], references: [id])
+  
+  // Image metadata
+  width             Int
+  height            Int
+  fileSize          Int
+  mimeType          String
+  
+  // Relationships
+  downloads         Download[]
+  orderItems        OrderItem[]
+  licenses          ImageLicense[]
+  
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  @@map("images")
 }
 
 // ===============================
@@ -233,7 +285,7 @@ model Plan {
   reviews         Review[]
   favorites       Favorite[]
   downloadLogs    DownloadLog[]
-  licenses        License[]
+  imageLicenses   ImageLicense[]
   tags            PlanTag[]
   galleryItems    GalleryItem[]
   
@@ -626,16 +678,18 @@ model Order {
   user            User         @relation(fields: [userId], references: [id])
   
   // Order details
-  status          String  @default("PENDING") // PENDING, CONFIRMED, PROCESSING, COMPLETED, etc.
+  status          String  @default("PENDING") // PENDING, CONFIRMED, PROCESSING, COMPLETED, CANCELLED
   totalAmount     Float
   subtotal        Float
   taxAmount       Float      @default(0)
   discountAmount  Float      @default(0)
+  currency        String     @default("USD")
   
-  // Payment information
-  paymentStatus   String @default("PENDING") // PENDING, PROCESSING, PAID, FAILED, etc.
-  paymentMethod   String?
-  paymentId       String?
+  // Payment information (Stripe integration)
+  paymentStatus   String @default("PENDING") // PENDING, PROCESSING, PAID, FAILED, REFUNDED
+  paymentMethod   String?    // card, paypal, etc.
+  stripePaymentIntentId String? @unique
+  stripeSessionId String?     @unique
   
   // Billing information
   billingEmail    String
@@ -649,6 +703,7 @@ model Order {
   // Order metadata
   notes           String?
   internalNotes   String?
+  customerIp      String?
   
   // Fulfillment
   fulfillmentStatus String @default("PENDING") // PENDING, PROCESSING, FULFILLED, CANCELLED
@@ -656,7 +711,7 @@ model Order {
   
   // Relationships
   items           OrderItem[]
-  licenses        License[]
+  licenses        ImageLicense[]
   
   createdAt       DateTime     @default(now())
   updatedAt       DateTime     @updatedAt
@@ -670,56 +725,71 @@ model OrderItem {
   orderId       String
   order         Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
   
-  planId        String
-  plan          Plan        @relation(fields: [planId], references: [id])
+  // Support both images and plans
+  imageId       String?
+  image         Image?      @relation(fields: [imageId], references: [id])
+  planId        String?
+  plan          Plan?       @relation(fields: [planId], references: [id])
   
   // Item details at time of purchase
   quantity      Int         @default(1)
   unitPrice     Float
   totalPrice    Float
+  currency      String      @default("USD")
   
   // License type purchased
-  licenseType   String      // SINGLE_USE, COMMERCIAL, UNLIMITED, DEVELOPER
+  licenseType   String      // PREVIEW, STANDARD, COMMERCIAL, EXTENDED
   
-  // Snapshot of plan details at purchase time (simplified for SQLite)
-  planTitle     String
-  planDescription String?
+  // Snapshot of item details at purchase time
+  itemTitle     String
+  itemDescription String?
+  itemType      String      // IMAGE, PLAN
   
   createdAt     DateTime    @default(now())
   
   @@map("order_items")
 }
 
-model License {
+model ImageLicense {
   id                String      @id @default(cuid())
   orderId           String
   order             Order       @relation(fields: [orderId], references: [id])
   
-  planId            String
-  plan              Plan        @relation(fields: [planId], references: [id])
+  // Support both images and plans
+  imageId           String?
+  image             Image?      @relation(fields: [imageId], references: [id])
+  planId            String?
+  plan              Plan?       @relation(fields: [planId], references: [id])
   
   userId            String
   user              User        @relation(fields: [userId], references: [id])
   
   // License details
-  licenseType       String      // SINGLE_USE, COMMERCIAL, UNLIMITED, DEVELOPER
+  licenseType       String      // PREVIEW, STANDARD, COMMERCIAL, EXTENDED
   licenseKey        String      @unique
   
   // Usage tracking
   downloadCount     Int         @default(0)
-  maxDownloads      Int?
+  maxDownloads      Int?        // NULL = unlimited
   
   // Validity
   isActive          Boolean     @default(true)
-  expiresAt         DateTime?
+  expiresAt         DateTime?   // NULL = no expiration
   
-  // Terms (simplified for SQLite)
+  // License terms and restrictions
   termsText         String?
+  commercialUse     Boolean     @default(false)
+  resaleAllowed     Boolean     @default(false)
+  modificationAllowed Boolean   @default(true)
+  
+  // Purchase metadata
+  purchasePrice     Float
+  currency          String      @default("USD")
   
   createdAt         DateTime    @default(now())
   updatedAt         DateTime    @updatedAt
   
-  @@map("licenses")
+  @@map("image_licenses")
 }
 
 // ===============================
@@ -770,6 +840,28 @@ model Favorite {
 // ===============================
 // DOWNLOAD TRACKING & AUDIT
 // ===============================
+
+model Download {
+  id          String   @id @default(cuid())
+  
+  // Image relationship (for gallery downloads)
+  imageId     String
+  image       Image    @relation(fields: [imageId], references: [id])
+  
+  // User relationship (optional for guest downloads)
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  
+  // Download details
+  license     String   // PREVIEW, STANDARD, COMMERCIAL, EXTENDED
+  
+  // Tracking information
+  ipAddress   String
+  userAgent   String
+  downloadedAt DateTime @default(now())
+  
+  @@map("downloads")
+}
 
 model DownloadLog {
   id          String   @id @default(cuid())

@@ -1,0 +1,276 @@
+{
+  "common": {
+    "home": "Accueil",
+    "about": "À Propos",
+    "services": "Services",
+    "catalog": "Catalogue",
+    "categories": "Catégories",
+    "gallery": "Galerie",
+    "blog": "Blog",
+    "contact": "Contact",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "register": "S'inscrire",
+    "dashboard": "Tableau de Bord",
+    "language": "Langue",
+    "english": "Anglais",
+    "french": "Français"
+  },
+  "navigation": {
+    "mainMenu": "Menu Principal",
+    "userMenu": "Menu Utilisateur",
+    "adminMenu": "Menu Admin"
+  },
+  "homepage": {
+    "title": "Pulse Architects | Plans Architecturaux Premium",
+    "subtitle": "Découvrez des plans architecturaux premium, des conceptions de maisons et des plans",
+    "description": "Conceptions résidentielles et commerciales professionnelles pour votre projet de rêve",
+    "featuredPlans": "Plans en Vedette",
+    "browseAllPlans": "Parcourir Tous les Plans",
+    "getStarted": "Commencer"
+  },
+  "hero": {
+    "subtitle": "Plans Architecturaux Premium",
+    "title": "Concevez Votre Rêve",
+    "browsePlans": "Parcourir les Plans",
+    "viewGallery": "Voir la Galerie",
+    "residentialPlans": "Plans Résidentiels",
+    "commercialDesigns": "Conceptions Commerciales",
+    "customBlueprints": "Plans Personnalisés",
+    "professionalSupport": "Support Professionnel",
+    "premiumDesigns": "Conceptions Premium"
+  },
+  "features": {
+    "title": "Pourquoi Choisir",
+    "titleHighlight": "Pulse Architects?",
+    "description": "Plans architecturaux professionnels avec téléchargement instantané, documentation complète et normes de qualité inégalées.",
+    "quality": {
+      "title": "Qualité Professionnelle",
+      "description": "Tous les plans sont créés par des architectes licenciés et respectent les codes de construction internationaux et les normes de sécurité."
+    },
+    "instant": {
+      "title": "Téléchargement Instantané",
+      "description": "Obtenez vos plans immédiatement après l'achat avec livraison numérique sécurisée et accès à vie aux mises à jour."
+    },
+    "documentation": {
+      "title": "Documentation Complète",
+      "description": "Plans d'étage, élévations, sections, détails de construction et spécifications de matériaux inclus."
+    },
+    "support": {
+      "title": "Support Expert",
+      "description": "Support client 24/7 et consultation avec notre équipe d'architectes et de designers expérimentés."
+    },
+    "awards": {
+      "title": "Conceptions Primées",
+      "description": "Nos plans ont remporté plusieurs prix d'architecture et ont été présentés dans des publications de design de premier plan."
+    },
+    "delivery": {
+      "title": "Livraison Rapide",
+      "description": "La plupart des plans sont livrés en quelques minutes après l'achat, avec des modifications personnalisées disponibles sous 48 heures."
+    }
+  },
+  "cta": {
+    "title": "Prêt à Commencer la Construction?",
+    "description": "Parcourez notre vaste collection de plans architecturaux premium et trouvez la conception parfaite pour votre prochain projet.",
+    "browseCatalog": "Parcourir le Catalogue",
+    "getQuote": "Obtenir un Devis Personnalisé"
+  },
+  "auth": {
+    "loginTitle": "Se Connecter",
+    "registerTitle": "Créer un Compte",
+    "email": "Email",
+    "password": "Mot de Passe",
+    "confirmPassword": "Confirmer le Mot de Passe",
+    "name": "Nom Complet",
+    "signIn": "Se Connecter",
+    "signUp": "S'inscrire",
+    "forgotPassword": "Mot de passe oublié?",
+    "noAccount": "Vous n'avez pas de compte?",
+    "hasAccount": "Vous avez déjà un compte?",
+    "signingIn": "Connexion en cours...",
+    "signingUp": "Création du compte...",
+    "loginError": "Email ou mot de passe invalide",
+    "registerError": "L'inscription a échoué. Veuillez réessayer.",
+    "required": "Ce champ est requis"
+  },
+  "catalog": {
+    "title": "Catalogue de Plans Architecturaux",
+    "subtitle": "Parcourez notre collection de conceptions de maisons et plans premium",
+    "filterBy": "Filtrer Par",
+    "sortBy": "Trier Par",
+    "bedrooms": "Chambres",
+    "bathrooms": "Salles de Bain",
+    "area": "Superficie",
+    "floors": "Étages",
+    "style": "Style",
+    "price": "Prix",
+    "priceRange": "Gamme de Prix",
+    "noResults": "Aucun plan trouvé correspondant à vos critères",
+    "loadMore": "Charger Plus de Plans",
+    "viewDetails": "Voir les Détails",
+    "download": "Télécharger",
+    "addToCart": "Ajouter au Panier"
+  },
+  "dashboard": {
+    "title": "Tableau de Bord Admin",
+    "subtitle": "Gérez vos plans architecturaux et votre contenu",
+    "overview": "Aperçu",
+    "plans": "Plans",
+    "images": "Images",
+    "users": "Utilisateurs",
+    "settings": "Paramètres",
+    "analytics": "Analytiques",
+    "uploadImage": "Télécharger une Image",
+    "managePlans": "Gérer les Plans",
+    "userManagement": "Gestion des Utilisateurs",
+    "systemSettings": "Paramètres Système"
+  },
+  "pricingCalculator": {
+    "title": "Calculateur de Prix",
+    "subtitle": "Calculez les prix des plans architecturaux et les recommandations budgétaires",
+    "planSpecifications": "Spécifications du Plan",
+    "area": "Superficie",
+    "sqm": "Mètres Carrés",
+    "sqft": "Pieds Carrés",
+    "floors": "Nombre d'Étages",
+    "style": "Style Architectural",
+    "complexity": "Niveau de Complexité",
+    "region": "Région",
+    "calculate": "Calculer le Prix",
+    "results": "Résultats de Prix",
+    "totalPrice": "Prix Total",
+    "pricePerSqM": "Prix par m²",
+    "pricePerSqFt": "Prix par pied²",
+    "budgetRecommendation": "Recommandation Budgétaire",
+    "saveSettings": "Enregistrer les Paramètres"
+  },
+  "gallery": {
+    "title": "Galerie de Projets",
+    "subtitle": "Explorez nos projets architecturaux terminés",
+    "viewProject": "Voir le Projet",
+    "projectDetails": "Détails du Projet",
+    "location": "Emplacement",
+    "yearCompleted": "Année de Réalisation",
+    "architect": "Architecte",
+    "loadMore": "Charger Plus de Projets"
+  },
+  "about": {
+    "title": "Créer l'excellence architecturale.",
+    "description": "Transformer les visions en réalité grâce à un design innovant et une attention méticuleuse aux détails.",
+    "badge": "À Propos de Nous"
+  },
+  "services": {
+    "hero": {
+      "title": "Services Architecturaux",
+      "titleHighlight": "Professionnels",
+      "description": "Des plans architecturaux premium aux visualisations 3D et permis de construire, nous fournissons des services complets pour tous vos besoins de construction et de design.",
+      "browsePlans": "Parcourir les Plans",
+      "getConsultation": "Obtenir une Consultation"
+    },
+    "coreServices": {
+      "title": "Nos Services Principaux",
+      "description": "Nous nous spécialisons dans trois domaines principaux qui couvrent tous les aspects de la conception architecturale et de la conformité de construction."
+    },
+    "mainServices": {
+      "architecturalPlans": {
+        "title": "Plans Architecturaux",
+        "description": "Plans architecturaux premium conçus par des professionnels licenciés pour des projets résidentiels et commerciaux.",
+        "features": [
+          "Plans d'étage détaillés et élévations",
+          "Dessins structurels et spécifications",
+          "Conceptions conformes aux codes",
+          "Formats de fichiers multiples (PDF, DWG, RVT)"
+        ]
+      },
+      "3dRenders": {
+        "title": "Rendus 3D & Visualisations",
+        "description": "Rendus 3D de haute qualité et représentations visuelles pour aider les clients à visualiser leurs projets.",
+        "features": [
+          "Rendus extérieurs photoréalistes",
+          "Visualisation intérieure et visites virtuelles",
+          "Études de matériaux et d'éclairage",
+          "Présentations de réalité virtuelle"
+        ]
+      },
+      "buildingPermits": {
+        "title": "Permis de Construire & Certificats",
+        "description": "Services complets de demande de permis et certificats de construction pour assurer la conformité réglementaire.",
+        "features": [
+          "Demandes de permis de construire",
+          "Vérification de conformité de zonage",
+          "Évaluations d'impact environnemental",
+          "Certifications de sécurité et codes d'incendie"
+        ]
+      }
+    },
+    "additionalServices": {
+      "title": "Services Additionnels",
+      "description": "Services de soutien complets pour assurer le succès de votre projet de la conception à la réalisation.",
+      "consultation": {
+        "title": "Services de Consultation",
+        "description": "Consultation architecturale experte pour projets personnalisés et modifications."
+      },
+      "designAwards": {
+        "title": "Programme de Prix de Design",
+        "description": "Soumettez vos projets pour des prix de design architectural et reconnaissance."
+      },
+      "sustainableDesign": {
+        "title": "Design Durable",
+        "description": "Certifications de bâtiments verts et solutions d'architecture durable."
+      },
+      "digitalLibrary": {
+        "title": "Bibliothèque d'Assets Numériques",
+        "description": "Accès à une vaste bibliothèque de composants architecturaux et matériaux."
+      },
+      "fastTrack": {
+        "title": "Services Accélérés",
+        "description": "Conception et livraison expédiées pour projets urgents."
+      },
+      "qualityAssurance": {
+        "title": "Assurance Qualité",
+        "description": "Contrôles qualité complets et couverture de responsabilité professionnelle."
+      }
+    },
+    "process": {
+      "title": "Notre Processus",
+      "description": "Nous suivons un processus éprouvé pour livrer des résultats exceptionnels pour chaque projet.",
+      "steps": {
+        "consultation": {
+          "title": "Consultation",
+          "description": "Réunion initiale pour comprendre vos exigences et vision."
+        },
+        "design": {
+          "title": "Conception",
+          "description": "Créer des plans détaillés et spécifications adaptés à vos besoins."
+        },
+        "review": {
+          "title": "Révision",
+          "description": "Collaborer sur les révisions et perfectionnements jusqu'à perfection."
+        },
+        "delivery": {
+          "title": "Livraison",
+          "description": "Livraison finale de tous les fichiers, permis et documentation."
+        }
+      }
+    },
+    "cta": {
+      "title": "Prêt à Commencer Votre Projet?",
+      "description": "Contactez-nous aujourd'hui pour discuter de vos besoins architecturaux et obtenir un devis personnalisé pour votre projet.",
+      "getStarted": "Commencer Aujourd'hui",
+      "viewWork": "Voir Notre Travail"
+    },
+    "common": {
+      "whatsIncluded": "Qu'est-ce qui est Inclus:",
+      "learnMore": "En Savoir Plus"
+    }
+  },
+  "footer": {
+    "companyInfo": "Marché de plans architecturaux premium et de conceptions de maisons",
+    "quickLinks": "Liens Rapides",
+    "contact": "Informations de Contact",
+    "followUs": "Nous Suivre",
+    "allRightsReserved": "Tous droits réservés",
+    "privacyPolicy": "Politique de Confidentialité",
+    "termsOfService": "Conditions d'Utilisation"
+  }
+}

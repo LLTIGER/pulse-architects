@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Bricolage_Grotesque } from 'next/font/google'
 import './globals.css'
 import { ThemeProvider } from '@/components/providers/ThemeProvider'
@@ -7,10 +7,14 @@ import { AuthProvider } from '@/lib/auth/auth-context'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import ScrollToTop from '@/components/ui/ScrollToTop'
+import { getMessages } from 'next-intl/server'
+import { LanguageProvider } from '@/components/providers/LanguageProvider'
+import { IntlProvider } from '@/components/providers/IntlProvider'
 
 const font = Bricolage_Grotesque({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://pulse-architects.com'),
   title: {
     default: 'Pulse Architects | Premium Architectural Plans',
     template: '%s | Pulse Architects'
@@ -63,38 +67,45 @@ export const metadata: Metadata = {
     description: 'Discover premium architectural plans, house designs, and blueprints.',
     images: ['/og-image.jpg'],
   },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-  },
   verification: {
     google: 'your-google-site-verification',
   },
 }
 
-export default function RootLayout({
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+}
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const messages = await getMessages()
+  
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${font.className} bg-white dark:bg-dark antialiased`}>
-        <ThemeProvider
-          attribute='class'
-          enableSystem={true}
-          defaultTheme='light'>
-          <AuthProvider>
-            <Header />
-            <div className="min-h-screen">
-              {children}
-            </div>
-            <Footer />
-            <ScrollToTop />
-            <ToastProvider />
-          </AuthProvider>
-        </ThemeProvider>
+        <LanguageProvider>
+          <IntlProvider defaultMessages={messages}>
+            <ThemeProvider
+              attribute='class'
+              enableSystem={true}
+              defaultTheme='light'>
+              <AuthProvider>
+                <Header />
+                <div className="min-h-screen">
+                  {children}
+                </div>
+                <Footer />
+                <ScrollToTop />
+                <ToastProvider />
+              </AuthProvider>
+            </ThemeProvider>
+          </IntlProvider>
+        </LanguageProvider>
       </body>
     </html>
   )

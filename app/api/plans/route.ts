@@ -192,7 +192,7 @@ export async function GET(request: NextRequest) {
       message: 'Plans retrieved successfully'
     })
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching plans:', error)
     return NextResponse.json(
       { 

@@ -31,7 +31,7 @@ export async function GET() {
 
     return NextResponse.json(response, { status: statusCode })
 
-  } catch (error) {
+  } catch (error: any) {
     return NextResponse.json(
       {
         status: 'unhealthy',

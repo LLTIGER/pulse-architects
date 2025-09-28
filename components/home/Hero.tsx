@@ -1,22 +1,24 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 
 const Hero: React.FC = () => {
+  const t = useTranslations('hero')
   return (
     <section className='!py-0'>
       <div className='bg-gradient-to-b from-skyblue via-lightskyblue dark:via-[#4298b0] to-white/10 dark:to-black/10 overflow-hidden relative'>
         <div className='container max-w-8xl mx-auto px-5 2xl:px-0 pt-32 md:pt-60 md:pb-68'>
           <div className='relative text-white dark:text-dark text-center md:text-start z-10'>
-            <p className='text-inherit text-xm font-medium'>Premium Architectural Plans</p>
+            <p className='text-inherit text-xm font-medium'>{t('subtitle')}</p>
             <h1 className='text-inherit text-6xl sm:text-9xl font-semibold -tracking-wider md:max-w-45p mt-4 mb-6'>
-              Design Your Dream
+              {t('title')}
             </h1>
             <div className='flex flex-col xs:flex-row justify-center md:justify-start gap-4'>
               <Link href="/catalog" className='px-8 py-4 border border-white dark:border-dark bg-white dark:bg-dark text-dark dark:text-white duration-300 dark:hover:text-dark hover:bg-transparent hover:text-white text-base font-semibold rounded-full hover:cursor-pointer'>
-                Browse Plans
+                {t('browsePlans')}
               </Link>
               <button className='px-8 py-4 border border-white dark:border-dark bg-transparent text-white dark:text-dark hover:bg-white dark:hover:bg-dark dark:hover:text-white hover:text-dark duration-300 text-base font-semibold rounded-full hover:cursor-pointer'>
-                View Gallery
+                {t('viewGallery')}
               </button>
             </div>
           </div>
@@ -52,7 +54,7 @@ const Hero: React.FC = () => {
                 unoptimized={true}
               />
               <p className='text-sm sm:text-base font-normal text-inherit'>
-                Residential Plans
+                {t('residentialPlans')}
               </p>
             </div>
             <div className='flex flex-col sm:items-center gap-3'>
@@ -73,7 +75,7 @@ const Hero: React.FC = () => {
                 unoptimized={true}
               />
               <p className='text-sm sm:text-base font-normal text-inherit'>
-                Commercial Designs
+                {t('commercialDesigns')}
               </p>
             </div>
             <div className='flex flex-col sm:items-center gap-3'>
@@ -94,7 +96,7 @@ const Hero: React.FC = () => {
                 unoptimized={true}
               />
               <p className='text-sm sm:text-base font-normal text-inherit'>
-                Custom Blueprints
+                {t('customBlueprints')}
               </p>
             </div>
             <div className='flex flex-col sm:items-center gap-3'>
@@ -102,7 +104,7 @@ const Hero: React.FC = () => {
                 500+
               </p>
               <p className='text-sm sm:text-base font-normal text-black/50 dark:text-white/50'>
-                Premium Designs
+                {t('premiumDesigns')}
               </p>
             </div>
           </div>

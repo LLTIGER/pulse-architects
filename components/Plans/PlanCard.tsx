@@ -75,7 +75,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
             </div>
             <div>
               <button className='text-base font-normal text-primary px-5 py-2 rounded-full bg-primary/10'>
-                {price}
+                {price || 'Price TBD'}
               </button>
             </div>
           </div>

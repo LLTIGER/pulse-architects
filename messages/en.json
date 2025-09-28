@@ -1,0 +1,276 @@
+{
+  "common": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "catalog": "Catalog",
+    "categories": "Categories",
+    "gallery": "Gallery",
+    "blog": "Blog",
+    "contact": "Contact",
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "dashboard": "Dashboard",
+    "language": "Language",
+    "english": "English",
+    "french": "French"
+  },
+  "navigation": {
+    "mainMenu": "Main Menu",
+    "userMenu": "User Menu",
+    "adminMenu": "Admin Menu"
+  },
+  "homepage": {
+    "title": "Pulse Architects | Premium Architectural Plans",
+    "subtitle": "Discover premium architectural plans, house designs, and blueprints",
+    "description": "Professional residential and commercial designs for your dream project",
+    "featuredPlans": "Featured Plans",
+    "browseAllPlans": "Browse All Plans",
+    "getStarted": "Get Started"
+  },
+  "hero": {
+    "subtitle": "Premium Architectural Plans",
+    "title": "Design Your Dream",
+    "browsePlans": "Browse Plans",
+    "viewGallery": "View Gallery",
+    "residentialPlans": "Residential Plans",
+    "commercialDesigns": "Commercial Designs",
+    "customBlueprints": "Custom Blueprints",
+    "professionalSupport": "Professional Support",
+    "premiumDesigns": "Premium Designs"
+  },
+  "features": {
+    "title": "Why Choose",
+    "titleHighlight": "Pulse Architects?",
+    "description": "Professional architectural plans with instant download, comprehensive documentation, and unmatched quality standards.",
+    "quality": {
+      "title": "Professional Quality",
+      "description": "All plans are created by licensed architects and comply with international building codes and safety standards."
+    },
+    "instant": {
+      "title": "Instant Download",
+      "description": "Get your plans immediately after purchase with secure digital delivery and lifetime access to updates."
+    },
+    "documentation": {
+      "title": "Complete Documentation",
+      "description": "Floor plans, elevations, sections, construction details, and material specifications all included."
+    },
+    "support": {
+      "title": "Expert Support",
+      "description": "24/7 customer support and consultation with our team of experienced architects and designers."
+    },
+    "awards": {
+      "title": "Award-Winning Designs",
+      "description": "Our plans have won multiple architectural awards and have been featured in leading design publications."
+    },
+    "delivery": {
+      "title": "Fast Delivery",
+      "description": "Most plans are delivered within minutes of purchase, with custom modifications available within 48 hours."
+    }
+  },
+  "cta": {
+    "title": "Ready to Start Building?",
+    "description": "Browse our extensive collection of premium architectural plans and find the perfect design for your next project.",
+    "browseCatalog": "Browse Catalog",
+    "getQuote": "Get Custom Quote"
+  },
+  "auth": {
+    "loginTitle": "Sign In",
+    "registerTitle": "Create Account",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "name": "Full Name",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signingIn": "Signing In...",
+    "signingUp": "Creating Account...",
+    "loginError": "Invalid email or password",
+    "registerError": "Registration failed. Please try again.",
+    "required": "This field is required"
+  },
+  "catalog": {
+    "title": "Architectural Plans Catalog",
+    "subtitle": "Browse our collection of premium house designs and blueprints",
+    "filterBy": "Filter By",
+    "sortBy": "Sort By",
+    "bedrooms": "Bedrooms",
+    "bathrooms": "Bathrooms",
+    "area": "Area",
+    "floors": "Floors",
+    "style": "Style",
+    "price": "Price",
+    "priceRange": "Price Range",
+    "noResults": "No plans found matching your criteria",
+    "loadMore": "Load More Plans",
+    "viewDetails": "View Details",
+    "download": "Download",
+    "addToCart": "Add to Cart"
+  },
+  "dashboard": {
+    "title": "Admin Dashboard",
+    "subtitle": "Manage your architectural plans and content",
+    "overview": "Overview",
+    "plans": "Plans",
+    "images": "Images",
+    "users": "Users",
+    "settings": "Settings",
+    "analytics": "Analytics",
+    "uploadImage": "Upload Image",
+    "managePlans": "Manage Plans",
+    "userManagement": "User Management",
+    "systemSettings": "System Settings"
+  },
+  "pricingCalculator": {
+    "title": "Pricing Calculator",
+    "subtitle": "Calculate architectural plan pricing and budget recommendations",
+    "planSpecifications": "Plan Specifications",
+    "area": "Area",
+    "sqm": "Square Meters",
+    "sqft": "Square Feet", 
+    "floors": "Number of Floors",
+    "style": "Architectural Style",
+    "complexity": "Complexity Level",
+    "region": "Region",
+    "calculate": "Calculate Price",
+    "results": "Pricing Results",
+    "totalPrice": "Total Price",
+    "pricePerSqM": "Price per m²",
+    "pricePerSqFt": "Price per ft²",
+    "budgetRecommendation": "Budget Recommendation",
+    "saveSettings": "Save Settings"
+  },
+  "gallery": {
+    "title": "Project Gallery",
+    "subtitle": "Explore our completed architectural projects",
+    "viewProject": "View Project",
+    "projectDetails": "Project Details",
+    "location": "Location",
+    "yearCompleted": "Year Completed",
+    "architect": "Architect",
+    "loadMore": "Load More Projects"
+  },
+  "about": {
+    "title": "Crafting architectural excellence.",
+    "description": "Transforming visions into reality through innovative design and meticulous attention to detail.",
+    "badge": "About Us"
+  },
+  "services": {
+    "hero": {
+      "title": "Professional Architectural",
+      "titleHighlight": "Services",
+      "description": "From premium architectural plans to 3D visualizations and building permits, we provide comprehensive services for all your construction and design needs.",
+      "browsePlans": "Browse Plans",
+      "getConsultation": "Get Consultation"
+    },
+    "coreServices": {
+      "title": "Our Core Services",
+      "description": "We specialize in three main areas that cover all aspects of architectural design and construction compliance."
+    },
+    "mainServices": {
+      "architecturalPlans": {
+        "title": "Architectural Plans",
+        "description": "Premium architectural plans designed by licensed professionals for residential and commercial projects.",
+        "features": [
+          "Detailed floor plans and elevations",
+          "Structural drawings and specifications",
+          "Code-compliant designs",
+          "Multiple file formats (PDF, DWG, RVT)"
+        ]
+      },
+      "3dRenders": {
+        "title": "3D Renders & Visualizations",
+        "description": "High-quality 3D renders and visual representations to help clients visualize their projects.",
+        "features": [
+          "Photorealistic exterior renders",
+          "Interior visualization and walkthroughs",
+          "Material and lighting studies",
+          "Virtual reality presentations"
+        ]
+      },
+      "buildingPermits": {
+        "title": "Building Permits & Certificates",
+        "description": "Complete permit application services and building certificates to ensure regulatory compliance.",
+        "features": [
+          "Building permit applications",
+          "Zoning compliance verification",
+          "Environmental impact assessments",
+          "Safety and fire code certifications"
+        ]
+      }
+    },
+    "additionalServices": {
+      "title": "Additional Services",
+      "description": "Comprehensive support services to ensure your project's success from concept to completion.",
+      "consultation": {
+        "title": "Consultation Services",
+        "description": "Expert architectural consultation for custom projects and modifications."
+      },
+      "designAwards": {
+        "title": "Design Awards Program",
+        "description": "Submit your projects for architectural design awards and recognition."
+      },
+      "sustainableDesign": {
+        "title": "Sustainable Design",
+        "description": "Green building certifications and sustainable architecture solutions."
+      },
+      "digitalLibrary": {
+        "title": "Digital Asset Library",
+        "description": "Access to extensive library of architectural components and materials."
+      },
+      "fastTrack": {
+        "title": "Fast-Track Services",
+        "description": "Expedited design and delivery for time-sensitive projects."
+      },
+      "qualityAssurance": {
+        "title": "Quality Assurance",
+        "description": "Comprehensive quality checks and professional liability coverage."
+      }
+    },
+    "process": {
+      "title": "Our Process",
+      "description": "We follow a proven process to deliver exceptional results for every project.",
+      "steps": {
+        "consultation": {
+          "title": "Consultation",
+          "description": "Initial meeting to understand your requirements and vision."
+        },
+        "design": {
+          "title": "Design",
+          "description": "Create detailed plans and specifications tailored to your needs."
+        },
+        "review": {
+          "title": "Review",
+          "description": "Collaborate on revisions and refinements until perfect."
+        },
+        "delivery": {
+          "title": "Delivery",
+          "description": "Final delivery of all files, permits, and documentation."
+        }
+      }
+    },
+    "cta": {
+      "title": "Ready to Start Your Project?",
+      "description": "Contact us today to discuss your architectural needs and get a personalized quote for your project.",
+      "getStarted": "Get Started Today",
+      "viewWork": "View Our Work"
+    },
+    "common": {
+      "whatsIncluded": "What's Included:",
+      "learnMore": "Learn More"
+    }
+  },
+  "footer": {
+    "companyInfo": "Premium architectural plans and house designs marketplace",
+    "quickLinks": "Quick Links",
+    "contact": "Contact Information",
+    "followUs": "Follow Us",
+    "allRightsReserved": "All rights reserved",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
+  }
+}

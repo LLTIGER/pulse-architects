@@ -2,7 +2,7 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { format } from 'date-fns'
-import { ArrowLeft, Clock, User, Tag } from 'lucide-react'
+import { ArrowLeft, Clock, User } from 'lucide-react'
 
 interface BlogPostProps {
   post: {

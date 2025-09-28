@@ -1,40 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { registerUser } from '@/lib/auth/auth'
+import { createRateLimiter, RateLimitPresets } from '@/lib/security/rate-limiter'
+import { registerSchema, validateRequestBody } from '@/lib/validation/schemas'
+
+const rateLimiter = createRateLimiter(RateLimitPresets.auth)
 
 export async function POST(request: NextRequest) {
+  // Apply rate limiting
+  const rateLimitResult = rateLimiter(request)
+  if (rateLimitResult) {
+    return rateLimitResult
+  }
+
   try {
     const body = await request.json()
-    const { email, password, name, role } = body
-
-    if (!email || !password || !name) {
+    
+    // Validate request body
+    const validation = validateRequestBody(registerSchema, body)
+    if (!validation.success) {
       return NextResponse.json(
-        { error: 'Email, password, and name are required' },
+        { error: 'Validation failed', details: validation.errors },
         { status: 400 }
       )
     }
 
-    // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      )
-    }
-
-    // Basic password validation
-    if (password.length < 6) {
-      return NextResponse.json(
-        { error: 'Password must be at least 6 characters long' },
-        { status: 400 }
-      )
-    }
+    const { email, password, name, role } = validation.data
 
     const result = await registerUser({ 
       email, 
       password, 
       name, 
-      role: role || 'CUSTOMER' 
+      role 
     })
 
     if ('error' in result) {
@@ -44,11 +40,21 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Send welcome email
+    try {
+      const { sendWelcomeEmail } = await import('../../../../emails/lib/email-sender')
+      await sendWelcomeEmail(result.user.email, result.user.name || 'New User')
+      console.log(`Welcome email sent to ${result.user.email}`)
+    } catch (emailError) {
+      console.error('Failed to send welcome email:', emailError)
+      // Don't fail registration if email fails
+    }
+
     return NextResponse.json({
       user: result.user,
-      token: result.token
+      tokens: result.tokens
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Register API error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },

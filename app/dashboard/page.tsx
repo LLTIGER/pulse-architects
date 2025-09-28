@@ -1,196 +1,388 @@
 'use client'
-import React from 'react'
-import Link from 'next/link'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/lib/auth/auth-context'
 import { 
-  LayoutDashboard, 
-  FileText, 
-  Box, 
   Users, 
-  Settings, 
+  FileImage, 
   Download, 
   BarChart3, 
-  LogOut,
-  Home
+  Settings,
+  Plus,
+  TrendingUp,
+  Eye
 } from 'lucide-react'
-import { useAuth } from '@/lib/auth/auth-context'
+
+interface AnalyticsData {
+  overview: {
+    totalUsers: { value: number; change: number; changeType: string }
+    totalImages: { value: number; change: number; changeType: string }
+    totalDownloads: { value: number; change: number; changeType: string }
+    downloadsToday: { value: number; change: number; changeType: string }
+  }
+  imageStatuses: Record<string, number>
+  downloadsByLicense: Record<string, number>
+  recentActivity: Array<{
+    id: string
+    type: string
+    description: string
+    license: string
+    category: string
+    timestamp: string
+    user: { name: string; email: string } | null
+  }>
+  chartData: {
+    downloadsChart: Array<{ date: string; downloads: number; day: string }>
+    licenseDistribution: Array<{ name: string; value: number }>
+  }
+}
 
 const DashboardPage: React.FC = () => {
-  const { user, logout, isAdmin } = useAuth()
+  const { user, loading, isAdmin } = useAuth()
   const router = useRouter()
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null)
+  const [analyticsLoading, setAnalyticsLoading] = useState(true)
 
-  const handleLogout = () => {
-    logout()
-    router.push('/')
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/auth/login')
+    } else if (!loading && user && !isAdmin) {
+      router.push('/')
+    }
+  }, [user, loading, isAdmin, router])
+
+  // Fetch analytics data
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      if (!user || !isAdmin) return
+
+      try {
+        const response = await fetch('/api/admin/analytics', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
+          }
+        })
+
+        if (response.ok) {
+          const data = await response.json()
+          setAnalytics(data)
+        } else {
+          console.error('Failed to fetch analytics:', response.statusText)
+        }
+      } catch (error) {
+        console.error('Error fetching analytics:', error)
+      } finally {
+        setAnalyticsLoading(false)
+      }
+    }
+
+    fetchAnalytics()
+  }, [user, isAdmin])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-dark flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+      </div>
+    )
   }
 
-  if (!user) {
-    router.push('/auth/login')
+  if (!user || !isAdmin) {
     return null
   }
 
-  const adminMenuItems = [
+  const stats = analytics ? [
     {
-      title: 'Plans Management',
-      description: 'Manage architectural plans, add new designs, edit existing ones',
-      href: '/dashboard/plans',
-      icon: FileText,
-      color: 'from-blue-500 to-blue-600'
+      name: 'Total Users',
+      value: analytics.overview.totalUsers.value.toLocaleString(),
+      change: analytics.overview.totalUsers.change > 0 ? `+${analytics.overview.totalUsers.change}%` : `${analytics.overview.totalUsers.change}%`,
+      changeType: analytics.overview.totalUsers.changeType,
+      icon: Users
     },
     {
-      title: 'Visualizations',
-      description: 'Manage 3D visualizations, renderings, and galleries',
-      href: '/dashboard/visualizations',
-      icon: Box,
-      color: 'from-purple-500 to-purple-600'
+      name: 'Images Uploaded',
+      value: analytics.overview.totalImages.value.toLocaleString(),
+      change: analytics.overview.totalImages.change > 0 ? `+${analytics.overview.totalImages.change}%` : `${analytics.overview.totalImages.change}%`,
+      changeType: analytics.overview.totalImages.changeType,
+      icon: FileImage
     },
     {
-      title: 'User Management',
-      description: 'Manage users, roles, and permissions',
-      href: '/dashboard/users',
-      icon: Users,
-      color: 'from-green-500 to-green-600'
+      name: 'Downloads Today',
+      value: analytics.overview.downloadsToday.value.toLocaleString(),
+      change: analytics.overview.downloadsToday.change > 0 ? `+${analytics.overview.downloadsToday.change}%` : `${analytics.overview.downloadsToday.change}%`,
+      changeType: analytics.overview.downloadsToday.changeType,
+      icon: Download
     },
     {
-      title: 'Downloads & Licenses',
-      description: 'Track downloads, manage licenses and user access',
-      href: '/dashboard/downloads',
-      icon: Download,
-      color: 'from-orange-500 to-orange-600'
+      name: 'Total Downloads',
+      value: analytics.overview.totalDownloads.value.toLocaleString(),
+      change: analytics.overview.totalDownloads.change > 0 ? `+${analytics.overview.totalDownloads.change}%` : `${analytics.overview.totalDownloads.change}%`,
+      changeType: analytics.overview.totalDownloads.changeType,
+      icon: TrendingUp
+    }
+  ] : [
+    {
+      name: 'Total Users',
+      value: '...',
+      change: '...',
+      changeType: 'neutral',
+      icon: Users
     },
     {
-      title: 'Analytics',
-      description: 'View website analytics, sales reports, and performance metrics',
-      href: '/dashboard/analytics',
+      name: 'Images Uploaded',
+      value: '...',
+      change: '...',
+      changeType: 'neutral',
+      icon: FileImage
+    },
+    {
+      name: 'Downloads Today',
+      value: '...',
+      change: '...',
+      changeType: 'neutral',
+      icon: Download
+    },
+    {
+      name: 'Total Downloads',
+      value: '...',
+      change: '...',
+      changeType: 'neutral',
+      icon: TrendingUp
+    }
+  ]
+
+  const quickActions = [
+    {
+      name: 'Upload Images',
+      description: 'Add new architectural plans to the gallery',
+      icon: Plus,
+      href: '/dashboard/upload',
+      color: 'bg-blue-500'
+    },
+    {
+      name: 'Manage Content',
+      description: 'Review and approve pending uploads',
+      icon: Eye,
+      href: '/dashboard/content',
+      color: 'bg-green-500'
+    },
+    {
+      name: 'View Analytics',
+      description: 'Check website and download statistics',
       icon: BarChart3,
-      color: 'from-indigo-500 to-indigo-600'
+      href: '/dashboard/analytics',
+      color: 'bg-purple-500'
     },
     {
-      title: 'Settings',
-      description: 'System configuration, site settings, and preferences',
+      name: 'Settings',
+      description: 'Configure site settings and preferences',
+      icon: Settings,
       href: '/dashboard/settings',
-      icon: Settings,
-      color: 'from-gray-500 to-gray-600'
+      color: 'bg-orange-500'
     }
   ]
-
-  const userMenuItems = [
-    {
-      title: 'My Downloads',
-      description: 'View and download your purchased plans',
-      href: '/dashboard/my-downloads',
-      icon: Download,
-      color: 'from-primary to-green-600'
-    },
-    {
-      title: 'Purchase History',
-      description: 'View your order history and invoices',
-      href: '/dashboard/orders',
-      icon: FileText,
-      color: 'from-blue-500 to-blue-600'
-    },
-    {
-      title: 'Profile Settings',
-      description: 'Manage your account and preferences',
-      href: '/dashboard/profile',
-      icon: Settings,
-      color: 'from-gray-500 to-gray-600'
-    }
-  ]
-
-  const menuItems = isAdmin ? adminMenuItems : userMenuItems
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="container max-w-8xl mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link href="/" className="flex items-center gap-2 text-primary hover:text-primary/80">
-                <Home className="w-5 h-5" />
-                <span className="text-sm font-medium">Back to Site</span>
-              </Link>
-              <div className="w-px h-6 bg-gray-300" />
-              <div>
-                <h1 className="text-2xl font-bold text-dark">
-                  {isAdmin ? 'Admin Dashboard' : 'My Dashboard'}
-                </h1>
-                <p className="text-sm text-dark/60">Welcome back, {user.name}</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="text-sm text-dark/60">
-                {isAdmin ? 'Administrator' : 'Customer'}
-              </span>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 text-sm text-gray-600 hover:text-red-600 transition-colors"
-              >
-                <LogOut className="w-4 h-4" />
-                Sign Out
-              </button>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="container max-w-8xl mx-auto px-6 py-8">
-        {/* Welcome Section */}
-        <div className="bg-gradient-to-r from-primary to-green-600 rounded-2xl p-8 text-white mb-8">
-          <h2 className="text-3xl font-bold mb-2">
-            Welcome to {isAdmin ? 'Admin Dashboard' : 'Your Dashboard'}
-          </h2>
-          <p className="text-white/80 text-lg">
-            {isAdmin 
-              ? 'Manage your architectural plans, users, and website content from here.'
-              : 'Access your purchased plans, view order history, and manage your account.'
-            }
+    <div className="min-h-screen bg-gray-50 dark:bg-dark">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Admin Dashboard
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-1">
+            Welcome back, {user.name}. Here's what's happening with Pulse Architects today.
           </p>
         </div>
 
-        {/* Dashboard Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {menuItems.map((item, index) => {
-            const Icon = item.icon
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {stats.map((stat) => {
+            const IconComponent = stat.icon
             return (
-              <Link
-                key={index}
-                href={item.href}
-                className="group bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 p-6 border border-gray-100"
-              >
-                <div className="flex items-start gap-4">
-                  <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${item.color} flex items-center justify-center`}>
-                    <Icon className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-dark group-hover:text-primary transition-colors">
-                      {item.title}
-                    </h3>
-                    <p className="text-sm text-dark/60 mt-1">
-                      {item.description}
+              <div key={stat.name} className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                      {stat.name}
+                    </p>
+                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
+                      {stat.value}
                     </p>
                   </div>
+                  <div className="p-3 bg-primary/10 rounded-lg">
+                    <IconComponent className="w-6 h-6 text-primary" />
+                  </div>
                 </div>
-              </Link>
+                <div className="mt-4 flex items-center">
+                  <span className={`text-sm font-medium ${
+                    stat.changeType === 'positive' 
+                      ? 'text-green-600 dark:text-green-400' 
+                      : 'text-red-600 dark:text-red-400'
+                  }`}>
+                    {stat.change}
+                  </span>
+                  <span className="text-sm text-gray-600 dark:text-gray-400 ml-2">
+                    from last month
+                  </span>
+                </div>
+              </div>
             )
           })}
         </div>
 
-        {/* Recent Activity (Placeholder) */}
-        {isAdmin && (
-          <div className="mt-12">
-            <h3 className="text-xl font-semibold text-dark mb-6">Recent Activity</h3>
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-              <div className="text-center py-12">
-                <BarChart3 className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                <p className="text-gray-500">Activity dashboard coming soon...</p>
-              </div>
+        {/* Quick Actions */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+            Quick Actions
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {quickActions.map((action) => {
+              const IconComponent = action.icon
+              return (
+                <div 
+                  key={action.name}
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 hover:shadow-lg transition-shadow cursor-pointer"
+                  onClick={() => router.push(action.href)}
+                >
+                  <div className={`w-12 h-12 ${action.color} rounded-lg flex items-center justify-center mb-4`}>
+                    <IconComponent className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                    {action.name}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                    {action.description}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Download Analytics and Recent Activity */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+          {/* Download Statistics */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Download Statistics
+              </h2>
+            </div>
+            <div className="p-6">
+              {analyticsLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                </div>
+              ) : analytics ? (
+                <div className="space-y-6">
+                  {/* License Distribution */}
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-3">
+                      Downloads by License Type
+                    </h3>
+                    <div className="space-y-2">
+                      {Object.entries(analytics.downloadsByLicense).map(([license, count]) => (
+                        <div key={license} className="flex items-center justify-between">
+                          <span className="text-sm text-gray-900 dark:text-white capitalize">
+                            {license.toLowerCase()}
+                          </span>
+                          <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                            {count}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Image Status */}
+                  <div>
+                    <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-3">
+                      Images by Status
+                    </h3>
+                    <div className="space-y-2">
+                      {Object.entries(analytics.imageStatuses).map(([status, count]) => (
+                        <div key={status} className="flex items-center justify-between">
+                          <span className={`text-sm capitalize px-2 py-1 rounded text-xs font-medium ${
+                            status === 'APPROVED' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :
+                            status === 'PENDING' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' :
+                            'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300'
+                          }`}>
+                            {status.toLowerCase()}
+                          </span>
+                          <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                            {count}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <p className="text-gray-500 dark:text-gray-400 text-center py-4">
+                  Failed to load analytics data
+                </p>
+              )}
             </div>
           </div>
-        )}
-      </main>
+
+          {/* Recent Activity */}
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow">
+            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                Recent Activity
+              </h2>
+            </div>
+            <div className="p-6">
+              {analyticsLoading ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                </div>
+              ) : analytics && analytics.recentActivity.length > 0 ? (
+                <div className="space-y-4">
+                  {analytics.recentActivity.map((activity) => (
+                    <div key={activity.id} className="flex items-start space-x-3 py-3 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
+                      <div className="flex-shrink-0">
+                        <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                          <Download className="w-4 h-4 text-primary" />
+                        </div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm text-gray-900 dark:text-white">
+                          {activity.description}
+                        </p>
+                        <div className="flex items-center space-x-2 mt-1">
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                            activity.license === 'PREVIEW' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300' :
+                            activity.license === 'STANDARD' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' :
+                            activity.license === 'COMMERCIAL' ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300' :
+                            'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300'
+                          }`}>
+                            {activity.license}
+                          </span>
+                          <span className="text-xs text-gray-500 dark:text-gray-400">
+                            {activity.category}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex-shrink-0">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          {new Date(activity.timestamp).toLocaleString()}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-500 dark:text-gray-400 text-center py-4">
+                  No recent download activity
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
+      </div>
     </div>
   )
 }

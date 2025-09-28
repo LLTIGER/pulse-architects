@@ -1,9 +1,13 @@
+'use client'
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight, Building, Palette, FileCheck, Users, Award, Lightbulb, Download, Zap, Shield } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 const ServicesPage: React.FC = () => {
+  const tHero = useTranslations('services.hero')
+  
   const mainServices = [
     {
       icon: Building,
@@ -85,27 +89,26 @@ const ServicesPage: React.FC = () => {
       <section className='py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-black'>
         <div className='container max-w-8xl mx-auto px-5 text-center'>
           <h1 className='text-5xl md:text-7xl font-bold tracking-tight text-dark dark:text-white mb-8 leading-tight'>
-            Professional Architectural{' '}
+            {tHero('title')}{' '}
             <span className='bg-gradient-to-r from-primary to-skyblue bg-clip-text text-transparent'>
-              Services
+              {tHero('titleHighlight')}
             </span>
           </h1>
           <p className='text-xl md:text-2xl text-dark/60 dark:text-white/60 max-w-4xl mx-auto mb-12'>
-            From premium architectural plans to 3D visualizations and building permits, 
-            we provide comprehensive services for all your construction and design needs.
+            {tHero('description')}
           </p>
           <div className='flex flex-col sm:flex-row gap-4 justify-center'>
             <Link 
               href='/catalog'
               className='btn-homely-primary'
             >
-              Browse Plans
+              {tHero('browsePlans')}
             </Link>
             <Link 
               href='/contact'
               className='btn-homely-secondary'
             >
-              Get Consultation
+              {tHero('getConsultation')}
             </Link>
           </div>
         </div>

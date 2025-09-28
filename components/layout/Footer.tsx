@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Facebook, Twitter, Instagram, Linkedin, Phone, Mail, MapPin } from "lucide-react"
+import Logo from "@/components/ui/Logo"
 
 const Footer = () => {
   const architecturalLinks = [
@@ -60,6 +61,15 @@ const Footer = () => {
         <div className="py-16 border-b border-white/10">
           <div className="grid grid-cols-12 sm:gap-10 gap-y-6">
             <div className="md:col-span-7 col-span-12">
+              {/* Brand Logo */}
+              <div className="mb-8">
+                <Logo 
+                  variant="icon"
+                  width={50}
+                  height={50}
+                  textColor="text-white"
+                />
+              </div>
               <h2 className="text-white leading-[1.2] text-3xl md:text-4xl font-medium mb-6 lg:max-w-3/4">
                 Ready to build your dream home? 
                 Contact us today.

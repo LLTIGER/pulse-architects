@@ -6,11 +6,15 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import NavLink from './Navigation/NavLink'
 import { useTheme } from 'next-themes'
 import { usePathname } from 'next/navigation'
+import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
+import { useLanguage } from '@/components/providers/LanguageProvider'
+import Logo from '@/components/ui/Logo'
 
 const Header: React.FC = () => {
   const [sticky, setSticky] = useState(false)
   const [navbarOpen, setNavbarOpen] = useState(false)
   const { theme, setTheme } = useTheme()
+  const { currentLocale } = useLanguage()
   const pathname = usePathname()
 
   const sideMenuRef = useRef<HTMLDivElement>(null)
@@ -42,16 +46,18 @@ const Header: React.FC = () => {
       <nav className={`container mx-auto max-w-8xl flex items-center justify-between py-4 duration-300 ${sticky ? "shadow-lg bg-white dark:bg-dark rounded-full top-5 px-4 " : "shadow-none top-0"}`}>
         <div className='flex justify-between items-center gap-2 w-full'>
           <div>
-            <Link href='/' className="flex items-center space-x-2">
-              <div className="h-8 w-8 bg-blue-600 rounded flex items-center justify-center">
-                <div className="w-4 h-4 bg-white rounded-sm" />
-              </div>
-              <span className={`text-xl font-bold ${isHomepage ? (sticky ? "text-gray-900 dark:text-white" : "text-white") : "text-gray-900 dark:text-white"}`}>
-                Pulse Architects
-              </span>
-            </Link>
+            <Logo 
+              variant="icon"
+              width={40}
+              height={40}
+              textColor={isHomepage ? (sticky ? "text-gray-900 dark:text-white" : "text-white") : "text-gray-900 dark:text-white"}
+            />
           </div>
           <div className='flex items-center gap-2 sm:gap-6'>
+            <LanguageSwitcher 
+              isHomepage={isHomepage}
+              sticky={sticky}
+            />
             <button
               className='hover:cursor-pointer'
               onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}

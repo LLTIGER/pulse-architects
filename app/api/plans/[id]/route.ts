@@ -174,7 +174,7 @@ export async function GET(
     return NextResponse.json({
       plan: transformedPlan
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching plan:', error)
     return NextResponse.json(
       { error: 'Failed to fetch plan' },

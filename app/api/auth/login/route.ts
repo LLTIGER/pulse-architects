@@ -1,17 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { loginUser } from '@/lib/auth/auth'
+import { createRateLimiter, RateLimitPresets } from '@/lib/security/rate-limiter'
+import { loginSchema, validateRequestBody } from '@/lib/validation/schemas'
+
+const rateLimiter = createRateLimiter(RateLimitPresets.auth)
 
 export async function POST(request: NextRequest) {
+  // Apply rate limiting
+  const rateLimitResult = rateLimiter(request)
+  if (rateLimitResult) {
+    return rateLimitResult
+  }
+
   try {
     const body = await request.json()
-    const { email, password } = body
-
-    if (!email || !password) {
+    
+    // Validate request body
+    const validation = validateRequestBody(loginSchema, body)
+    if (!validation.success) {
       return NextResponse.json(
-        { error: 'Email and password are required' },
+        { error: 'Validation failed', details: validation.errors },
         { status: 400 }
       )
     }
+
+    const { email, password } = validation.data
 
     const result = await loginUser({ email, password })
 
@@ -24,9 +37,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       user: result.user,
-      token: result.token
+      tokens: result.tokens
     })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Login API error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
